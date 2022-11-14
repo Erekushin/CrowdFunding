@@ -26,9 +26,5 @@ class Main extends StatelessWidget {
     );
   }
 
-  void localLogWriter(String text, {bool isError = false}) {
-    print("aldaanii medeelel local log writer");
-    print(text);
-    print(isError);
-  }
+  void localLogWriter(String text, {bool isError = false}) {}
 }
