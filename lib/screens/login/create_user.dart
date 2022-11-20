@@ -8,6 +8,7 @@ import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
+import 'package:gerege_app_v2/widget/gerege_textfield.dart';
 
 import 'package:get/get.dart';
 
@@ -76,7 +77,7 @@ class _CreateUserScreenState extends State<CreateUserScreen>
       });
     });
     super.initState();
-    getCountryList();
+    // Рш();
   }
 
   @override
@@ -208,6 +209,12 @@ class _CreateUserScreenState extends State<CreateUserScreen>
       "user_id": ""
     };
 
+    print("bodyMNG");
+    print(bodyMNG);
+
+    print("bodyOther");
+    print(bodyOther);
+
     Services()
         .postRequest(
             json.encode(selectionCountry == "MNG" ? bodyMNG : bodyOther),
@@ -217,6 +224,8 @@ class _CreateUserScreenState extends State<CreateUserScreen>
         .then((data) {
       Navigator.of(Get.overlayContext!).pop();
       var res = data.body;
+      print("body res");
+      print(data.body);
       if (data.statusCode == 200) {
         print('kukukakak');
         print(data.body);
@@ -259,14 +268,13 @@ class _CreateUserScreenState extends State<CreateUserScreen>
         ),
       ),
       body: SingleChildScrollView(
-        child: screenTwo(),
-        //  Obx(
-        //   () => screenChange.value == 0
-        //       ? screenZero()
-        //       : screenChange.value == 1
-        //           ? screenOne()
-        //           : screenTwo(),
-        // ),
+        child: Obx(
+          () => screenChange.value == 0
+              ? screenZero()
+              : screenChange.value == 1
+                  ? screenOne()
+                  : screenTwo(),
+        ),
       ),
     );
   }
@@ -374,7 +382,7 @@ class _CreateUserScreenState extends State<CreateUserScreen>
                 selectionCountry == "MNG"
                     ? TextFormField(
                         autofocus: false,
-                        keyboardType: TextInputType.number,
+                        keyboardType: TextInputType.text,
                         controller: registerController,
                         decoration: InputDecoration(
                           labelText: ''.translationWord(),
@@ -416,7 +424,10 @@ class _CreateUserScreenState extends State<CreateUserScreen>
               ),
             ),
             onPressed: () {
-              setState(() {});
+              setState(() {
+                print('ilgeh');
+                documentFind();
+              });
             },
           ),
           const SizedBox(height: 10),
@@ -714,6 +725,160 @@ class _CreateUserScreenState extends State<CreateUserScreen>
     );
   }
 
+  Widget screenZero() {
+    return Container(
+      margin: const EdgeInsets.only(left: 20, right: 20),
+      child: Form(
+        key: formKey,
+        child: Column(
+          children: [
+            const SizedBox(height: 50),
+            Container(
+              decoration: const BoxDecoration(
+                color: Colors.transparent,
+              ),
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.0),
+                  border: Border(
+                    bottom: BorderSide(
+                      color: Colors.grey.withOpacity(0.2),
+                      width: 1,
+                    ),
+                  ),
+                ),
+                child: TabBar(
+                  indicatorColor: CoreColor().backgroundButton,
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Colors.grey,
+                  controller: tabController,
+                  labelStyle: const TextStyle(
+                    fontSize: 14,
+                    fontFamily: "MRegular",
+                  ),
+                  tabs: [
+                    Tab(
+                      text: 'email_tr'.translationWord(),
+                    ),
+                    Tab(
+                      text: 'phone_num_tr'.translationWord(),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            selectedIndex == 0
+                ? GeregeTextField(
+                    controller: searchController,
+                    label: 'email_tr',
+                    keyboardType: TextInputType.emailAddress,
+                    // validator: (val){},
+                    // validator: GlobalValidator().emailValid(val),
+                  )
+                // TextFormField(
+                //     autofocus: false,
+                //     keyboardType: TextInputType.text,
+                //     controller: searchController,
+                //     validator: (String? val) =>
+                //         GlobalValidator().emailValid(val),
+                //     decoration: InputDecoration(
+                //       labelText: 'email_tr'.translationWord(),
+                //       labelStyle: const TextStyle(
+                //         color: Colors.black,
+                //         fontSize: 15,
+                //       ),
+                //       contentPadding: const EdgeInsets.all(20),
+                //       border: OutlineInputBorder(
+                //         borderRadius: BorderRadius.circular(10),
+                //       ),
+                //       enabledBorder: OutlineInputBorder(
+                //         borderRadius:
+                //             const BorderRadius.all(Radius.circular(10)),
+                //         borderSide: BorderSide(
+                //           width: 1,
+                //           color: Colors.black.withOpacity(0.2),
+                //         ),
+                //       ),
+                //     ),
+                //   )
+
+                : Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10)),
+                          border: Border.all(
+                              color: Colors.black.withOpacity(0.2), width: 1),
+                        ),
+                        width: 90,
+                        child: const Text(
+                          '+976',
+                          style: TextStyle(fontSize: 16),
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: TextFormField(
+                          controller: searchController,
+                          autofocus: false,
+                          keyboardType: TextInputType.number,
+                          maxLength: 8,
+                          validator: (String? val) =>
+                              GlobalValidator().phoneValid(val),
+                          decoration: InputDecoration(
+                            counterText: '',
+                            labelText: 'phone_num_tr'.translationWord(),
+                            labelStyle: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                            ),
+                            contentPadding: const EdgeInsets.all(20),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(10)),
+                              borderSide: BorderSide(
+                                width: 1,
+                                color: Colors.black.withOpacity(0.2),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+            const SizedBox(height: 30),
+            GeregeButtonWidget(
+              radius: 10.0,
+              elevation: 0.0,
+              minWidth: GlobalVariables.gWidth,
+              backgroundColor: CoreColor().backgroundBlue,
+              borderColor: CoreColor().backgroundBlue,
+              text: Text(
+                'otp_send_tr'.translationWord(),
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+              ),
+              onPressed: () {
+                setState(() {
+                  if (formKey.currentState!.validate()) {
+                    otpSend();
+                  }
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget screenOne() {
     return Container(
       margin: const EdgeInsets.only(left: 20, right: 20),
@@ -824,152 +989,6 @@ class _CreateUserScreenState extends State<CreateUserScreen>
             },
           ),
         ],
-      ),
-    );
-  }
-
-  Widget screenZero() {
-    return Container(
-      margin: const EdgeInsets.only(left: 20, right: 20),
-      child: Form(
-        key: formKey,
-        child: Column(
-          children: [
-            const SizedBox(height: 50),
-            Container(
-              decoration: const BoxDecoration(
-                color: Colors.transparent,
-              ),
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.0),
-                  border: Border(
-                    bottom: BorderSide(
-                      color: Colors.grey.withOpacity(0.2),
-                      width: 1,
-                    ),
-                  ),
-                ),
-                child: TabBar(
-                  indicatorColor: CoreColor().backgroundButton,
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Colors.grey,
-                  controller: tabController,
-                  labelStyle: const TextStyle(
-                    fontSize: 14,
-                    fontFamily: "MRegular",
-                  ),
-                  tabs: [
-                    Tab(
-                      text: 'email_tr'.translationWord(),
-                    ),
-                    Tab(
-                      text: 'phone_num_tr'.translationWord(),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            selectedIndex == 0
-                ? TextFormField(
-                    autofocus: false,
-                    keyboardType: TextInputType.text,
-                    controller: searchController,
-                    validator: (String? val) =>
-                        GlobalValidator().emailValid(val),
-                    decoration: InputDecoration(
-                      labelText: 'email_tr'.translationWord(),
-                      labelStyle: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 15,
-                      ),
-                      contentPadding: const EdgeInsets.all(20),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Colors.black.withOpacity(0.2),
-                        ),
-                      ),
-                    ),
-                  )
-                : Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(10)),
-                          border: Border.all(
-                              color: Colors.black.withOpacity(0.2), width: 1),
-                        ),
-                        width: 90,
-                        child: const Text(
-                          '+976',
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: TextFormField(
-                          controller: searchController,
-                          autofocus: false,
-                          keyboardType: TextInputType.number,
-                          maxLength: 8,
-                          validator: (String? val) =>
-                              GlobalValidator().phoneValid(val),
-                          decoration: InputDecoration(
-                            counterText: '',
-                            labelText: 'phone_num_tr'.translationWord(),
-                            labelStyle: const TextStyle(
-                              color: Colors.black,
-                              fontSize: 15,
-                            ),
-                            contentPadding: const EdgeInsets.all(20),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10)),
-                              borderSide: BorderSide(
-                                width: 1,
-                                color: Colors.black.withOpacity(0.2),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-            const SizedBox(height: 30),
-            GeregeButtonWidget(
-              radius: 10.0,
-              elevation: 0.0,
-              minWidth: GlobalVariables.gWidth,
-              backgroundColor: CoreColor().backgroundBlue,
-              borderColor: CoreColor().backgroundBlue,
-              text: Text(
-                'otp_send_tr'.translationWord(),
-                style: const TextStyle(
-                  color: Colors.white,
-                ),
-              ),
-              onPressed: () {
-                setState(() {
-                  if (formKey.currentState!.validate()) {
-                    otpSend();
-                  }
-                });
-              },
-            ),
-          ],
-        ),
       ),
     );
   }

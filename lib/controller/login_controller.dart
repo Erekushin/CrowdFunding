@@ -47,8 +47,8 @@ class LoginController extends GetxController {
       Navigator.of(Get.overlayContext!).pop();
       var res = data.body;
       if (data.statusCode == 200) {
-        print('kukukakak');
-        print(res['authorization']['token']);
+        print('login resss');
+        print(res);
         // Get.back();
         GlobalVariables.gStorage.write("token", res['authorization']['token']);
         GlobalVariables.gStorage.write('userInformation', res['user']);
@@ -56,7 +56,7 @@ class LoginController extends GetxController {
         // Get.to(() => const HomeScreen());
         Get.to(() => const MainTab(indexTab: 0));
       } else {
-        Get.back();
+        // Get.back();
         print("wtf");
         print(res);
         Get.snackbar(
@@ -72,14 +72,14 @@ class LoginController extends GetxController {
     });
   }
 
-  @override
-  void onClose() {
-    searchText?.dispose();
-    passwordTextController?.dispose();
-    deviceIdTextController?.dispose();
-    mobileTypeTextController?.dispose();
-    super.onClose();
-  }
+  // @override
+  // void onClose() {
+  //   searchText?.dispose();
+  //   passwordTextController?.dispose();
+  //   deviceIdTextController?.dispose();
+  //   mobileTypeTextController?.dispose();
+  //   super.onClose();
+  // }
 
   clean() {
     searchText?.text = '';

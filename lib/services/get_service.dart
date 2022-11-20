@@ -69,24 +69,6 @@ class Services extends GetConnect {
     return response;
   }
 
-  /// [url] service url
-  /// [formData] upload image formdata
-  ///
-  Future<Response> uploadImages(filePath, fileName, String url, bool token) {
-    final form = FormData({
-      'file': MultipartFile(filePath, filename: fileName),
-    });
-    return post(
-      url,
-      form,
-      headers: <String, String>{
-        'authorization': token == true
-            ? "Bearer ${GlobalVariables.gStorage.read("token")}"
-            : "",
-      },
-    );
-  }
-
   /// [putRequest] post service request
   /// [data] request body data
   /// [token] check for token usage
@@ -109,6 +91,24 @@ class Services extends GetConnect {
       Get.to(() => const LoginScreen());
     }
     return response;
+  }
+
+  /// [url] service url
+  /// [formData] upload image formdata
+  ///
+  Future<Response> uploadImages(filePath, fileName, String url, bool token) {
+    final form = FormData({
+      'file': MultipartFile(filePath, filename: fileName),
+    });
+    return post(
+      url,
+      form,
+      headers: <String, String>{
+        'authorization': token == true
+            ? "Bearer ${GlobalVariables.gStorage.read("token")}"
+            : "",
+      },
+    );
   }
 
   // GetSocket userMessages() {

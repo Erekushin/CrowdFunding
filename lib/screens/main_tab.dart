@@ -2,9 +2,10 @@ import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.da
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/home/home_screen.dart';
-import 'package:gerege_app_v2/screens/home/me_screen.dart';
-import 'package:gerege_app_v2/screens/home/information_screen.dart';
+import 'package:gerege_app_v2/screens/home/me/me_screen.dart';
+import 'package:gerege_app_v2/screens/home/news/information_screen.dart';
 import 'package:gerege_app_v2/screens/home/qr_reader.dart';
+import 'package:gerege_app_v2/screens/home/wallet/wallet_screen.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/drawer.dart';
 import 'package:get/route_manager.dart';
@@ -15,7 +16,7 @@ class MainTab extends StatefulWidget {
   const MainTab({Key? key, required this.indexTab}) : super(key: key);
 
   @override
-  _MainTabState createState() => _MainTabState();
+  State<MainTab> createState() => _MainTabState();
 }
 
 class _MainTabState extends State<MainTab> {
@@ -31,6 +32,7 @@ class _MainTabState extends State<MainTab> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
+      print(index);
       switch (index) {
         case 0:
           currentPage = const MeScreen();
@@ -38,8 +40,14 @@ class _MainTabState extends State<MainTab> {
         case 1:
           currentPage = const InfoScreen();
           break;
-        case 2:
+        case 4:
           currentPage = const HomeScreen();
+          break;
+        case 2:
+          currentPage = const InfoScreen();
+          break;
+        case 3:
+          currentPage = const WalletScreen();
           break;
       }
     });
@@ -62,8 +70,6 @@ class _MainTabState extends State<MainTab> {
           centerTitle: true,
           leading: IconButton(
             onPressed: () {
-              // GlobalVariables.gStorage.erase();
-              // Get.offAll(() => const LoginScreen());
               setState(() {
                 _drawerKey.currentState?.openDrawer();
               });
@@ -103,7 +109,7 @@ class _MainTabState extends State<MainTab> {
             width: 40,
           ),
           onPressed: () {
-            _onItemTapped(2);
+            _onItemTapped(4);
           },
         ),
         bottomNavigationBar: AnimatedBottomNavigationBar.builder(
@@ -115,7 +121,7 @@ class _MainTabState extends State<MainTab> {
             spreadRadius: 1,
             color: Colors.grey,
           ),
-          itemCount: 2,
+          itemCount: 4,
           tabBuilder: (int index, bool isActive) {
             return Column(
               mainAxisSize: MainAxisSize.min,
@@ -129,18 +135,32 @@ class _MainTabState extends State<MainTab> {
                             ? Colors.white
                             : Colors.white.withOpacity(0.5),
                       )
-                    : Icon(
-                        Icons.newspaper,
-                        size: 26,
-                        color: isActive == true
-                            ? Colors.white
-                            : Colors.white.withOpacity(0.5),
-                      ),
+                    : index == 1
+                        ? Icon(
+                            Icons.newspaper,
+                            size: 26,
+                            color: isActive == true
+                                ? Colors.white
+                                : Colors.white.withOpacity(0.5),
+                          )
+                        : Icon(
+                            Icons.wallet,
+                            size: 26,
+                            color: isActive == true
+                                ? Colors.white
+                                : Colors.white.withOpacity(0.5),
+                          ),
                 const SizedBox(height: 4),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
-                    index == 0 ? 'Би' : 'Мэдээ',
+                    index == 0
+                        ? 'Би'
+                        : index == 1
+                            ? 'Мэдээ'
+                            : index == 2
+                                ? 'Мэдээ'
+                                : 'Хэтэвч',
                     maxLines: 1,
                     style: TextStyle(
                       color: isActive == true

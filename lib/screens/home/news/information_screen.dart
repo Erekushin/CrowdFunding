@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
+import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 
 class InfoScreen extends StatefulWidget {
@@ -22,6 +24,31 @@ class _InfoScreenState extends State<InfoScreen> {
   @override
   void initState() {
     super.initState();
+    getNews();
+  }
+
+  // GET https://go-backend.gerege.mn/template/news?title&page_size&page_number
+
+  getNews() {
+    String url = '${CoreUrl.serviceUrl}news?page_size=10&page_number=1';
+    print(url);
+    Services().getRequest(url, true, '').then((data) {
+      print('getNews getNews getNews');
+      print(data.body);
+      // if (data.statusCode == 200) {
+      //   setState(() {
+      //     print(data.body['result']['items']);
+      //     countryList.value = data.body['result']['items'];
+      //   });
+      // } else {
+      //   Get.snackbar(
+      //     'warning_tr'.translationWord(),`
+      //     data.body['message'],
+      //     colorText: Colors.white,
+      //     backgroundColor: Colors.red.withOpacity(0.2),
+      //   );
+      // }
+    });
   }
 
   @override

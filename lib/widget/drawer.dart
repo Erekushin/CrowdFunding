@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/screens/home/confirmation_screen.dart';
-import 'package:gerege_app_v2/screens/home/core_info_user.dart';
-import 'package:gerege_app_v2/screens/home/login_info_screen.dart';
-import 'package:gerege_app_v2/screens/home/service_screen.dart';
+import 'package:gerege_app_v2/screens/home/me/confirmation_screen.dart';
+import 'package:gerege_app_v2/screens/home/me/core_info_user.dart';
+import 'package:gerege_app_v2/screens/home/me/login_info_screen.dart';
+import 'package:gerege_app_v2/screens/home/app_service/service_screen.dart';
 import 'package:gerege_app_v2/screens/login/login_screen.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';

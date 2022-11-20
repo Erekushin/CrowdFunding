@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
+import 'package:gerege_app_v2/screens/login/login_screen.dart';
 import 'package:get/get.dart';
 import 'dart:math' as math;
 
@@ -46,7 +47,7 @@ class _MyHomePageState extends State<SplashScreen>
         } else {
           setState(() {
             _start.value--;
-            // Get.to(() => const LoginScreen());
+            Get.to(() => const LoginScreen());
           });
         }
       },
@@ -98,7 +99,7 @@ class _MyHomePageState extends State<SplashScreen>
                   duration: const Duration(milliseconds: 300),
                   top: 250,
                   left: _start.value == 0
-                      ? ((GlobalVariables.gWidth / 2) - 35)
+                      ? ((GlobalVariables.gWidth / 3) - 35)
                       : ((GlobalVariables.gWidth / 2) - 35),
                   child: AnimatedBuilder(
                     animation: _controller,

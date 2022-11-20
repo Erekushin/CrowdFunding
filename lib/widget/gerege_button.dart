@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:gerege_app_v2/style/color.dart';
 
 class GeregeButtonWidget extends StatelessWidget {
   const GeregeButtonWidget({
     Key? key,
-    required this.backgroundColor,
+    this.backgroundColor,
     required this.minWidth,
-    required this.borderColor,
+    this.borderColor,
     required this.text,
     required this.onPressed,
-    required this.radius,
+    this.radius,
     this.height,
     this.elevation,
   }) : super(key: key);
 
   final Color? backgroundColor;
-  final Color borderColor;
+  final Color? borderColor;
   final Widget text;
   final double minWidth;
-  final double radius;
+  final double? radius;
   final VoidCallback onPressed;
   final double? height;
   final double? elevation;
@@ -27,10 +28,12 @@ class GeregeButtonWidget extends StatelessWidget {
     return MaterialButton(
       elevation: elevation,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(radius),
-        side: BorderSide(color: borderColor),
+        borderRadius: BorderRadius.circular(radius ?? 10),
+        side: BorderSide(
+          color: borderColor ?? CoreColor().backgroundBlue,
+        ),
       ),
-      color: backgroundColor,
+      color: backgroundColor ?? CoreColor().backgroundBlue,
       minWidth: minWidth,
       height: height ?? 60,
       onPressed: onPressed,

@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/screens/home/document_screen.dart';
+import 'package:gerege_app_v2/screens/home/me/document_screen.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:get/route_manager.dart';
