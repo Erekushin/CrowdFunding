@@ -32,31 +32,67 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
   }
 
   ///[removeAccount] bank account remove
-  removeAccount(item) {
-    String url = '${CoreUrl.serviceUrl}/wallet/bank/account?id=$item';
-    print(url);
-    // print(item);
-    Services().deleteRequest(url, true, '').then((data) {
-      print('delete');
-      print(data.body);
-      if (data.statusCode == 200) {
+  ///
+  removeAccount(id) {
+    var bodyData = {
+      "id": id.toString(),
+    };
+    print(bodyData);
+
+    Services()
+        .postRequest(bodyData,
+            '${CoreUrl.serviceUrl}/wallet/bank/account/delete', true, '')
+        .then((data) {
+      // var res = json.decode(data.body);
+      print('dete res');
+      var res = data.body;
+      print(res);
+      if (res['message'] == 'success') {
         setState(() {
           Navigator.pop(context);
           Get.snackbar(
-              'success_tr'.translationWord(), data.body['message'].toString(),
-              colorText: Colors.black, backgroundColor: Colors.white);
+            'success_tr'.translationWord(),
+            data.body['message'].toString(),
+            colorText: Colors.black,
+            backgroundColor: Colors.white,
+          );
           getBankAccounts();
         });
       } else {
         Get.snackbar(
           'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.white,
-          backgroundColor: Colors.red.withOpacity(0.2),
+          res['message'].toString(),
+          backgroundColor: Colors.white60,
+          colorText: Colors.black,
         );
       }
     });
   }
+  // removeAccount(item) {
+  //   String url = '${CoreUrl.serviceUrl}/wallet/bank/account?id=$item';
+  //   print(url);
+  //   // print(item);
+  //   Services().deleteRequest(url, true, '').then((data) {
+  //     print('delete');
+  //     print(data.body);
+  //     if (data.statusCode == 200) {
+  //       setState(() {
+  //         Navigator.pop(context);
+  //         Get.snackbar(
+  //             'success_tr'.translationWord(), data.body['message'].toString(),
+  //             colorText: Colors.black, backgroundColor: Colors.white);
+  //         getBankAccounts();
+  //       });
+  //     } else {
+  //       Get.snackbar(
+  //         'warning_tr'.translationWord(),
+  //         data.body['message'],
+  //         colorText: Colors.white,
+  //         backgroundColor: Colors.red.withOpacity(0.2),
+  //       );
+  //     }
+  //   });
+  // }
 
   /// [getBankAccounts] bank account list
   getBankList() async {
@@ -389,7 +425,9 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
                 borderColor: Colors.red.withOpacity(0.7),
                 text: Text(
                   'delete_tr'.translationWord(),
-                  style: const TextStyle(),
+                  style: const TextStyle(
+                    color: Colors.white,
+                  ),
                 ),
                 onPressed: () {
                   setState(() {

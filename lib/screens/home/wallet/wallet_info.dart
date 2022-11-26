@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/home/wallet/cart_screen.dart';
@@ -6,6 +7,8 @@ import 'package:gerege_app_v2/screens/home/wallet/pay_config_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/transaction.dart';
 import 'package:gerege_app_v2/screens/home/wallet/transfer_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/wallet_accounts_screen.dart';
+import 'package:gerege_app_v2/screens/main_tab.dart';
+import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
@@ -28,48 +31,71 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
     super.initState();
   }
 
+  /// [getWalletAccounts] wallet account list
+  getWalletAccounts() async {
+    print('getWalletAccounts()');
+    Services()
+        .getRequest('${CoreUrl.serviceUrl}wallet/account/balance', true, '')
+        .then((data) {
+      if (data.body['message'] == "success") {
+        setState(() {
+          GlobalVariables.accountNoList = data.body['result'];
+          print(GlobalVariables.accountNoList);
+        });
+      }
+    });
+  }
+
+  back() {
+    Get.to(() => const MainTab(indexTab: 3));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: CoreColor().btnGrey,
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
-        elevation: 0.0,
+    return WillPopScope(
+      onWillPop: () => back(),
+      child: Scaffold(
         backgroundColor: CoreColor().btnGrey,
-        centerTitle: true,
-        title: Text(
-          'money_tr'.translationWord(),
-          style: const TextStyle(
-            color: Colors.black,
-          ),
-        ),
-        actions: [
-          TextButton(
+        appBar: AppBar(
+          leading: IconButton(
             onPressed: () {
-              Get.to(() => const TransferScreen());
+              // Get.back();
+              Get.to(() => const MainTab(indexTab: 3));
             },
-            child: const Text(
-              'Transaction',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 14,
-              ),
+            icon: const Icon(
+              Icons.arrow_back,
+              color: Colors.black,
             ),
           ),
-        ],
-      ),
-      body: Column(
-        children: [
-          listWidget(),
-        ],
+          elevation: 0.0,
+          backgroundColor: CoreColor().btnGrey,
+          centerTitle: true,
+          title: Text(
+            'money_tr'.translationWord(),
+            style: const TextStyle(
+              color: Colors.black,
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.to(() => const TransferScreen());
+              },
+              child: const Text(
+                'Transaction',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ],
+        ),
+        body: Column(
+          children: [
+            listWidget(),
+          ],
+        ),
       ),
     );
   }
@@ -84,7 +110,8 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
           child: Column(
             children: [
               InkWell(
-                onTap: () {
+                onTap: () async {
+                  await getWalletAccounts();
                   Get.to(() => const TransactionScreen());
                 },
                 child: Row(

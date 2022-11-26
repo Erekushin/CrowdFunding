@@ -30,16 +30,20 @@ class _TransactionScreenState extends State<TransactionScreen>
       NumberFormat.decimalPattern(_locale).format(double.parse(s));
   RxDouble chargeAmount = 0.0.obs;
   final TextEditingController _amountController = TextEditingController();
-  RxList cardList = [].obs;
+  // RxList cardList = [].obs;
   RxList accountList = [].obs;
-  String selectionBankId = "";
-  String selectionBankAccount = "";
+
   late TabController tabController;
   RxInt selectedIndex = 0.obs;
+  RxList cartList = [].obs;
+
+  RxMap selectedCard = {}.obs;
+  RxMap selectedAccount = {}.obs;
 
   @override
   void initState() {
     super.initState();
+    getCartList();
     tabController = TabController(
       initialIndex: 0,
       length: 2, //1,
@@ -52,36 +56,99 @@ class _TransactionScreenState extends State<TransactionScreen>
     });
   }
 
-  /// [getBankAccounts] bank account list
-  getBankAccounts() async {
+  getCartList() {
     Services()
-        .getRequest('${CoreUrl.serviceUrl}wallet/bank/account', true, '')
+        .getRequest('${CoreUrl.serviceUrl}wallet/card', true, '')
         .then((data) {
-      if (data.body['message'] == "success") {
+      if (data.statusCode == 200) {
         setState(() {
-          accountList.value = data.body['result'];
+          cartList.value = data.body['result']['items'];
+          if (cartList.isNotEmpty) {
+            selectedCard.value = cartList[0];
+          }
         });
       }
     });
   }
 
-  hmacEncryp(selectedId) {
+  /// [getBankAccounts] bank account list
+  getBankAccounts() async {
+    Services()
+        .getRequest('${CoreUrl.serviceUrl}wallet/bank/account', true, '')
+        .then((data) {
+      if (data.statusCode == 200) {
+        setState(() {
+          accountList.value = data.body['result'];
+          print('accountListlist');
+          print(accountList);
+          if (accountList.isNotEmpty) {
+            selectedAccount.value = accountList[0];
+            print('utaga aw');
+            print(selectedAccount);
+          }
+        });
+      }
+    });
+  }
+
+  hmacEncryp(selected) {
     var hmackey = utf8.encode("Bm2#3Z8]HID(&Wt");
-    String hmacValue = selectedId +
+
+    String hmacValue = selected['id'].toString() +
         _amountController.text.replaceAll(',', '') +
-        chargeAmount.value.round().toString();
+        chargeAmount.value.floor().toString();
+
     var hmacSha256 = Hmac(sha256, hmackey); // HMAC-SHA256
     var digest = hmacSha256.convert(utf8.encode(hmacValue));
     var bodyData = {
-      "type": "charge",
+      // "type": "charge",
       "hash": digest.toString(),
-      "card_token_id": int.parse(selectedId),
+      "card_token_id": selected['id'].toString(),
+      "card_no": selected['card_number'],
       "device_type": Platform.isAndroid == true ? 'android' : "ios",
-      "amount": chargeAmount.value.round(),
+      "amount": chargeAmount.value.floor(),
       "charge_percent": 1,
       "charge_amount": int.parse(_amountController.text.replaceAll(',', '')),
     };
-    // cardPay(bodyData);
+    print(bodyData);
+    cardPay(bodyData);
+  }
+
+  cardPay(bodyData) {
+    Get.dialog(
+      const Center(
+        child: CircularProgressIndicator(),
+      ),
+      barrierDismissible: false,
+    );
+    Services()
+        .postRequest(json.encode(bodyData),
+            '${CoreUrl.serviceUrl}wallet/card/deposit', true, '')
+        .then((data) {
+      print(data.body);
+      if (data.statusCode == 200) {
+        Get.back();
+        Get.back();
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.black,
+          backgroundColor: Colors.white,
+        );
+        GlobalVariables.accountBalance.value =
+            GlobalVariables.accountBalance.value +
+                int.parse(_amountController.text.replaceAll(',', ''));
+      } else {
+        Navigator.of(Get.overlayContext!).pop();
+
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.black,
+          backgroundColor: Colors.white,
+        );
+      }
+    });
   }
 
   withDrawMoney() async {
@@ -92,19 +159,25 @@ class _TransactionScreenState extends State<TransactionScreen>
       barrierDismissible: false,
     );
     var bodyData = {
-      "bank_account_id": selectionBankId,
-      "account_number": selectionBankAccount,
+      "bank_account_id": selectedAccount['id'].toString(),
+      "account_number":
+          GlobalVariables.accountNoList[0]['account_no'].toString(),
       "amount": int.parse(_amountController.text.replaceAll(',', ''))
     };
+    // bank_account_id: "",
+    // account_number: "",
+    // amount: "",
     print(bodyData);
+
+    // accountNoList
 
     Services()
         .postRequest(json.encode(bodyData),
-            '${CoreUrl.serviceUrl}/wallet/withdraw', true, '')
+            '${CoreUrl.serviceUrl}wallet/withdraw', true, '')
         .then((data) {
       // var res = json.decode(data.body);
       print(data.body);
-      if (data.body['message'] == "success") {
+      if (data.statusCode == 200) {
         // Get.back();
         Get.back();
         Get.back();
@@ -232,9 +305,10 @@ class _TransactionScreenState extends State<TransactionScreen>
                 ),
               ),
               onPressed: () async {
-                // await getCartList();
+                // await getWalletAccounts();
                 setState(() {
                   print('top uooda');
+
                   topUpModal();
                 });
               },
@@ -274,7 +348,6 @@ class _TransactionScreenState extends State<TransactionScreen>
     _amountController.text = "";
     chargeAmount.value = 0;
     return showModalBottomSheet(
-      // isDismissible: false,
       context: context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
@@ -336,16 +409,6 @@ class _TransactionScreenState extends State<TransactionScreen>
     return Column(
       children: [
         const SizedBox(height: 50),
-        const Text(
-          'Top up',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontFamily: "MBold",
-            fontSize: 18,
-          ),
-        ),
-        const SizedBox(height: 60),
         Container(
           margin: const EdgeInsets.only(left: 20, right: 20),
           child: const Divider(
@@ -366,46 +429,49 @@ class _TransactionScreenState extends State<TransactionScreen>
               ),
             ),
             Expanded(
-              child: DropdownButtonFormField(
-                iconEnabledColor: Colors.grey,
-                iconDisabledColor: Colors.grey,
-                decoration: InputDecoration(
-                  fillColor: CoreColor().backgroundBlue,
-                  hintText: "",
-                  enabledBorder: InputBorder.none,
-                ),
-                isExpanded: true,
-                hint: const Text(
-                  'Select bank',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 17,
+              child: DropdownButtonHideUnderline(
+                child: DropdownButton(
+                  hint: const SizedBox(
+                    child: Text(
+                      "Карт холбоогүй байна",
+                      style: TextStyle(color: Colors.grey),
+                      textAlign: TextAlign.end,
+                    ),
                   ),
+                  isExpanded: true,
+                  value: selectedCard.value,
+                  icon: Container(
+                    margin: const EdgeInsets.only(right: 10),
+                    child: const Icon(
+                      Icons.keyboard_arrow_down_sharp,
+                    ),
+                  ),
+                  style: const TextStyle(color: Colors.black),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedCard.value = value!;
+                    });
+                  },
+                  items: cartList.map<DropdownMenuItem>(
+                    (value) {
+                      return DropdownMenuItem(
+                        value: value,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 10),
+                            Text(
+                              "${value['card_number']}",
+                            ),
+                            Text(
+                              "${value['bank']['name']}",
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ).toList(),
                 ),
-                items: cardList.map((value) {
-                  return DropdownMenuItem(
-                      value: value,
-                      child: Row(
-                        children: [
-                          const Icon(
-                            Icons.account_balance,
-                          ),
-                          const SizedBox(width: 10),
-                          Text(
-                            "${value['card_number']}",
-                          ),
-                        ],
-                      ));
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    var data = json.decode(json.encode(value));
-                    // selectionBankId = data['bank']['id'].toString();
-                    // selectionBankAccount =
-                    //     data['bank']['account_number'].toString();
-                    // print(data['bank']);
-                  });
-                },
               ),
             )
           ],
@@ -510,7 +576,7 @@ class _TransactionScreenState extends State<TransactionScreen>
               ),
               Obx(
                 () => Text(
-                  "${chargeAmount.value.ceil()}",
+                  "${chargeAmount.value.floor()}",
                   style: const TextStyle(
                     fontSize: 16,
                   ),
@@ -534,18 +600,18 @@ class _TransactionScreenState extends State<TransactionScreen>
           ),
           onPressed: () {
             setState(() {
-              if (selectionBankId != '' && _amountController.text != '') {
-                if (int.parse(_amountController.text.replaceAll(',', '')) ==
-                    0) {
+              if (selectedCard.isNotEmpty && _amountController.text != '') {
+                if (int.parse(_amountController.text.replaceAll(',', '')) <=
+                    499) {
                   Get.snackbar(
                     'warning_tr'.translationWord(),
-                    '0 -c их дүн оруулна уу'.translationWord(),
+                    '500 -c их дүн оруулна уу'.translationWord(),
                     colorText: Colors.black,
                     backgroundColor: Colors.white,
                   );
                 } else {
-                  print(selectionBankId);
-                  hmacEncryp(selectionBankId);
+                  // print(selectionBankId);
+                  hmacEncryp(selectedCard.value);
                 }
               } else {
                 Get.snackbar(
@@ -603,7 +669,7 @@ class _TransactionScreenState extends State<TransactionScreen>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      '404279568',
+                      '404230754',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontFamily: "MBold",
@@ -613,7 +679,7 @@ class _TransactionScreenState extends State<TransactionScreen>
                     TextButton(
                       onPressed: () {
                         Clipboard.setData(
-                            const ClipboardData(text: "404279568"));
+                            const ClipboardData(text: "404230754"));
                       },
                       child: Text(
                         'copy_tr'.translationWord(),
@@ -670,7 +736,7 @@ class _TransactionScreenState extends State<TransactionScreen>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      GlobalVariables.phoneNumber,
+                      "TB-${GlobalVariables.accountNoList[0]['account_no']}",
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontFamily: "MBold",
@@ -681,7 +747,8 @@ class _TransactionScreenState extends State<TransactionScreen>
                       onPressed: () {
                         Clipboard.setData(
                           ClipboardData(
-                            text: GlobalVariables.phoneNumber.toString(),
+                            text:
+                                "TB-${GlobalVariables.accountNoList[0]['account_no']}",
                           ),
                         );
                       },
@@ -760,8 +827,10 @@ class _TransactionScreenState extends State<TransactionScreen>
       // isDismissible: false,
       context: context,
       isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(25),
+        ),
       ),
       enableDrag: false,
       builder: (context) {
@@ -801,46 +870,50 @@ class _TransactionScreenState extends State<TransactionScreen>
                       ),
                     ),
                     Expanded(
-                      child: DropdownButtonFormField(
-                        iconEnabledColor: Colors.grey,
-                        iconDisabledColor: Colors.grey,
-                        decoration: InputDecoration(
-                          fillColor: CoreColor().backgroundBlue,
-                          hintText: "",
-                          enabledBorder: InputBorder.none,
-                        ),
-                        isExpanded: true,
-                        hint: Text(
-                          'select_bank'.translationWord(),
-                          style: const TextStyle(
-                            color: Colors.grey,
-                            fontSize: 17,
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          hint: const SizedBox(
+                            child: Text(
+                              "Данс холбоогүй байна",
+                              style: TextStyle(color: Colors.grey),
+                              textAlign: TextAlign.end,
+                            ),
                           ),
+                          isExpanded: true,
+                          value: selectedAccount.value,
+                          icon: Container(
+                            margin: const EdgeInsets.only(right: 10),
+                            child: const Icon(
+                              Icons.keyboard_arrow_down_sharp,
+                            ),
+                          ),
+                          style: const TextStyle(color: Colors.black),
+                          onChanged: (value) {
+                            setState(() {
+                              selectedAccount.value = value!;
+                              print(selectedAccount);
+                            });
+                          },
+                          items: accountList.map<DropdownMenuItem>(
+                            (value) {
+                              return DropdownMenuItem(
+                                value: value,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      "${value['account_number']}",
+                                    ),
+                                    Text(
+                                      "${value['bank']['name']}",
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ).toList(),
                         ),
-                        items: accountList.map((value) {
-                          return DropdownMenuItem(
-                              value: value,
-                              child: Row(
-                                children: [
-                                  const Icon(
-                                    Icons.account_balance,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Text(
-                                    "${value['account_number']}",
-                                  ),
-                                ],
-                              ));
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            var data = json.decode(json.encode(value));
-                            print(data);
-                            selectionBankId = data['bank']['id'].toString();
-                            selectionBankAccount =
-                                data['account_number'].toString();
-                          });
-                        },
                       ),
                     )
                   ],
@@ -912,7 +985,22 @@ class _TransactionScreenState extends State<TransactionScreen>
                     height: 2,
                   ),
                 ),
-                const SizedBox(height: 200),
+                // bank hoorondiin shimtgel n TDB bol 100 busad n 200
+                const SizedBox(height: 40),
+                const Center(
+                  child: Text(
+                    "Банк хоорондын шимтгэл нь ХХБ бол \n100 бусад банк 200 төгрөгний шимтгэл авна",
+                    overflow: TextOverflow.fade,
+                    textAlign: TextAlign.center,
+                    maxLines: 3,
+                    softWrap: false,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 160),
                 GeregeButtonWidget(
                   radius: 10.0,
                   elevation: 0.0,
@@ -927,19 +1015,22 @@ class _TransactionScreenState extends State<TransactionScreen>
                   ),
                   onPressed: () {
                     setState(() {
-                      if (selectionBankId != '' &&
+                      print(selectedAccount);
+                      print(int.parse(
+                          _amountController.text.replaceAll(',', '')));
+                      if (selectedAccount.isNotEmpty &&
                           _amountController.text != '') {
                         if (int.parse(
-                                _amountController.text.replaceAll(',', '')) ==
-                            0) {
+                                _amountController.text.replaceAll(',', '')) <=
+                            499) {
                           Get.snackbar(
                             'warning_tr'.translationWord(),
-                            '0 -c их дүн оруулна уу'.translationWord(),
+                            '500 -c их дүн оруулна уу'.translationWord(),
                             colorText: Colors.black,
                             backgroundColor: Colors.white,
                           );
                         } else {
-                          print(selectionBankId);
+                          // print(selectionBankId);
                           withDrawMoney();
                         }
                       } else {
@@ -963,7 +1054,12 @@ class _TransactionScreenState extends State<TransactionScreen>
 
   rechargeFee(double amount) {
     double sum = 0;
-    sum = amount + (amount / 99).floor() + 1;
+    print(amount);
+    print(amount / 99);
+//  + 1
+    sum = amount + (amount / 99);
+    print("suymfga: $sum");
+
     return sum;
   }
 }

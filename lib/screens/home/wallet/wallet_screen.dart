@@ -1,7 +1,11 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
+import 'package:gerege_app_v2/screens/home/wallet/invoice_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/money_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/wallet_info.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
@@ -51,6 +55,15 @@ class _WalletScreenState extends State<WalletScreen>
         } else {
           print(tabController.index);
           selectedIndex = tabController.index;
+
+          if (selectedIndex == 1) {
+            getInvoiceList();
+          }
+          // else if (selectedIndex == 2) {
+          //   recieptList();
+          // } else if (selectedIndex == 0) {
+          //   getStatementList();
+          // }
         }
       });
     });
@@ -62,6 +75,62 @@ class _WalletScreenState extends State<WalletScreen>
   void dispose() {
     tabController.dispose();
     super.dispose();
+  }
+
+  ///[getInvoiceList] get invoice list
+  getInvoiceList() async {
+    loader = true;
+
+    Services()
+        .getRequest('${CoreUrl.serviceUrl}wallet/invoice', true, '')
+        .then((data) {
+      print(data.statusCode);
+      log(json.encode(data.body));
+      print('res invoice');
+      print(data.body);
+      // var res = json.decode(data.body);
+      if (data.statusCode == 200) {
+        invoiceList.value = data.body['result'];
+        setState(() {
+          loader = false;
+        });
+      } else {
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.black,
+          backgroundColor: Colors.white,
+        );
+      }
+    });
+  }
+
+//   POST /wallet/invoice/cancel
+// {id}
+
+  invoiceCancel(id) async {
+    var dataBody = {"id": id};
+    Services()
+        .postRequest(json.encode(dataBody),
+            '${CoreUrl.serviceUrl}wallet/invoice/cancel', true, '')
+        .then((data) {
+      print(data.statusCode);
+      log(json.encode(data.body));
+      print('res invoice');
+      print(data.body);
+      // var res = json.decode(data.body);
+      // if (data.statusCode == 200) {
+      // invoiceList.value = data.body['result'];
+
+      // } else {
+      //   Get.snackbar(
+      //     'warning_tr'.translationWord(),
+      //     data.body['message'],
+      //     colorText: Colors.black,
+      //     backgroundColor: Colors.white,
+      //   );
+      // }
+    });
   }
 
   ///[getAccountBalance] wallet balance default account
@@ -115,10 +184,12 @@ class _WalletScreenState extends State<WalletScreen>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
-                          Icons.money,
-                          color: Colors.white,
+                        const ImageIcon(
+                          AssetImage(
+                            "assets/icons/money.png",
+                          ),
                           size: 60,
+                          color: Colors.white,
                         ),
                         Text(
                           'money_tr'.translationWord(),
@@ -140,10 +211,12 @@ class _WalletScreenState extends State<WalletScreen>
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(
-                          Icons.wallet,
-                          color: Colors.white,
+                        const ImageIcon(
+                          AssetImage(
+                            "assets/icons/wallettool.png",
+                          ),
                           size: 60,
+                          color: Colors.white,
                         ),
                         Text(
                           'wallet_tr'.translationWord(),
@@ -257,7 +330,45 @@ class _WalletScreenState extends State<WalletScreen>
                                     )
                                   : Container(
                                       margin: const EdgeInsets.only(bottom: 5),
-                                      child: getInvoiceListWidget(),
+                                      child: Column(
+                                        children: [
+                                          const SizedBox(height: 10),
+                                          InkWell(
+                                            onTap: () {
+                                              // addCart();
+                                              Get.to(
+                                                  () => const InvoiceScreen());
+                                            },
+                                            child: Container(
+                                              height: 60,
+                                              margin: const EdgeInsets.only(
+                                                  left: 20, right: 20),
+                                              width: GlobalVariables.gWidth,
+                                              padding: const EdgeInsets.all(20),
+                                              decoration: const BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                                color: Colors.white,
+                                              ),
+                                              child: Container(
+                                                alignment: Alignment.centerLeft,
+                                                child: Text(
+                                                  'invoice_send_tr'
+                                                      .translationWord(),
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 16,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: getInvoiceListWidget(),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                             )
                           : Expanded(
@@ -463,24 +574,12 @@ class _WalletScreenState extends State<WalletScreen>
                               children: [
                                 Text(
                                   invoiceList[index]['list_type'] == "RECEIVE"
-                                      ? invoiceList[index]['src_user']
-                                                  ['last_name']
-                                              .toString()
-                                              .capitalizeCustom() +
-                                          " " +
-                                          invoiceList[index]['src_user']
-                                                  ['first_name']
-                                              .toString()
-                                              .capitalizeCustom()
-                                      : invoiceList[index]['dest_user']
-                                                  ['last_name']
-                                              .toString()
-                                              .capitalizeCustom() +
-                                          " " +
-                                          invoiceList[index]['dest_user']
-                                                  ['first_name']
-                                              .toString()
-                                              .capitalizeCustom(),
+                                      ? invoiceList[index]['src_name']
+                                          .toString()
+                                          .capitalizeCustom()
+                                      : invoiceList[index]['dest_name']
+                                          .toString()
+                                          .capitalizeCustom(),
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
@@ -564,12 +663,6 @@ class _WalletScreenState extends State<WalletScreen>
   }
 
   String time(date) {
-    var dateValue = DateFormat("yyyy-MM-ddTHH:mm:ss").parseUTC(date);
-    String formattedDate = DateFormat("yyyy/MM/dd").format(dateValue);
-    return formattedDate;
-  }
-
-  String time2(date) {
     var dateValue = DateFormat("yyyy-MM-dd HH:mm:ss").parseUTC(date);
     String formattedDate = DateFormat("yyyy/MM/dd").format(dateValue);
     return formattedDate;
@@ -651,7 +744,7 @@ class _WalletScreenState extends State<WalletScreen>
                           ),
                           const SizedBox(height: 5),
                           Text(
-                            time2(transactionDocument[index]['created_date']),
+                            time(transactionDocument[index]['created_date']),
                             style: const TextStyle(
                               fontSize: 10,
                             ),
@@ -785,96 +878,53 @@ class _WalletScreenState extends State<WalletScreen>
             margin: const EdgeInsets.only(left: 15, right: 15),
             child: Column(
               children: [
-                // detail['list_type'] == "SEND" && detail['status'] == "PAID"
-                //     ? Text(
-                //         'paid_tr'.translationWord(),
-                //         textAlign: TextAlign.center,
-                //         style: const TextStyle(
-                //           color: Colors.black,
-                //           fontWeight: FontWeight.bold,
-                //           fontFamily: "MBold",
-                //           fontSize: 18,
-                //         ),
-                //       )
-
-                //     // 'Нэхэмжлэл хүлээлгийн \n төлөвт байна'
-                //     : detail['status'] == "NEW"
-                //         ? Text(
-                //             'invoice_note_tr'.translationWord(),
-                //             textAlign: TextAlign.center,
-                //             style: const TextStyle(
-                //               color: Colors.black,
-                //               fontWeight: FontWeight.bold,
-                //               fontFamily: "MBold",
-                //               fontSize: 18,
-                //             ),
-                //           )
-                //         : Text(
-                //             'paid_tr'.translationWord(),
-                //             textAlign: TextAlign.center,
-                //             style: const TextStyle(
-                //               color: Colors.black,
-                //               fontWeight: FontWeight.bold,
-                //               fontFamily: "MBold",
-                //               fontSize: 18,
-                //             ),
-                //           ),
-                // const SizedBox(height: 10),
-                // Text(
-                //   time(detail['due_date']),
-                //   style: const TextStyle(
-                //     fontSize: 12,
-                //   ),
-                // ),
-                // const SizedBox(height: 40),
-                // Container(
-                //   height: 2,
-                //   color: Colors.grey.withOpacity(0.2),
-                // ),
                 const SizedBox(height: 30),
                 detail['list_type'] == "SEND" && detail['status'] == "PAID"
-                    ? Container(
-                        alignment: Alignment.center,
-                        child: Text(
-                          'paid_tr'.translationWord(),
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "MBold",
-                            fontSize: 18,
-                          ),
+                    ? Text(
+                        'paid_tr'.translationWord(),
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "MBold",
+                          fontSize: 18,
                         ),
                       )
 
                     // 'Нэхэмжлэл хүлээлгийн \n төлөвт байна'
                     : detail['status'] == "NEW"
-                        ? Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'invoice_note_tr'.translationWord(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "MBold",
-                                fontSize: 18,
-                              ),
+                        ? Text(
+                            'invoice_note_tr'.translationWord(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "MBold",
+                              fontSize: 18,
                             ),
                           )
-                        : Container(
-                            alignment: Alignment.center,
-                            child: Text(
-                              'paid_tr'.translationWord(),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: "MBold",
-                                fontSize: 18,
-                              ),
+                        : Text(
+                            'paid_tr'.translationWord(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "MBold",
+                              fontSize: 18,
                             ),
                           ),
+                const SizedBox(height: 10),
+                Text(
+                  time(detail['due_date']),
+                  style: const TextStyle(
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(height: 40),
+                Container(
+                  height: 2,
+                  color: Colors.grey.withOpacity(0.2),
+                ),
                 const SizedBox(height: 10),
                 Row(
                   // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -928,7 +978,6 @@ class _WalletScreenState extends State<WalletScreen>
                     )
                   ],
                 ),
-
                 const SizedBox(height: 30),
                 Container(
                   height: 2,
@@ -940,30 +989,27 @@ class _WalletScreenState extends State<WalletScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // ClipRRect(
-                          //   borderRadius: BorderRadius.circular(35.0),
-                          //   child: detail['src_user']['picture'] == ""
-                          //       ? Container(
-                          //           color: Colors.grey.withOpacity(0.5),
-                          //           width: 60,
-                          //           height: 60,
-                          //         )
-                          //       : Image.network(
-                          //           CoreUrl.fileServer +
-                          //               detail['src_user']['picture'],
-                          //           height: 60.0,
-                          //           width: 60.0,
-                          //         ),
-                          // ),
-                          Container(
-                            color: Colors.grey.withOpacity(0.5),
-                            width: 60,
-                            height: 60,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(35.0),
+                            child: detail['src_profile_image'] == ""
+                                ? Container(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    width: 60,
+                                    height: 60,
+                                  )
+                                : Image.memory(
+                                    const Base64Decoder().convert(
+                                      detail['src_profile_image'].replaceAll(
+                                          'data:image/jpeg;base64,', ''),
+                                    ),
+                                    fit: BoxFit.cover,
+                                    cacheWidth: 60,
+                                    cacheHeight: 60,
+                                  ),
                           ),
                           const SizedBox(width: 20),
                           Text(
-                            "${detail['src_user']['last_name'] + " " + detail['src_user']['first_name']}"
-                                .toUpperCase(),
+                            "${detail['src_name']}".toUpperCase(),
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 15,
@@ -980,27 +1026,27 @@ class _WalletScreenState extends State<WalletScreen>
                             width: 60,
                             height: 60,
                           ),
-                          // ClipRRect(
-                          //   borderRadius: BorderRadius.circular(35.0),
-                          //   child: CoreUrl.fileServer +
-                          //               detail['dest_user']['picture'] ==
-                          //           ""
-                          //       ? Container(
-                          //           color: Colors.grey.withOpacity(0.5),
-                          //           width: 60,
-                          //           height: 60,
-                          //         )
-                          //       : Image.network(
-                          //           CoreUrl.fileServer +
-                          //               detail['dest_user']['picture'],
-                          //           height: 60.0,
-                          //           width: 60.0,
-                          //         ),
-                          // ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(35.0),
+                            child: detail['dest_profile_image'] == ""
+                                ? Container(
+                                    color: Colors.grey.withOpacity(0.5),
+                                    width: 60,
+                                    height: 60,
+                                  )
+                                : Image.memory(
+                                    const Base64Decoder().convert(
+                                      detail['dest_profile_image'].replaceAll(
+                                          'data:image/jpeg;base64,', ''),
+                                    ),
+                                    fit: BoxFit.cover,
+                                    cacheWidth: 60,
+                                    cacheHeight: 60,
+                                  ),
+                          ),
                           const SizedBox(width: 20),
                           Text(
-                            "${detail['dest_user']['last_name'] + " " + detail['dest_user']['first_name']}"
-                                .toUpperCase(),
+                            "${detail['dest_name']}".toUpperCase(),
                             style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               fontSize: 15,
@@ -1048,7 +1094,9 @@ class _WalletScreenState extends State<WalletScreen>
                               ),
                               onPressed: () {
                                 setState(() {
-                                  Get.back();
+                                  // Get.back();
+                                  print(detail['id']);
+                                  invoiceCancel(detail['id']);
                                 });
                               },
                             ),

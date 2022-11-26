@@ -125,6 +125,7 @@ class _CreateUserScreenState extends State<CreateUserScreen>
         .then((data) {
       // var res = json.decode(data.body);
       print('burtgel res');
+      print(data.body);
       var res = data.body;
       if (data.statusCode == 200) {
         // print(res['authorization']['token']);
@@ -135,8 +136,6 @@ class _CreateUserScreenState extends State<CreateUserScreen>
             .write('userInformation', res['result']['user']);
         GlobalVariables.storageToVar();
         getCountryList();
-
-        screenChange.value = 2;
       } else {
         Get.snackbar(
           'warning_tr'.translationWord(),
@@ -174,6 +173,7 @@ class _CreateUserScreenState extends State<CreateUserScreen>
         setState(() {
           print(data.body['result']['items']);
           countryList.value = data.body['result']['items'];
+          screenChange.value = 2;
         });
       } else {
         Get.snackbar(
@@ -192,11 +192,12 @@ class _CreateUserScreenState extends State<CreateUserScreen>
     var bodyMNG = {
       "country_code": selectionCountry,
       "reg_no": registerController.text,
-      "user_id": ""
     };
     var bodyOther = {
-      "birth_date": "${yearBirth.text}-${monthBirth.text}-${dayBirth.text}",
-      "category_id": selectCategoryId,
+      "birth_date": yearBirth.text == ""
+          ? ''
+          : "${yearBirth.text}-${monthBirth.text}-${dayBirth.text}",
+
       "country_code": selectionCountry,
       "date_of_expiry":
           "${yearExpire.text}-${monthExpire.text}-${dayExpire.text}",
@@ -205,8 +206,10 @@ class _CreateUserScreenState extends State<CreateUserScreen>
       "first_name": firstNameController.text,
       "last_name": lastNameController.text,
       "reg_no": "",
-      "type_id": selectTypeId,
-      "user_id": ""
+      "type_id": "",
+      "category_id": "4", //selectCategoryId,
+
+      "gender": selectionGender == "Эр" ? "1" : "0"
     };
 
     print("bodyMNG");
@@ -218,8 +221,8 @@ class _CreateUserScreenState extends State<CreateUserScreen>
     Services()
         .postRequest(
             json.encode(selectionCountry == "MNG" ? bodyMNG : bodyOther),
-            '${CoreUrl.serviceUrl}document/find',
-            false,
+            '${CoreUrl.serviceUrl}/document/find',
+            true,
             '')
         .then((data) {
       Navigator.of(Get.overlayContext!).pop();
@@ -230,7 +233,7 @@ class _CreateUserScreenState extends State<CreateUserScreen>
         print('kukukakak');
         print(data.body);
       } else {
-        Get.back();
+        // Get.back();
         Get.snackbar(
           'warning_tr'.translationWord(),
           res['message'].toString(),
@@ -473,8 +476,8 @@ class _CreateUserScreenState extends State<CreateUserScreen>
               ),
               TextFormField(
                 autofocus: false,
-                keyboardType: TextInputType.number,
-                controller: registerController,
+                keyboardType: TextInputType.text,
+                controller: lastNameController,
                 decoration: InputDecoration(
                   labelText: ''.translationWord(),
                   labelStyle: const TextStyle(
@@ -503,8 +506,8 @@ class _CreateUserScreenState extends State<CreateUserScreen>
               ),
               TextFormField(
                 autofocus: false,
-                keyboardType: TextInputType.number,
-                controller: registerController,
+                keyboardType: TextInputType.text,
+                controller: firstNameController,
                 decoration: InputDecoration(
                   labelText: ''.translationWord(),
                   labelStyle: const TextStyle(
@@ -582,6 +585,204 @@ class _CreateUserScreenState extends State<CreateUserScreen>
               const SizedBox(height: 10),
               const Text(
                 'Төрсөн огноо',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Огноо хоосон байж болохгүй';
+                          }
+                          if (!RegExp(r'[0-9]{4}$').hasMatch(value)) {
+                            return 'Огноо буруу байна!!!';
+                          }
+                          if (int.parse(value) < 1900) {
+                            return 'Огноо буруу байна!!! ';
+                          }
+                          return null;
+                        },
+                        autofocus: false,
+                        controller: yearBirth,
+                        keyboardType: TextInputType.number,
+                        maxLength: 4,
+                        decoration: InputDecoration(
+                          counterText: "",
+                          labelText: 'YYYY',
+                          labelStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
+                          contentPadding: const EdgeInsets.all(20),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Colors.black.withOpacity(0.2),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Сар хоосон байж болохгүй';
+                          }
+                          if (!RegExp(r'[0-9]{2}$').hasMatch(value)) {
+                            return 'Сар буруу байна!!!';
+                          }
+                          if (int.parse(value) > 12) {
+                            return 'Сар буруу байна!!! ';
+                          }
+                          return null;
+                        },
+                        maxLength: 2,
+                        autofocus: false,
+                        controller: monthBirth,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          counterText: "",
+                          labelText: 'MM',
+                          labelStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
+                          contentPadding: const EdgeInsets.all(20),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Colors.black.withOpacity(0.2),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Өдөр хоосон байж болохгүй';
+                          }
+                          if (!RegExp(r'[0-9]{2}$').hasMatch(value)) {
+                            return 'Өдөр буруу байна!!!';
+                          }
+                          if (int.parse(value) > 31) {
+                            return 'Өдөр буруу байна!!! ';
+                          }
+                          return null;
+                        },
+                        maxLength: 2,
+                        autofocus: false,
+                        controller: dayBirth,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          counterText: "",
+                          labelText: 'DD',
+                          labelStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
+                          contentPadding: const EdgeInsets.all(20),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Colors.black.withOpacity(0.2),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
+          ),
+        ),
+        const SizedBox(height: 20),
+        Container(
+          width: GlobalVariables.gWidth,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.3),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(20),
+            ),
+            border: Border.all(
+              width: 1,
+              color: Colors.black.withOpacity(0.2),
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 10),
+              const Text(
+                'Пасспортын мэдээлэл',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Пасспортын дугаар',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              TextFormField(
+                autofocus: false,
+                keyboardType: TextInputType.text,
+                controller: docNoController,
+                decoration: InputDecoration(
+                  labelText: ''.translationWord(),
+                  labelStyle: const TextStyle(
+                    color: Colors.black,
+                    fontSize: 15,
+                  ),
+                  contentPadding: const EdgeInsets.all(20),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: const BorderRadius.all(Radius.circular(10)),
+                    borderSide: BorderSide(
+                      width: 1,
+                      color: Colors.black.withOpacity(0.2),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Text(
+                'Пасспорт олгосон огноо',
                 style: TextStyle(
                   fontSize: 16,
                 ),
@@ -718,6 +919,143 @@ class _CreateUserScreenState extends State<CreateUserScreen>
                 ),
               ),
               const SizedBox(height: 10),
+              const Text(
+                'Пасспорт дуусах огноо',
+                style: TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+              SizedBox(
+                height: 60,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Огноо хоосон байж болохгүй';
+                          }
+                          if (!RegExp(r'[0-9]{4}$').hasMatch(value)) {
+                            return 'Огноо буруу байна!!!';
+                          }
+                          if (int.parse(value) < 1900) {
+                            return 'Огноо буруу байна!!! ';
+                          }
+                          return null;
+                        },
+                        autofocus: false,
+                        controller: yearExpire,
+                        keyboardType: TextInputType.number,
+                        maxLength: 4,
+                        decoration: InputDecoration(
+                          counterText: "",
+                          labelText: 'YYYY',
+                          labelStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
+                          contentPadding: const EdgeInsets.all(20),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Colors.black.withOpacity(0.2),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Сар хоосон байж болохгүй';
+                          }
+                          if (!RegExp(r'[0-9]{2}$').hasMatch(value)) {
+                            return 'Сар буруу байна!!!';
+                          }
+                          if (int.parse(value) > 12) {
+                            return 'Сар буруу байна!!! ';
+                          }
+                          return null;
+                        },
+                        maxLength: 2,
+                        autofocus: false,
+                        controller: monthExpire,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          counterText: "",
+                          labelText: 'MM',
+                          labelStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
+                          contentPadding: const EdgeInsets.all(20),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Colors.black.withOpacity(0.2),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Өдөр хоосон байж болохгүй';
+                          }
+                          if (!RegExp(r'[0-9]{2}$').hasMatch(value)) {
+                            return 'Өдөр буруу байна!!!';
+                          }
+                          if (int.parse(value) > 31) {
+                            return 'Өдөр буруу байна!!! ';
+                          }
+                          return null;
+                        },
+                        maxLength: 2,
+                        autofocus: false,
+                        controller: dayExpire,
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                          counterText: "",
+                          labelText: 'DD',
+                          labelStyle: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                          ),
+                          contentPadding: const EdgeInsets.all(20),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Colors.black.withOpacity(0.2),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

@@ -43,6 +43,7 @@ class GlobalVariables {
   static int isConfirmedPhone = 0;
   static int isConfirmedEmail = 0;
   static RxInt accountBalance = 1.obs;
+  static List accountNoList = [];
 
   /// [storageToVar] user variables assign a value
   static storageToVar() {

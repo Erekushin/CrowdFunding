@@ -66,6 +66,11 @@ class TranslationWords {
           'When you transfer money through the banking app, just copy the above code on the transaction value. If the transaction value is entered incorrectly, the account will not be recharged.',
       'copy_tr': 'Copy',
       'warning_tr': 'Warning',
+      'invoice_note_tr': 'The claim is pending',
+      'cancel_tr': 'Cancel',
+      'payment_code_tr': "Payment",
+      'invoice_send_tr': 'Send invoice',
+      'allow_tr': 'Allow',
     },
     'mn_MN': {
       'login_name_tr': 'Нэвтрэх нэр',
@@ -134,6 +139,11 @@ class TranslationWords {
       'account_warning_tr':
           'Та банкны апп-р мөнгө шилжүүлэхдээ гүйлгээний утга дээр зөвхөн дээрх кодыг хуулж тавина уу. Гүйлгээний утга буруу бичигдсэн тохиолдолд данс цэнэглэгдэхгүй болно.',
       'warning_tr': 'Анхааруулга',
+      'invoice_note_tr': 'Нэхэмжлэл хүлээлгийн төлөвт байна',
+      'cancel_tr': 'Татгалзах',
+      'payment_code_tr': "Төлөх",
+      'invoice_send_tr': 'Нэхэмжлэл илгээх',
+      'allow_tr': 'Зөвшөөрөх',
     },
     'ru_RU': {
       'login_name_tr': 'Логин',

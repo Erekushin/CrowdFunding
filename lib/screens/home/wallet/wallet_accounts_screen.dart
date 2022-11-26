@@ -40,8 +40,6 @@ class _WalletAccountsScreenState extends State<WalletAccountsScreen>
     });
   }
 
-// set default account
-// POST {{local}}/wallet/account/default?account_no=1000000001
   /// [addBankAccount] bank account add
   addGeregeAccount() {
     var bodyData = {};
@@ -128,35 +126,35 @@ class _WalletAccountsScreenState extends State<WalletAccountsScreen>
         ),
         child: Column(
           children: [
-            InkWell(
-              onTap: () {
-                setState(() {
-                  print('click');
-                  addGeregeAccount();
-                });
-              },
-              child: Container(
-                height: 60,
-                width: GlobalVariables.gWidth,
-                margin: const EdgeInsets.only(top: 10, right: 25, left: 25),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey,
-                      offset: Offset(0.0, 1.0),
-                      blurRadius: 1.0,
-                    ),
-                  ],
-                ),
-                child: const Icon(
-                  Icons.add_circle_outline,
-                  size: 50,
-                  color: Colors.grey,
-                ),
-              ),
-            ),
+            // InkWell(
+            //   onTap: () {
+            //     setState(() {
+            //       print('click');
+            //       addGeregeAccount();
+            //     });
+            //   },
+            //   child: Container(
+            //     height: 60,
+            //     width: GlobalVariables.gWidth,
+            //     margin: const EdgeInsets.only(top: 10, right: 25, left: 25),
+            //     decoration: const BoxDecoration(
+            //       color: Colors.white,
+            //       borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            //       boxShadow: [
+            //         BoxShadow(
+            //           color: Colors.grey,
+            //           offset: Offset(0.0, 1.0),
+            //           blurRadius: 1.0,
+            //         ),
+            //       ],
+            //     ),
+            //     child: const Icon(
+            //       Icons.add_circle_outline,
+            //       size: 50,
+            //       color: Colors.grey,
+            //     ),
+            //   ),
+            // ),
             const SizedBox(height: 10),
             Expanded(
               child: cartList(),
@@ -200,22 +198,24 @@ class _WalletAccountsScreenState extends State<WalletAccountsScreen>
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Container(
-                        padding: const EdgeInsets.only(top: 10, right: 10),
-                        alignment: Alignment.topRight,
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              print('delete');
-                            });
-                          },
-                          child: Icon(
-                            Icons.delete,
-                            size: 25,
-                            color: Colors.white.withOpacity(0.5),
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   padding: const EdgeInsets.only(top: 10, right: 10),
+                      //   alignment: Alignment.topRight,
+                      //   child: InkWell(
+                      //     onTap: () {
+                      //       setState(() {
+                      //         print('delete');
+                      //         deleteGeregeAccount(
+                      //             accountList[index]['account_no']);
+                      //       });
+                      //     },
+                      //     child: Icon(
+                      //       Icons.delete,
+                      //       size: 25,
+                      //       color: Colors.white.withOpacity(0.5),
+                      //     ),
+                      //   ),
+                      // ),
                       Container(
                         padding: const EdgeInsets.only(top: 10, right: 10),
                         alignment: Alignment.topRight,

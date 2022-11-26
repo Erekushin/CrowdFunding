@@ -15,14 +15,14 @@ import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class TransferScreen extends StatefulWidget {
-  const TransferScreen({Key? key}) : super(key: key);
+class InvoiceScreen extends StatefulWidget {
+  const InvoiceScreen({Key? key}) : super(key: key);
 
   @override
-  State createState() => _TransferScreenState();
+  State createState() => _InvoiceScreenState();
 }
 
-class _TransferScreenState extends State<TransferScreen> {
+class _InvoiceScreenState extends State<InvoiceScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   RxBool isSwitched = false.obs;
   var priceController = TextEditingController();
@@ -89,30 +89,27 @@ class _TransferScreenState extends State<TransferScreen> {
     });
   }
 
-//   11. Шилжүүлэх
-// url: /wallet/send
-// method: post
-// body: {
-//             amount: "",
-//             dest_user_id: "", (Шилжүүлэх хүний ID)
-//             src_account_no: "", (Дансны account no)
-//             description: "",
-//           }
+// invoice uusgeh
+// POST {{local}}/wallet/invoice
+//   {
+//     "dest_user_id": "10000081",
+//     "amount": 155,
+//     "description":"sen darga"
+// }
 
-  sendTransaction(pincode) async {
+  invoiceScreen(pincode) async {
     // var bytes = utf8.encode(pincode);
     // var digest = md5.convert(bytes);
     var bodyData = {
       "dest_user_id": destUserId,
       "amount": int.parse(priceController.text.replaceAll(',', '')),
       "description": descController.text,
-      "src_account_no": "${GlobalVariables.accountNoList[0]['account_no']}",
       // "pin_code": digest.toString()
     };
 
     Services()
-        .postRequest(
-            json.encode(bodyData), '${CoreUrl.serviceUrl}wallet/send', true, '')
+        .postRequest(json.encode(bodyData),
+            '${CoreUrl.serviceUrl}wallet/invoice', true, '')
         .then((data) {
       // var res = json.decode(data.body);
       if (data.body['message'] == "success") {
@@ -157,7 +154,7 @@ class _TransferScreenState extends State<TransferScreen> {
         appBar: const PreferredSize(
           preferredSize: Size.fromHeight(65), // Set this height
           child: BackAppBar(
-            titleText: 'transfer_tr',
+            titleText: 'invoice_tr',
           ),
         ),
         body: Column(
@@ -426,7 +423,7 @@ class _TransferScreenState extends State<TransferScreen> {
                                       controller4: _controller4,
                                       checkEvent: (val) async {
                                         debugPrint("text ${val.length}");
-                                        sendTransaction(
+                                        invoiceScreen(
                                           _controller1.text +
                                               _controller2.text +
                                               _controller3.text +
