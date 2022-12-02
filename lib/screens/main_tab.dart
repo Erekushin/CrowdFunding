@@ -9,7 +9,10 @@ import 'package:gerege_app_v2/screens/home/qr_reader.dart';
 import 'package:gerege_app_v2/screens/home/wallet/wallet_screen.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/drawer.dart';
+import 'package:get/get.dart';
 import 'package:get/route_manager.dart';
+
+import '../widget/drawer_tablet.dart';
 
 class MainTab extends StatefulWidget {
   final int indexTab;
@@ -33,7 +36,6 @@ class _MainTabState extends State<MainTab> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      print(index);
       switch (index) {
         case 0:
           if (GlobalVariables.useTablet) {
@@ -65,156 +67,154 @@ class _MainTabState extends State<MainTab> {
       onWillPop: () {
         return Future.value(_allow);
       },
-      child: Scaffold(
-        key: _drawerKey,
-        drawerEdgeDragWidth: 0.0,
-        drawer: const DrawerWidget(),
-        appBar: AppBar(
-          backgroundColor: CoreColor().backgroundBlue,
-          title: const Text('Gerege template'),
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () {
-              setState(() {
-                _drawerKey.currentState?.openDrawer();
-              });
-            },
-            icon: const Icon(
-              Icons.menu,
-              color: Colors.white,
-              size: 30,
-            ),
-          ),
-          actions: [
-            Container(
-              margin: const EdgeInsets.only(right: 20),
-              child: IconButton(
-                onPressed: () {
-                  setState(() {
-                    print('qr call');
-                    Get.to(() => const QrCodeScanner());
-                  });
-                },
-                icon: const Icon(
-                  Icons.qr_code,
-                  color: Colors.white,
-                  size: 40,
+      child: Row(
+        children: [
+          GlobalVariables.useTablet
+              ? Obx(
+                  () => SizedBox(
+                    width: GlobalVariables.isTabletSidebar.value ? 250 : 0,
+                    child: const DrawerTabletWidget(),
+                  ),
+                )
+              : Container(),
+          Expanded(
+            child: Scaffold(
+              key: _drawerKey,
+              drawerEdgeDragWidth: 0.0,
+              drawer: const DrawerWidget(),
+              appBar: AppBar(
+                backgroundColor: CoreColor().backgroundBlue,
+                title: const Text('Gerege template'),
+                centerTitle: true,
+                leading: IconButton(
+                  onPressed: () {
+                    if (GlobalVariables.useTablet) {
+                      GlobalVariables.isTabletSidebar.value =
+                          !GlobalVariables.isTabletSidebar.value;
+                    } else {
+                      setState(() {
+                        _drawerKey.currentState?.openDrawer();
+                      });
+                    }
+                  },
+                  icon: const Icon(
+                    Icons.menu,
+                    color: Colors.white,
+                    size: 30,
+                  ),
                 ),
+                actions: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 20),
+                    child: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          print('qr call');
+                          Get.to(() => const QrCodeScanner());
+                        });
+                      },
+                      icon: const Icon(
+                        Icons.qr_code,
+                        color: Colors.white,
+                        size: 40,
+                      ),
+                    ),
+                  )
+                ],
+                automaticallyImplyLeading: false,
               ),
-            )
-          ],
-          automaticallyImplyLeading: false,
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: FloatingActionButton(
-          elevation: 0.0,
-          backgroundColor: CoreColor().backgroundBlue,
-          child: Image.asset(
-            "assets/images/solo_logo.png",
-            width: 40,
-          ),
-          onPressed: () {
-            _onItemTapped(4);
-          },
-        ),
-        bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-          notchAndCornersAnimation: null,
-          splashSpeedInMilliseconds: 0,
-          shadow: const BoxShadow(
-            offset: Offset(0, 1),
-            blurRadius: 2,
-            spreadRadius: 1,
-            color: Colors.grey,
-          ),
-          itemCount: 4,
-          tabBuilder: (int index, bool isActive) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                index == 0
-                    ? Icon(
-                        Icons.account_circle_outlined,
-                        size: 21,
-                        color: isActive == true
-                            ? Colors.white
-                            : Colors.white.withOpacity(0.5),
-                      )
-                    : index == 1
-                        ? Icon(
-                            Icons.newspaper,
-                            size: 26,
-                            color: isActive == true
-                                ? Colors.white
-                                : Colors.white.withOpacity(0.5),
-                          )
-                        : Icon(
-                            Icons.wallet,
-                            size: 26,
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+              floatingActionButton: FloatingActionButton(
+                elevation: 0.0,
+                backgroundColor: CoreColor().backgroundBlue,
+                child: Image.asset(
+                  "assets/images/solo_logo.png",
+                  width: 40,
+                ),
+                onPressed: () {
+                  _onItemTapped(4);
+                },
+              ),
+              bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+                notchAndCornersAnimation: null,
+                splashSpeedInMilliseconds: 0,
+                shadow: const BoxShadow(
+                  offset: Offset(0, 1),
+                  blurRadius: 2,
+                  spreadRadius: 1,
+                  color: Colors.grey,
+                ),
+                itemCount: 4,
+                tabBuilder: (int index, bool isActive) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      index == 0
+                          ? Icon(
+                              Icons.account_circle_outlined,
+                              size: 21,
+                              color: isActive == true
+                                  ? Colors.white
+                                  : Colors.white.withOpacity(0.5),
+                            )
+                          : index == 1
+                              ? Icon(
+                                  Icons.newspaper,
+                                  size: 26,
+                                  color: isActive == true
+                                      ? Colors.white
+                                      : Colors.white.withOpacity(0.5),
+                                )
+                              : Icon(
+                                  Icons.wallet,
+                                  size: 26,
+                                  color: isActive == true
+                                      ? Colors.white
+                                      : Colors.white.withOpacity(0.5),
+                                ),
+                      const SizedBox(height: 4),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          index == 0
+                              ? 'Би'
+                              : index == 1
+                                  ? 'Мэдээ'
+                                  : index == 2
+                                      ? 'Мэдээ'
+                                      : 'Хэтэвч',
+                          maxLines: 1,
+                          style: TextStyle(
                             color: isActive == true
                                 ? Colors.white
                                 : Colors.white.withOpacity(0.5),
                           ),
-                const SizedBox(height: 4),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    index == 0
-                        ? 'Би'
-                        : index == 1
-                            ? 'Мэдээ'
-                            : index == 2
-                                ? 'Мэдээ'
-                                : 'Хэтэвч',
-                    maxLines: 1,
-                    style: TextStyle(
-                      color: isActive == true
-                          ? Colors.white
-                          : Colors.white.withOpacity(0.5),
-                    ),
-                  ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+                backgroundColor: CoreColor().backgroundBlue,
+                activeIndex: _selectedIndex,
+                notchSmoothness: NotchSmoothness.defaultEdge,
+                gapLocation: GapLocation.center,
+                leftCornerRadius: 20,
+                rightCornerRadius: 20,
+                onTap: _onItemTapped,
+              ),
+              body: Container(
+                width: GlobalVariables.gWidth,
+                height: GlobalVariables.gHeight,
+                decoration: const BoxDecoration(
+                  color: Colors.blue,
                 ),
-              ],
-            );
-          },
-          backgroundColor: CoreColor().backgroundBlue,
-          activeIndex: _selectedIndex,
-          notchSmoothness: NotchSmoothness.defaultEdge,
-          gapLocation: GapLocation.center,
-          leftCornerRadius: 20,
-          rightCornerRadius: 20,
-          onTap: _onItemTapped,
-        ),
-        body: Container(
-          width: GlobalVariables.gWidth,
-          height: GlobalVariables.gHeight,
-          decoration: const BoxDecoration(
-            color: Colors.blue,
+                child: currentPage,
+              ),
+            ),
           ),
-          child:
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: Align(
-              //         alignment: Alignment.center,
-              //         child: Column(
-              //           children: [currentPage],
-              //         ),
-              //       ),
-              //     ),
-              //     SizedBox(
-              //       width: 200,
-              //       child: Align(
-              //         alignment: Alignment.center,
-              //         child: Column(
-              //           children: [Text("data")],
-              //         ),
-              //       ),
-              //     )
-              //   ],
-              // )
-              currentPage,
-        ),
+        ],
       ),
     );
   }

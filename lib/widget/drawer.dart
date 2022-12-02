@@ -8,6 +8,8 @@ import 'package:gerege_app_v2/screens/login/phone/login_screen.dart';
 import 'package:gerege_app_v2/screens/login/tablet/login_screen_tablet.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
+import 'package:gerege_app_v2/widget/sidebar/header_logo.dart';
+import 'package:gerege_app_v2/widget/sidebar/menu.dart';
 import 'package:get/route_manager.dart';
 
 class DrawerWidget extends StatefulWidget {
@@ -35,138 +37,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
           elevation: 1.0,
           child: Column(
             children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  color: CoreColor().backgroundBlue,
-                ),
-                height: 200,
-                width: GlobalVariables.gWidth,
-                child: Stack(
-                  children: [
-                    SizedBox(
-                      width: GlobalVariables.gWidth,
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 60),
-                          SizedBox(
-                            height: 90,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(20.0),
-                              child: Image.asset(
-                                "assets/images/gerege_logo_white.png",
-                                fit: BoxFit.cover,
-                                height: GlobalVariables.gHeight,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 45,
-                      child: InkWell(
-                        onTap: () {
-                          Get.to(() => const ServiceScreen());
-                        },
-                        child: ListTile(
-                          title: const Text(
-                            'Үйлчилгээ',
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: CoreColor().backgroundBlue,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                    SizedBox(
-                      height: 45,
-                      child: InkWell(
-                        onTap: () {
-                          Get.to(() => const CoreInfoScreen());
-                        },
-                        child: ListTile(
-                          title: const Text(
-                            'Үндсэн мэдээлэл',
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: CoreColor().backgroundBlue,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                    SizedBox(
-                      height: 45,
-                      child: InkWell(
-                        onTap: () {
-                          Get.to(() => const LoginInfoScreen());
-                        },
-                        child: ListTile(
-                          title: const Text(
-                            'Нэвтрэх мэдээлэл',
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: CoreColor().backgroundBlue,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                    SizedBox(
-                      height: 45,
-                      child: InkWell(
-                        onTap: () {
-                          Get.to(() => const ConfirmationScreen());
-                        },
-                        child: ListTile(
-                          title: const Text(
-                            'Баталгаажуулалт',
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
-                          ),
-                          trailing: Icon(
-                            Icons.arrow_forward_ios_outlined,
-                            color: CoreColor().backgroundBlue,
-                            size: 20,
-                          ),
-                        ),
-                      ),
-                    ),
-                    Divider(
-                      color: Colors.black.withOpacity(0.5),
-                    ),
-                  ],
-                ),
-              ),
+              const HeaderLogoWidget(),
+              const Expanded(child: MenuWidget()),
               GeregeButtonWidget(
                 radius: 10.0,
                 elevation: 0.0,

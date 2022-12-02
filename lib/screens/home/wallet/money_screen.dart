@@ -81,21 +81,38 @@ class _NMoneyScreenState extends State<MoneyScreen> {
           ),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            barcodeWidget(),
-            actionWidget(),
-          ],
-        ),
-      ),
+      body: GlobalVariables.useTablet // ?? tablet response
+          ? Row(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: barcodeWidget(),
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      actionWidget(),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  barcodeWidget(),
+                  actionWidget(),
+                ],
+              ),
+            ),
     );
   }
 
   Widget barcodeWidget() {
     return Container(
       width: GlobalVariables.gWidth,
-      margin: const EdgeInsets.all(20),
+      margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: Colors.white,

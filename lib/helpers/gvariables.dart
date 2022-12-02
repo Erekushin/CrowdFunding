@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 
 class GlobalVariables {
   static bool useTablet = false;
+  static RxBool isTabletSidebar = true.obs;
   static double gWidth = Get.width;
   static double gHeight = Get.height;
   static GetStorage gStorage = GetStorage();
@@ -109,5 +110,15 @@ class GlobalVariables {
 
   static bool keyboardIsVisible(BuildContext context) {
     return !(MediaQuery.of(context).viewInsets.bottom == 0.0);
+  }
+
+  static String moneyFormat(String price) {
+    if (price.length >= 2) {
+      var value = price;
+      value = value.replaceAll(RegExp(r'\D'), '');
+      value = value.replaceAll(RegExp(r'\B(?=(\d{3})+(?!\d))'), ',');
+      return value;
+    }
+    return "";
   }
 }

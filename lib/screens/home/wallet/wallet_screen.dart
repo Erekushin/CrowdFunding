@@ -7,6 +7,8 @@ import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/home/wallet/invoice_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/money_screen.dart';
+import 'package:gerege_app_v2/screens/home/wallet/phone/wallet_screen_phone.dart';
+import 'package:gerege_app_v2/screens/home/wallet/tablet/wallet_screen_tablet.dart';
 import 'package:gerege_app_v2/screens/home/wallet/wallet_info.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
@@ -149,244 +151,153 @@ class _WalletScreenState extends State<WalletScreen>
     });
   }
 
-  moneyFormat(String price) {
-    if (price.length >= 2) {
-      var value = price;
-      value = value.replaceAll(RegExp(r'\D'), '');
-      value = value.replaceAll(RegExp(r'\B(?=(\d{3})+(?!\d))'), ',');
-      return value;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: CoreColor().btnGrey,
       resizeToAvoidBottomInset: false,
-      body: Column(
-        children: [
-          Container(
-            height: 140,
-            // padding: const EdgeInsets.all(20),
-            margin: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: CoreColor().backgroundBlue,
-              borderRadius: const BorderRadius.all(Radius.circular(10.0)),
-            ),
-            child: Row(
+      body: GlobalVariables.useTablet
+          ? Row(
               children: [
+                SizedBox(width: 200, child: WalletScreenTablet()),
                 Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      print('money');
-                      Get.to(() => const MoneyScreen());
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const ImageIcon(
-                          AssetImage(
-                            "assets/icons/money.png",
-                          ),
-                          size: 60,
-                          color: Colors.white,
-                        ),
-                        Text(
-                          'money_tr'.translationWord(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                      ],
-                    ),
-                  ),
+                  child: tabsAndData(),
                 ),
+              ],
+            )
+          : Column(
+              children: [
+                WalletScreenPhone(),
                 Expanded(
-                  child: InkWell(
-                    onTap: () {
-                      print('wallet');
-                      Get.to(() => const WalletInfoScreen());
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const ImageIcon(
-                          AssetImage(
-                            "assets/icons/wallettool.png",
-                          ),
-                          size: 60,
-                          color: Colors.white,
-                        ),
-                        Text(
-                          'wallet_tr'.translationWord(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                        Obx(
-                          () => Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                _formatNumber(GlobalVariables
-                                    .accountBalance.value
-                                    .toString()
-                                    .replaceAll(',', '')),
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Container(
-                                alignment: Alignment.bottomCenter,
-                                child: const Text(
-                                  '₮',
-                                  textAlign: TextAlign.end,
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
+                  child: tabsAndData(),
+                ),
               ],
             ),
-          ),
-          Expanded(
-            child: Container(
-              height: GlobalVariables.gHeight,
+    );
+  }
+
+  Widget tabsAndData() {
+    return Container(
+      height: GlobalVariables.gHeight,
+      decoration: BoxDecoration(
+        color: CoreColor().btnGrey,
+      ),
+      child: Column(
+        children: [
+          const SizedBox(height: 10),
+          Container(
+            // height: 30,
+            padding: const EdgeInsets.only(left: 20, right: 20),
+            decoration: const BoxDecoration(
+              color: Colors.transparent,
+            ),
+            child: DecoratedBox(
               decoration: BoxDecoration(
-                color: CoreColor().btnGrey,
-              ),
-              child: Column(
-                children: [
-                  const SizedBox(height: 10),
-                  Container(
-                    // height: 30,
-                    padding: const EdgeInsets.only(left: 20, right: 20),
-                    decoration: const BoxDecoration(
-                      color: Colors.transparent,
-                    ),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.0),
-                        border: Border(
-                          bottom: BorderSide(
-                            color: Colors.grey.withOpacity(0.2),
-                            width: 1,
-                          ),
-                        ),
-                      ),
-                      child: TabBar(
-                        indicatorColor: CoreColor().backgroundButton,
-                        labelColor: Colors.black,
-                        unselectedLabelColor: Colors.grey,
-                        controller: tabController,
-                        labelStyle: const TextStyle(
-                          fontSize: 13,
-                          fontFamily: "MRegular",
-                        ),
-                        tabs: [
-                          Tab(
-                            text: 'transaction_tr'.translationWord(),
-                          ),
-                          Tab(
-                            text: 'invoices_tr'.translationWord(),
-                          ),
-                          Tab(
-                            text: 'documents_tr'.translationWord(),
-                          ),
-                        ],
-                      ),
-                    ),
+                color: Colors.white.withOpacity(0.0),
+                border: Border(
+                  bottom: BorderSide(
+                    color: Colors.grey.withOpacity(0.2),
+                    width: 1,
                   ),
-                  selectedIndex == 0
-                      ? Expanded(
-                          child: loader == true
-                              ? Center(
-                                  child: CircularProgressIndicator(
-                                    color: CoreColor().backgroundBtnBlue,
-                                  ),
-                                )
-                              : Container(
-                                  margin: const EdgeInsets.only(bottom: 5),
-                                  child: documentListWidget(),
-                                ),
-                        )
-                      : selectedIndex == 1
-                          ? Expanded(
-                              child: loader == true
-                                  ? Center(
-                                      child: CircularProgressIndicator(
-                                        color: CoreColor().backgroundBtnBlue,
-                                      ),
-                                    )
-                                  : Container(
-                                      margin: const EdgeInsets.only(bottom: 5),
-                                      child: Column(
-                                        children: [
-                                          const SizedBox(height: 10),
-                                          InkWell(
-                                            onTap: () {
-                                              // addCart();
-                                              Get.to(
-                                                  () => const InvoiceScreen());
-                                            },
-                                            child: Container(
-                                              height: 60,
-                                              margin: const EdgeInsets.only(
-                                                  left: 20, right: 20),
-                                              width: GlobalVariables.gWidth,
-                                              padding: const EdgeInsets.all(20),
-                                              decoration: const BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(10),
-                                                ),
-                                                color: Colors.white,
-                                              ),
-                                              child: Container(
-                                                alignment: Alignment.centerLeft,
-                                                child: Text(
-                                                  'invoice_send_tr'
-                                                      .translationWord(),
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: getInvoiceListWidget(),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                            )
-                          : Expanded(
-                              child: loader == true
-                                  ? Center(
-                                      child: CircularProgressIndicator(
-                                        color: CoreColor().backgroundBtnBlue,
-                                      ),
-                                    )
-                                  : Container(
-                                      margin: const EdgeInsets.only(bottom: 5),
-                                      child: transactionListWidget(),
-                                    ),
-                            )
+                ),
+              ),
+              child: TabBar(
+                indicatorColor: CoreColor().backgroundButton,
+                labelColor: Colors.black,
+                unselectedLabelColor: Colors.grey,
+                controller: tabController,
+                labelStyle: const TextStyle(
+                  fontSize: 13,
+                  fontFamily: "MRegular",
+                ),
+                tabs: [
+                  Tab(
+                    text: 'transaction_tr'.translationWord(),
+                  ),
+                  Tab(
+                    text: 'invoices_tr'.translationWord(),
+                  ),
+                  Tab(
+                    text: 'documents_tr'.translationWord(),
+                  ),
                 ],
               ),
             ),
           ),
+          selectedIndex == 0
+              ? Expanded(
+                  child: loader == true
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: CoreColor().backgroundBtnBlue,
+                          ),
+                        )
+                      : Container(
+                          margin: const EdgeInsets.only(bottom: 5),
+                          child: documentListWidget(),
+                        ),
+                )
+              : selectedIndex == 1
+                  ? Expanded(
+                      child: loader == true
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: CoreColor().backgroundBtnBlue,
+                              ),
+                            )
+                          : Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 10),
+                                  InkWell(
+                                    onTap: () {
+                                      // addCart();
+                                      Get.to(() => const InvoiceScreen());
+                                    },
+                                    child: Container(
+                                      height: 60,
+                                      margin: const EdgeInsets.only(
+                                          left: 20, right: 20),
+                                      width: GlobalVariables.gWidth,
+                                      padding: const EdgeInsets.all(20),
+                                      decoration: const BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                        color: Colors.white,
+                                      ),
+                                      child: Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Text(
+                                          'invoice_send_tr'.translationWord(),
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: getInvoiceListWidget(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                    )
+                  : Expanded(
+                      child: loader == true
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: CoreColor().backgroundBtnBlue,
+                              ),
+                            )
+                          : Container(
+                              margin: const EdgeInsets.only(bottom: 5),
+                              child: transactionListWidget(),
+                            ),
+                    )
         ],
       ),
     );
@@ -840,7 +751,7 @@ class _WalletScreenState extends State<WalletScreen>
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "${moneyFormat(detail['amount'].toString())}₮",
+                  "${GlobalVariables.moneyFormat(detail['amount'].toString())}₮",
                   style: const TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 35,
@@ -962,7 +873,7 @@ class _WalletScreenState extends State<WalletScreen>
                       children: [
                         // const Spacer(),
                         Text(
-                          "${moneyFormat(detail['total_amount'].toString())}₮",
+                          "${GlobalVariables.moneyFormat(detail['total_amount'].toString())}₮",
                           style: const TextStyle(
                             // fontWeight: FontWeight.w400,
                             fontSize: 35,
