@@ -239,7 +239,9 @@ class _TransactionScreenState extends State<TransactionScreen>
       ),
       body: Column(
         children: [
-          const SizedBox(height: 100),
+          GlobalVariables.useTablet
+              ? const SizedBox(height: 30)
+              : const SizedBox(height: 100),
           const Center(
             child: Icon(
               Icons.monetization_on,
@@ -338,7 +340,9 @@ class _TransactionScreenState extends State<TransactionScreen>
               },
             ),
           ),
-          const SizedBox(height: 120),
+          GlobalVariables.useTablet
+              ? const SizedBox(height: 50)
+              : const SizedBox(height: 120),
         ],
       ),
     );
@@ -358,7 +362,9 @@ class _TransactionScreenState extends State<TransactionScreen>
       enableDrag: false,
       builder: (context) {
         return SizedBox(
-          height: GlobalVariables.gHeight - 200,
+          height: GlobalVariables.useTablet
+              ? GlobalVariables.gHeight - 100
+              : GlobalVariables.gHeight - 200,
           child: Obx(
             () => Column(
               children: [
@@ -406,250 +412,404 @@ class _TransactionScreenState extends State<TransactionScreen>
   }
 
   topupCart() {
-    return Column(
-      children: [
-        const SizedBox(height: 50),
-        Container(
-          margin: const EdgeInsets.only(left: 20, right: 20),
-          child: const Divider(
-            color: Colors.grey,
-            height: 2,
-          ),
-        ),
-        Row(
-          children: [
-            Container(
-              width: 120,
-              margin: const EdgeInsets.only(left: 20, right: 10),
-              child: Text(
-                'cart_tr'.translationWord(),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          const SizedBox(height: 50),
+          Container(
+            margin: const EdgeInsets.only(left: 20, right: 20),
+            child: const Divider(
+              color: Colors.grey,
+              height: 2,
             ),
-            Expanded(
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  hint: const SizedBox(
-                    child: Text(
-                      "Карт холбоогүй байна",
-                      style: TextStyle(color: Colors.grey),
-                      textAlign: TextAlign.end,
-                    ),
-                  ),
-                  isExpanded: true,
-                  value: selectedCard.value,
-                  icon: Container(
-                    margin: const EdgeInsets.only(right: 10),
-                    child: const Icon(
-                      Icons.keyboard_arrow_down_sharp,
-                    ),
-                  ),
-                  style: const TextStyle(color: Colors.black),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedCard.value = value!;
-                    });
-                  },
-                  items: cartList.map<DropdownMenuItem>(
-                    (value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 10),
-                            Text(
-                              "${value['card_number']}",
-                            ),
-                            Text(
-                              "${value['bank']['name']}",
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  ).toList(),
-                ),
-              ),
-            )
-          ],
-        ),
-        const SizedBox(height: 5),
-        Container(
-          margin: const EdgeInsets.only(left: 20, right: 20),
-          child: const Divider(
-            color: Colors.grey,
-            height: 2,
           ),
-        ),
-        Row(
-          children: [
-            Container(
-              width: 90,
-              margin: const EdgeInsets.only(left: 20),
-              child: Text(
-                'amount_tr'.translationWord(),
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(left: 20, right: 20),
-                child: TextField(
-                  style: const TextStyle(
-                    fontSize: 18,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.start,
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  onChanged: (val) {
-                    setState(() {
-                      if (val != '') {
-                        chargeAmount.value =
-                            rechargeFee(double.parse(val.replaceAll(',', '')));
-                        val = _formatNumber(val.replaceAll(',', ''));
-                        _amountController.value = TextEditingValue(
-                          text: val,
-                          selection:
-                              TextSelection.collapsed(offset: val.length),
-                        );
-                      }
-                    });
-                  },
-                  decoration: InputDecoration(
-                    counterText: "",
-                    hintText: 'amount_tr'.translationWord(),
-                    hintStyle: const TextStyle(
-                      color: Colors.grey,
-                      fontSize: 15,
-                    ),
-                    contentPadding: const EdgeInsets.all(20),
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-            )
-          ],
-        ),
-        Container(
-          margin: const EdgeInsets.only(left: 20, right: 20),
-          child: const Divider(
-            color: Colors.grey,
-            height: 2,
-          ),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          margin: const EdgeInsets.only(left: 20),
-          child: Row(
+          Row(
             children: [
-              Text(
-                'fee_tr'.translationWord() + ': ',
-                style: const TextStyle(
-                  fontSize: 16,
+              Container(
+                width: 120,
+                margin: const EdgeInsets.only(left: 20, right: 10),
+                child: Text(
+                  'cart_tr'.translationWord(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              const Text(
-                '1%',
-                style: TextStyle(
-                  fontSize: 16,
+              Expanded(
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    hint: const SizedBox(
+                      child: Text(
+                        "Карт холбоогүй байна",
+                        style: TextStyle(color: Colors.grey),
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                    isExpanded: true,
+                    value: selectedCard.value,
+                    icon: Container(
+                      margin: const EdgeInsets.only(right: 10),
+                      child: const Icon(
+                        Icons.keyboard_arrow_down_sharp,
+                      ),
+                    ),
+                    style: const TextStyle(color: Colors.black),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedCard.value = value!;
+                      });
+                    },
+                    items: cartList.map<DropdownMenuItem>(
+                      (value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 10),
+                              Text(
+                                "${value['card_number']}",
+                              ),
+                              Text(
+                                "${value['bank']['name']}",
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ).toList(),
+                  ),
                 ),
-              ),
+              )
             ],
           ),
-        ),
-        const SizedBox(height: 5),
-        Container(
-          margin: const EdgeInsets.only(left: 20),
-          child: Row(
+          const SizedBox(height: 5),
+          Container(
+            margin: const EdgeInsets.only(left: 20, right: 20),
+            child: const Divider(
+              color: Colors.grey,
+              height: 2,
+            ),
+          ),
+          Row(
             children: [
-              Text(
-                'charge_amount_tr'.translationWord() + ': ',
-                style: const TextStyle(
-                  fontSize: 16,
+              Container(
+                width: 90,
+                margin: const EdgeInsets.only(left: 20),
+                child: Text(
+                  'amount_tr'.translationWord(),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-              Obx(
-                () => Text(
-                  "${chargeAmount.value.floor()}",
+              Expanded(
+                child: Container(
+                  margin: const EdgeInsets.only(left: 20, right: 20),
+                  child: TextField(
+                    style: const TextStyle(
+                      fontSize: 18,
+                      color: Colors.black,
+                    ),
+                    textAlign: TextAlign.start,
+                    controller: _amountController,
+                    keyboardType: TextInputType.number,
+                    onChanged: (val) {
+                      setState(() {
+                        if (val != '') {
+                          chargeAmount.value = rechargeFee(
+                              double.parse(val.replaceAll(',', '')));
+                          val = _formatNumber(val.replaceAll(',', ''));
+                          _amountController.value = TextEditingValue(
+                            text: val,
+                            selection:
+                                TextSelection.collapsed(offset: val.length),
+                          );
+                        }
+                      });
+                    },
+                    decoration: InputDecoration(
+                      counterText: "",
+                      hintText: 'amount_tr'.translationWord(),
+                      hintStyle: const TextStyle(
+                        color: Colors.grey,
+                        fontSize: 15,
+                      ),
+                      contentPadding: const EdgeInsets.all(20),
+                      border: InputBorder.none,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 20, right: 20),
+            child: const Divider(
+              color: Colors.grey,
+              height: 2,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Container(
+            margin: const EdgeInsets.only(left: 20),
+            child: Row(
+              children: [
+                Text(
+                  'fee_tr'.translationWord() + ': ',
                   style: const TextStyle(
                     fontSize: 16,
                   ),
                 ),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 200),
-        GeregeButtonWidget(
-          radius: 10.0,
-          elevation: 0.0,
-          minWidth: GlobalVariables.gWidth / 1.6,
-          backgroundColor: CoreColor().btnBlue,
-          borderColor: CoreColor().btnBlue,
-          text: Text(
-            'continue_btn_tr'.translationWord(),
-            style: const TextStyle(
-              color: Colors.white,
+                const Text(
+                  '1%',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ],
             ),
           ),
-          onPressed: () {
-            setState(() {
-              if (selectedCard.isNotEmpty && _amountController.text != '') {
-                if (int.parse(_amountController.text.replaceAll(',', '')) <=
-                    499) {
+          const SizedBox(height: 5),
+          Container(
+            margin: const EdgeInsets.only(left: 20),
+            child: Row(
+              children: [
+                Text(
+                  'charge_amount_tr'.translationWord() + ': ',
+                  style: const TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                Obx(
+                  () => Text(
+                    "${chargeAmount.value.floor()}",
+                    style: const TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          GlobalVariables.useTablet
+              ? const SizedBox(height: 80)
+              : const SizedBox(height: 200),
+          GeregeButtonWidget(
+            radius: 10.0,
+            elevation: 0.0,
+            minWidth: GlobalVariables.gWidth / 1.6,
+            backgroundColor: CoreColor().btnBlue,
+            borderColor: CoreColor().btnBlue,
+            text: Text(
+              'continue_btn_tr'.translationWord(),
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+            onPressed: () {
+              setState(() {
+                if (selectedCard.isNotEmpty && _amountController.text != '') {
+                  if (int.parse(_amountController.text.replaceAll(',', '')) <=
+                      499) {
+                    Get.snackbar(
+                      'warning_tr'.translationWord(),
+                      '500 -c их дүн оруулна уу'.translationWord(),
+                      colorText: Colors.black,
+                      backgroundColor: Colors.white,
+                    );
+                  } else {
+                    // print(selectionBankId);
+                    hmacEncryp(selectedCard.value);
+                  }
+                } else {
                   Get.snackbar(
                     'warning_tr'.translationWord(),
-                    '500 -c их дүн оруулна уу'.translationWord(),
+                    'field_tr'.translationWord(),
                     colorText: Colors.black,
                     backgroundColor: Colors.white,
                   );
-                } else {
-                  // print(selectionBankId);
-                  hmacEncryp(selectedCard.value);
                 }
-              } else {
-                Get.snackbar(
-                  'warning_tr'.translationWord(),
-                  'field_tr'.translationWord(),
-                  colorText: Colors.black,
-                  backgroundColor: Colors.white,
-                );
-              }
-            });
-          },
-        ),
-      ],
+              });
+            },
+          ),
+        ],
+      ),
     );
   }
 
   accountListWidget() {
-    return Column(
-      children: [
-        Container(
-          margin: const EdgeInsets.only(top: 30, right: 20, left: 20),
-          decoration: BoxDecoration(
-            color: CoreColor().backgroundWhite,
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Container(
+            margin: const EdgeInsets.only(top: 30, right: 20, left: 20),
+            decoration: BoxDecoration(
+              color: CoreColor().backgroundWhite,
+              borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            ),
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 20, right: 20, left: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Банк',
+                    style: TextStyle(),
+                  ),
+                  const Text(
+                    'Худалдаа хөгжлийн банк',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "MBold",
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    height: 1,
+                    color: Colors.grey.withOpacity(0.3),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Дансны хуулга',
+                    style: TextStyle(),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        '404230754',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "MBold",
+                          fontSize: 16,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Clipboard.setData(
+                              const ClipboardData(text: "404230754"));
+                        },
+                        child: Text(
+                          'copy_tr'.translationWord(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Container(
+                    height: 1,
+                    color: Colors.grey.withOpacity(0.3),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Хүлээн авагч',
+                    style: TextStyle(),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Gerege',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "MBold",
+                          fontSize: 16,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Clipboard.setData(
+                              const ClipboardData(text: "Gerege"));
+                        },
+                        child: Text(
+                          'copy_tr'.translationWord(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Container(
+                    height: 1,
+                    color: Colors.grey.withOpacity(0.3),
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Гүйлгээний утга',
+                    style: TextStyle(),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "TB-${GlobalVariables.accountNoList[0]['account_no']}",
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "MBold",
+                          fontSize: 16,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Clipboard.setData(
+                            ClipboardData(
+                              text:
+                                  "TB-${GlobalVariables.accountNoList[0]['account_no']}",
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'copy_tr'.translationWord(),
+                          style: const TextStyle(
+                            fontSize: 14,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
-          child: Container(
-            padding: const EdgeInsets.only(bottom: 20, right: 20, left: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 20),
-                const Text(
-                  'Банк',
-                  style: TextStyle(),
+          const SizedBox(height: 20),
+          Container(
+            height: 130,
+            width: GlobalVariables.gWidth,
+            margin: const EdgeInsets.only(left: 20, right: 20),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.red,
+                  Colors.red.withOpacity(0.7),
+                ],
+                begin: const FractionalOffset(0.0, 1.0),
+                end: const FractionalOffset(0.0, 0.0),
+                stops: const [0.0, 1.0],
+                tileMode: TileMode.clamp,
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  spreadRadius: 2,
+                  blurRadius: 1,
+                  offset: const Offset(0, 0), // changes position of shadow
                 ),
-                const Text(
-                  'Худалдаа хөгжлийн банк',
-                  style: TextStyle(
+              ],
+              borderRadius: const BorderRadius.all(Radius.circular(8.0)),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'warning_tr'.translationWord(),
+                  style: const TextStyle(
+                    color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontFamily: "MBold",
                     fontSize: 16,
@@ -657,167 +817,20 @@ class _TransactionScreenState extends State<TransactionScreen>
                 ),
                 const SizedBox(height: 10),
                 Container(
-                  height: 1,
-                  color: Colors.grey.withOpacity(0.3),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Дансны хуулга',
-                  style: TextStyle(),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      '404230754',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "MBold",
-                        fontSize: 16,
-                      ),
+                  margin: const EdgeInsets.only(left: 10, right: 10),
+                  child: Text(
+                    'account_warning_tr'.translationWord(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 13,
                     ),
-                    TextButton(
-                      onPressed: () {
-                        Clipboard.setData(
-                            const ClipboardData(text: "404230754"));
-                      },
-                      child: Text(
-                        'copy_tr'.translationWord(),
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Container(
-                  height: 1,
-                  color: Colors.grey.withOpacity(0.3),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Хүлээн авагч',
-                  style: TextStyle(),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Gerege',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "MBold",
-                        fontSize: 16,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Clipboard.setData(const ClipboardData(text: "Gerege"));
-                      },
-                      child: Text(
-                        'copy_tr'.translationWord(),
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Container(
-                  height: 1,
-                  color: Colors.grey.withOpacity(0.3),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  'Гүйлгээний утга',
-                  style: TextStyle(),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "TB-${GlobalVariables.accountNoList[0]['account_no']}",
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontFamily: "MBold",
-                        fontSize: 16,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Clipboard.setData(
-                          ClipboardData(
-                            text:
-                                "TB-${GlobalVariables.accountNoList[0]['account_no']}",
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'copy_tr'.translationWord(),
-                        style: const TextStyle(
-                          fontSize: 14,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Container(
-          height: 130,
-          width: GlobalVariables.gWidth,
-          margin: const EdgeInsets.only(left: 20, right: 20),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Colors.red,
-                Colors.red.withOpacity(0.7),
-              ],
-              begin: const FractionalOffset(0.0, 1.0),
-              end: const FractionalOffset(0.0, 0.0),
-              stops: const [0.0, 1.0],
-              tileMode: TileMode.clamp,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
-                spreadRadius: 2,
-                blurRadius: 1,
-                offset: const Offset(0, 0), // changes position of shadow
-              ),
-            ],
-            borderRadius: const BorderRadius.all(Radius.circular(8.0)),
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'warning_tr'.translationWord(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: "MBold",
-                  fontSize: 16,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                margin: const EdgeInsets.only(left: 10, right: 10),
-                child: Text(
-                  'account_warning_tr'.translationWord(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 13,
                   ),
                 ),
-              ),
-            ],
-          ),
-        )
-      ],
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 
@@ -835,216 +848,223 @@ class _TransactionScreenState extends State<TransactionScreen>
       enableDrag: false,
       builder: (context) {
         return SizedBox(
-          height: GlobalVariables.gHeight - 200,
+          height: GlobalVariables.useTablet
+              ? GlobalVariables.gHeight - 100
+              : GlobalVariables.gHeight - 200,
           child: Obx(
-            () => Column(
-              children: [
-                const SizedBox(height: 50),
-                Text(
-                  'withdraw_tr'.translationWord(),
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: "MBold",
-                    fontSize: 18,
-                  ),
-                ),
-                const SizedBox(height: 60),
-                Container(
-                  margin: const EdgeInsets.only(left: 20, right: 20),
-                  child: const Divider(
-                    color: Colors.grey,
-                    height: 2,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 120,
-                      margin: const EdgeInsets.only(left: 20, right: 10),
-                      child: Text(
-                        'bank_number_tr'.translationWord(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          hint: const SizedBox(
-                            child: Text(
-                              "Данс холбоогүй байна",
-                              style: TextStyle(color: Colors.grey),
-                              textAlign: TextAlign.end,
-                            ),
-                          ),
-                          isExpanded: true,
-                          value: selectedAccount.value,
-                          icon: Container(
-                            margin: const EdgeInsets.only(right: 10),
-                            child: const Icon(
-                              Icons.keyboard_arrow_down_sharp,
-                            ),
-                          ),
-                          style: const TextStyle(color: Colors.black),
-                          onChanged: (value) {
-                            setState(() {
-                              selectedAccount.value = value!;
-                              print(selectedAccount);
-                            });
-                          },
-                          items: accountList.map<DropdownMenuItem>(
-                            (value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      "${value['account_number']}",
-                                    ),
-                                    Text(
-                                      "${value['bank']['name']}",
-                                    ),
-                                  ],
-                                ),
-                              );
-                            },
-                          ).toList(),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 5),
-                Container(
-                  margin: const EdgeInsets.only(left: 20, right: 20),
-                  child: const Divider(
-                    color: Colors.grey,
-                    height: 2,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Container(
-                      width: 90,
-                      margin: const EdgeInsets.only(left: 20),
-                      child: Text(
-                        'amount_tr'.translationWord(),
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.only(left: 20, right: 20),
-                        child: TextField(
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.black,
-                          ),
-                          textAlign: TextAlign.start,
-                          controller: _amountController,
-                          keyboardType: TextInputType.number,
-                          onChanged: (val) {
-                            setState(() {
-                              if (val != '') {
-                                chargeAmount.value = rechargeFee(
-                                    double.parse(val.replaceAll(',', '')));
-                                val = _formatNumber(val.replaceAll(',', ''));
-                                _amountController.value = TextEditingValue(
-                                  text: val,
-                                  selection: TextSelection.collapsed(
-                                      offset: val.length),
-                                );
-                              }
-                            });
-                          },
-                          decoration: InputDecoration(
-                            counterText: "",
-                            hintText: 'amount_tr'.translationWord(),
-                            hintStyle: const TextStyle(
-                              color: Colors.grey,
-                              fontSize: 15,
-                            ),
-                            contentPadding: const EdgeInsets.all(20),
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-                Container(
-                  margin: const EdgeInsets.only(left: 20, right: 20),
-                  child: const Divider(
-                    color: Colors.grey,
-                    height: 2,
-                  ),
-                ),
-                // bank hoorondiin shimtgel n TDB bol 100 busad n 200
-                const SizedBox(height: 40),
-                const Center(
-                  child: Text(
-                    "Банк хоорондын шимтгэл нь ХХБ бол \n100 бусад банк 200 төгрөгний шимтгэл авна",
-                    overflow: TextOverflow.fade,
-                    textAlign: TextAlign.center,
-                    maxLines: 3,
-                    softWrap: false,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 160),
-                GeregeButtonWidget(
-                  radius: 10.0,
-                  elevation: 0.0,
-                  minWidth: GlobalVariables.gWidth / 1.6,
-                  backgroundColor: CoreColor().btnBlue,
-                  borderColor: CoreColor().btnBlue,
-                  text: Text(
+            () => SingleChildScrollView(
+              child: Column(
+                children: [
+                  const SizedBox(height: 50),
+                  Text(
                     'withdraw_tr'.translationWord(),
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "MBold",
+                      fontSize: 18,
                     ),
                   ),
-                  onPressed: () {
-                    setState(() {
-                      print(selectedAccount);
-                      print(int.parse(
-                          _amountController.text.replaceAll(',', '')));
-                      if (selectedAccount.isNotEmpty &&
-                          _amountController.text != '') {
-                        if (int.parse(
-                                _amountController.text.replaceAll(',', '')) <=
-                            499) {
+                  const SizedBox(height: 60),
+                  Container(
+                    margin: const EdgeInsets.only(left: 20, right: 20),
+                    child: const Divider(
+                      color: Colors.grey,
+                      height: 2,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 120,
+                        margin: const EdgeInsets.only(left: 20, right: 10),
+                        child: Text(
+                          'bank_number_tr'.translationWord(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton(
+                            hint: const SizedBox(
+                              child: Text(
+                                "Данс холбоогүй байна",
+                                style: TextStyle(color: Colors.grey),
+                                textAlign: TextAlign.end,
+                              ),
+                            ),
+                            isExpanded: true,
+                            value: selectedAccount.value,
+                            icon: Container(
+                              margin: const EdgeInsets.only(right: 10),
+                              child: const Icon(
+                                Icons.keyboard_arrow_down_sharp,
+                              ),
+                            ),
+                            style: const TextStyle(color: Colors.black),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedAccount.value = value!;
+                                print(selectedAccount);
+                              });
+                            },
+                            items: accountList.map<DropdownMenuItem>(
+                              (value) {
+                                return DropdownMenuItem(
+                                  value: value,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(height: 10),
+                                      Text(
+                                        "${value['account_number']}",
+                                      ),
+                                      Text(
+                                        "${value['bank']['name']}",
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ).toList(),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    margin: const EdgeInsets.only(left: 20, right: 20),
+                    child: const Divider(
+                      color: Colors.grey,
+                      height: 2,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Container(
+                        width: 90,
+                        margin: const EdgeInsets.only(left: 20),
+                        child: Text(
+                          'amount_tr'.translationWord(),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 20, right: 20),
+                          child: TextField(
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
+                            ),
+                            textAlign: TextAlign.start,
+                            controller: _amountController,
+                            keyboardType: TextInputType.number,
+                            onChanged: (val) {
+                              setState(() {
+                                if (val != '') {
+                                  chargeAmount.value = rechargeFee(
+                                      double.parse(val.replaceAll(',', '')));
+                                  val = _formatNumber(val.replaceAll(',', ''));
+                                  _amountController.value = TextEditingValue(
+                                    text: val,
+                                    selection: TextSelection.collapsed(
+                                        offset: val.length),
+                                  );
+                                }
+                              });
+                            },
+                            decoration: InputDecoration(
+                              counterText: "",
+                              hintText: 'amount_tr'.translationWord(),
+                              hintStyle: const TextStyle(
+                                color: Colors.grey,
+                                fontSize: 15,
+                              ),
+                              contentPadding: const EdgeInsets.all(20),
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 20, right: 20),
+                    child: const Divider(
+                      color: Colors.grey,
+                      height: 2,
+                    ),
+                  ),
+                  // bank hoorondiin shimtgel n TDB bol 100 busad n 200
+                  const SizedBox(height: 40),
+                  const Center(
+                    child: Text(
+                      "Банк хоорондын шимтгэл нь ХХБ бол \n100 бусад банк 200 төгрөгний шимтгэл авна",
+                      overflow: TextOverflow.fade,
+                      textAlign: TextAlign.center,
+                      maxLines: 3,
+                      softWrap: false,
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ),
+                  GlobalVariables.useTablet
+                      ? const SizedBox(height: 50)
+                      : const SizedBox(height: 160),
+                  GeregeButtonWidget(
+                    radius: 10.0,
+                    elevation: 0.0,
+                    minWidth: GlobalVariables.gWidth / 1.6,
+                    backgroundColor: CoreColor().btnBlue,
+                    borderColor: CoreColor().btnBlue,
+                    text: Text(
+                      'withdraw_tr'.translationWord(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        print(selectedAccount);
+                        print(int.parse(
+                            _amountController.text.replaceAll(',', '')));
+                        if (selectedAccount.isNotEmpty &&
+                            _amountController.text != '') {
+                          if (int.parse(
+                                  _amountController.text.replaceAll(',', '')) <=
+                              499) {
+                            Get.snackbar(
+                              'warning_tr'.translationWord(),
+                              '500 -c их дүн оруулна уу'.translationWord(),
+                              colorText: Colors.black,
+                              backgroundColor: Colors.white,
+                            );
+                          } else {
+                            // print(selectionBankId);
+                            withDrawMoney();
+                          }
+                        } else {
                           Get.snackbar(
                             'warning_tr'.translationWord(),
-                            '500 -c их дүн оруулна уу'.translationWord(),
+                            'field_tr'.translationWord(),
                             colorText: Colors.black,
                             backgroundColor: Colors.white,
                           );
-                        } else {
-                          // print(selectionBankId);
-                          withDrawMoney();
                         }
-                      } else {
-                        Get.snackbar(
-                          'warning_tr'.translationWord(),
-                          'field_tr'.translationWord(),
-                          colorText: Colors.black,
-                          backgroundColor: Colors.white,
-                        );
-                      }
-                    });
-                  },
-                ),
-              ],
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         );

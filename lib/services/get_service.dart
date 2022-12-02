@@ -1,5 +1,5 @@
 import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/screens/login/login_screen.dart';
+import 'package:gerege_app_v2/screens/login/phone/login_screen.dart';
 import 'package:get/get_connect/connect.dart';
 import 'package:get/route_manager.dart';
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/main_tab.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
@@ -58,7 +59,7 @@ class _ServiceScreenState extends State<ServiceScreen> {
           ),
         ),
         body: GridView.count(
-          crossAxisCount: 3,
+          crossAxisCount: GlobalVariables.useTablet ? 4 : 3,
           childAspectRatio: (0.4 / .4),
           shrinkWrap: true,
           children: List.generate(serviceData.length, (index) {

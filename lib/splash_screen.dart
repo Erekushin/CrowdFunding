@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/screens/login/login_screen.dart';
+import 'package:gerege_app_v2/screens/login/phone/login_screen.dart';
+import 'package:gerege_app_v2/screens/login/tablet/login_screen_tablet.dart';
 import 'package:get/get.dart';
 import 'dart:math' as math;
 
@@ -34,7 +35,6 @@ class _MyHomePageState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    print('sdawe');
     initDesktop();
     const oneSec = Duration(milliseconds: 2000);
     timer = Timer.periodic(
@@ -47,7 +47,14 @@ class _MyHomePageState extends State<SplashScreen>
         } else {
           setState(() {
             _start.value--;
-            Get.to(() => const LoginScreen());
+            // GlobalVariables.useTablet
+            if (GlobalVariables.useTablet) {
+              print("const ScreenTablet");
+              Get.to(() => const LoginScreenTablet());
+            } else {
+              print("const LoginScreen()");
+              Get.to(() => const LoginScreen());
+            }
           });
         }
       },

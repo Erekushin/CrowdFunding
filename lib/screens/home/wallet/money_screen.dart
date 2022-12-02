@@ -81,11 +81,13 @@ class _NMoneyScreenState extends State<MoneyScreen> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          barcodeWidget(),
-          actionWidget(),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            barcodeWidget(),
+            actionWidget(),
+          ],
+        ),
       ),
     );
   }

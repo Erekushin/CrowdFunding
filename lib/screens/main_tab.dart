@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/home/home_screen.dart';
 import 'package:gerege_app_v2/screens/home/me/me_screen.dart';
+import 'package:gerege_app_v2/screens/home/me/tablet/me_screen_tablet.dart';
 import 'package:gerege_app_v2/screens/home/news/information_screen.dart';
 import 'package:gerege_app_v2/screens/home/qr_reader.dart';
 import 'package:gerege_app_v2/screens/home/wallet/wallet_screen.dart';
@@ -20,7 +21,7 @@ class MainTab extends StatefulWidget {
 }
 
 class _MainTabState extends State<MainTab> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 3;
   Widget currentPage = const MeScreen();
   final GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
   @override
@@ -35,7 +36,11 @@ class _MainTabState extends State<MainTab> {
       print(index);
       switch (index) {
         case 0:
-          currentPage = const MeScreen();
+          if (GlobalVariables.useTablet) {
+            currentPage = const MeScreenTablet();
+          } else {
+            currentPage = const MeScreen();
+          }
           break;
         case 1:
           currentPage = const InfoScreen();
@@ -186,7 +191,29 @@ class _MainTabState extends State<MainTab> {
           decoration: const BoxDecoration(
             color: Colors.blue,
           ),
-          child: currentPage,
+          child:
+              // Row(
+              //   children: [
+              //     Expanded(
+              //       child: Align(
+              //         alignment: Alignment.center,
+              //         child: Column(
+              //           children: [currentPage],
+              //         ),
+              //       ),
+              //     ),
+              //     SizedBox(
+              //       width: 200,
+              //       child: Align(
+              //         alignment: Alignment.center,
+              //         child: Column(
+              //           children: [Text("data")],
+              //         ),
+              //       ),
+              //     )
+              //   ],
+              // )
+              currentPage,
         ),
       ),
     );

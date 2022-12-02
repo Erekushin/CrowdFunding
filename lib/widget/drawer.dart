@@ -4,7 +4,8 @@ import 'package:gerege_app_v2/screens/home/me/confirmation_screen.dart';
 import 'package:gerege_app_v2/screens/home/me/core_info_user.dart';
 import 'package:gerege_app_v2/screens/home/me/login_info_screen.dart';
 import 'package:gerege_app_v2/screens/home/app_service/service_screen.dart';
-import 'package:gerege_app_v2/screens/login/login_screen.dart';
+import 'package:gerege_app_v2/screens/login/phone/login_screen.dart';
+import 'package:gerege_app_v2/screens/login/tablet/login_screen_tablet.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:get/route_manager.dart';
@@ -182,7 +183,11 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                 onPressed: () {
                   setState(() {
                     GlobalVariables.gStorage.erase();
-                    Get.offAll(() => const LoginScreen());
+                    if (GlobalVariables.useTablet) {
+                      Get.offAll(() => const LoginScreenTablet());
+                    } else {
+                      Get.offAll(() => const LoginScreen());
+                    }
                   });
                 },
               ),

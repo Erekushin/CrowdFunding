@@ -4,6 +4,7 @@ import 'package:gerege_app_v2/platforms/desktop_helper.dart';
 import 'package:gerege_app_v2/splash_screen.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,9 +12,17 @@ void main() async {
 
   /// false -> phone true-> tablet
   GlobalVariables.useTablet = DesktopHelper().getDeviceType();
-  print("GlobalVariables.useTablet ");
-  print(GlobalVariables.useTablet);
-  runApp(const Main());
+  WidgetsFlutterBinding.ensureInitialized();
+  if (GlobalVariables.useTablet) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]).then((value) => runApp(const Main()));
+  } else {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]).then((value) => runApp(const Main()));
+  }
 }
 
 /// [GetMaterialApp] use getx state management
@@ -21,6 +30,7 @@ class Main extends StatelessWidget {
   const Main({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    // final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     return GetMaterialApp(
       enableLog: true,
       logWriterCallback: localLogWriter,

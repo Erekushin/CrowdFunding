@@ -11,6 +11,8 @@ class GeregeTextField extends StatelessWidget {
     this.keyboardType,
     this.obscureText,
     this.labelSize,
+    this.paddingVertical,
+    this.paddingHorizontal,
     // required this.validator,
   }) : super(key: key);
 
@@ -21,6 +23,8 @@ class GeregeTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool? obscureText;
   final double? labelSize;
+  final double? paddingVertical;
+  final double? paddingHorizontal;
   // final Function validator;
 
   @override
@@ -40,7 +44,12 @@ class GeregeTextField extends StatelessWidget {
       decoration: InputDecoration(
         // contentPadding:
         //     const EdgeInsets.symmetric(vertical: 30.0, horizontal: 10.0),
-        contentPadding: const EdgeInsets.all(20),
+        // contentPadding: EdgeInsets.all(paddingVertical ?? 20),
+        contentPadding: EdgeInsets.only(
+            top: paddingVertical ?? 20,
+            bottom: paddingVertical ?? 20,
+            left: paddingHorizontal ?? 20,
+            right: paddingHorizontal ?? 20),
         labelText: label!.translationWord() ?? '',
         labelStyle: const TextStyle(
           color: Colors.black,

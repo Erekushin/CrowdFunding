@@ -67,8 +67,6 @@ class LoginController extends GetxController {
         );
       }
       // print(data.body['authorization']['token']);
-
-      // log(data.body);
     });
   }
 
