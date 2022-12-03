@@ -14,7 +14,6 @@ class LoginController extends GetxController {
   TextEditingController? deviceIdTextController;
   TextEditingController? mobileTypeTextController;
   late String currentTimeZone;
-  // UserModel? userData;
 
   @override
   void onInit() {
@@ -47,18 +46,11 @@ class LoginController extends GetxController {
       Navigator.of(Get.overlayContext!).pop();
       var res = data.body;
       if (data.statusCode == 200) {
-        print('login resss');
-        print(res);
-        // Get.back();
         GlobalVariables.gStorage.write("token", res['authorization']['token']);
         GlobalVariables.gStorage.write('userInformation', res['user']);
         GlobalVariables.storageToVar();
-        // Get.to(() => const HomeScreen());
         Get.to(() => const MainTab(indexTab: 0));
       } else {
-        // Get.back();
-        print("wtf");
-        print(res);
         Get.snackbar(
           'warning_tr'.translationWord(),
           res['message'].toString(),
@@ -66,18 +58,8 @@ class LoginController extends GetxController {
           colorText: Colors.black,
         );
       }
-      // print(data.body['authorization']['token']);
     });
   }
-
-  // @override
-  // void onClose() {
-  //   searchText?.dispose();
-  //   passwordTextController?.dispose();
-  //   deviceIdTextController?.dispose();
-  //   mobileTypeTextController?.dispose();
-  //   super.onClose();
-  // }
 
   clean() {
     searchText?.text = '';

@@ -51,8 +51,6 @@ class GlobalVariables {
   static storageToVar() {
     var userInformation = GlobalVariables.gStorage.read('userInformation');
 
-    print('dotd sa');
-    print(userInformation);
     GlobalVariables.id = userInformation['id'] ?? '';
     GlobalVariables.civilId = userInformation['civil_id'] ?? '';
     GlobalVariables.regNo = userInformation['reg_no'] ?? '';
@@ -86,15 +84,10 @@ class GlobalVariables {
   }
 
   ///[updateUserInformation] update user information
-  ///[updateUserInformation] update user information
-
   static updateUserInformation() {
     String url =
         '${CoreUrl.serviceUrl}user/find?search_text=${GlobalVariables.id}';
-    print(url);
     Services().getRequest(url, true, '').then((data) {
-      print('ywsanbh');
-      // print(data.statusCode);
       if (data.statusCode == 200) {
         GlobalVariables.gStorage.write('userInformation', data.body['result']);
         storageToVar();

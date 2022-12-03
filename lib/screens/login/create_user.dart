@@ -28,24 +28,14 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
 
   @override
   void initState() {
-    // countryList.value = [
-    //   {"iso_alpha_code_3": "MNG", "full_name": "Монгол Улс"},
-    //   {"iso_alpha_code_3": "ABW", "full_name": "Аруба Улс"},
-    //   {"iso_alpha_code_3": "AFG", "full_name": "Афганистан Улс"},
-    // ];
     super.initState();
   }
 
   getCountryList() {
     String url = '${CoreUrl.serviceUrl}countries?page_size=500&page_number=1';
-    print(url);
     Services().getRequest(url, true, '').then((data) {
-      print('ywsanbh');
-      print(data.body);
       if (data.statusCode == 200) {
-        // screenChange.value = 1;
         setState(() {
-          print(data.body['result']['items']);
           countryList.value = data.body['result']['items'];
           screenChange.value = 2;
         });

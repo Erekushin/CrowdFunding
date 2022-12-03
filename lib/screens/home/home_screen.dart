@@ -18,62 +18,23 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // final String _scanBarcode = 'Unknown';
   var searchController = TextEditingController();
 
   RxList driverList = [].obs;
-  // final SunmiController _sunmiController = Get.find();
   final SunmiController _sunmiController = Get.put(SunmiController());
-  // String _modelVersion = 'Unknown';
-  // var sunmiBarcodeScanner = SunmiBarcodeScanner();
 
   @override
   void initState() {
     super.initState();
-    // initPlatformState();
-    // sunmiBarcodeScanner.onBarcodeScanned().listen((event) {
-    //   print('adsadads');
-    //   print(event);
-    //   searchUser(event, false);
-    // });
   }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  // Future<void> initPlatformState() async {
-  //   String modelVersion;
-  //   // Platform messages may fail, so we use a try/catch PlatformException.
-  //   try {
-  //     modelVersion = (await sunmiBarcodeScanner.getScannerModel()).toString();
-  //   } on PlatformException {
-  //     modelVersion = 'Failed to get model version.';
-  //   }
-
-  //   // If the widget was removed from the tree while the asynchronous platform
-  //   // message was in flight, we want to discard the reply rather than calling
-  //   // setState to update our non-existent appearance.
-  //   if (!mounted) return;
-
-  //   setState(() {
-  //     _modelVersion = modelVersion;
-  //     print('model version');
-  //     print(_modelVersion);
-  //     print('model versiossn');
-  //   });
-  // }
 
   searchUser(text, type) {
     // {{DOMAIN}}/user/find?search_text=вю96042818
     String url = '${CoreUrl.serviceUrl}user/find?search_text=$text';
-    print(url);
     Services().getRequest(url, true, '').then((data) {
-      print('ywsanbh');
-      print(text);
-      print(data.body);
       if (data.body['message'] == "success") {
         driverList.add(data.body['result']);
-        print(driverList);
         if (type == true) {
-          print('sda');
           Get.back();
         }
         Get.snackbar(
@@ -99,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (GlobalVariables.usePos != "0") {
       ever(_sunmiController.codeVal, (value) {
         setState(() {
-          print("$value end utga oorchlgdd bn l da");
           searchUser(value, false);
         });
       });

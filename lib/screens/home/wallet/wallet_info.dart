@@ -33,14 +33,12 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
 
   /// [getWalletAccounts] wallet account list
   getWalletAccounts() async {
-    print('getWalletAccounts()');
     Services()
         .getRequest('${CoreUrl.serviceUrl}wallet/account/balance', true, '')
         .then((data) {
       if (data.body['message'] == "success") {
         setState(() {
           GlobalVariables.accountNoList = data.body['result'];
-          print(GlobalVariables.accountNoList);
         });
       }
     });
@@ -181,7 +179,6 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
               const SizedBox(height: 5),
               InkWell(
                 onTap: () {
-                  print('cart change');
                   Get.to(() => const CartScreen());
                 },
                 child: Row(
@@ -219,7 +216,6 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
               const SizedBox(height: 5),
               InkWell(
                 onTap: () {
-                  print('cart change');
                   Get.to(() => const WalletAccountsScreen());
                 },
                 child: Row(

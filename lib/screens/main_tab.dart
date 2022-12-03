@@ -10,7 +10,6 @@ import 'package:gerege_app_v2/screens/home/wallet/wallet_screen.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/drawer.dart';
 import 'package:get/get.dart';
-import 'package:get/route_manager.dart';
 
 import '../widget/drawer_tablet.dart';
 
@@ -109,7 +108,6 @@ class _MainTabState extends State<MainTab> {
                     child: IconButton(
                       onPressed: () {
                         setState(() {
-                          print('qr call');
                           Get.to(() => const QrCodeScanner());
                         });
                       },

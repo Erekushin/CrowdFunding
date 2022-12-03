@@ -79,12 +79,8 @@ class _TransactionScreenState extends State<TransactionScreen>
       if (data.statusCode == 200) {
         setState(() {
           accountList.value = data.body['result'];
-          print('accountListlist');
-          print(accountList);
           if (accountList.isNotEmpty) {
             selectedAccount.value = accountList[0];
-            print('utaga aw');
-            print(selectedAccount);
           }
         });
       }
@@ -110,7 +106,6 @@ class _TransactionScreenState extends State<TransactionScreen>
       "charge_percent": 1,
       "charge_amount": int.parse(_amountController.text.replaceAll(',', '')),
     };
-    print(bodyData);
     cardPay(bodyData);
   }
 
@@ -125,7 +120,6 @@ class _TransactionScreenState extends State<TransactionScreen>
         .postRequest(json.encode(bodyData),
             '${CoreUrl.serviceUrl}wallet/card/deposit', true, '')
         .then((data) {
-      print(data.body);
       if (data.statusCode == 200) {
         Get.back();
         Get.back();
@@ -164,19 +158,11 @@ class _TransactionScreenState extends State<TransactionScreen>
           GlobalVariables.accountNoList[0]['account_no'].toString(),
       "amount": int.parse(_amountController.text.replaceAll(',', ''))
     };
-    // bank_account_id: "",
-    // account_number: "",
-    // amount: "",
-    print(bodyData);
-
-    // accountNoList
 
     Services()
         .postRequest(json.encode(bodyData),
             '${CoreUrl.serviceUrl}wallet/withdraw', true, '')
         .then((data) {
-      // var res = json.decode(data.body);
-      print(data.body);
       if (data.statusCode == 200) {
         // Get.back();
         Get.back();
@@ -187,8 +173,7 @@ class _TransactionScreenState extends State<TransactionScreen>
           colorText: Colors.black,
           backgroundColor: Colors.white,
         );
-        // Get.to(() => const MainTab(indexTab: 1));
-        print('basdadasd asd asd asd asd asdas ');
+
         GlobalVariables.accountBalance.value =
             GlobalVariables.accountBalance.value -
                 int.parse(_amountController.text.replaceAll(',', ''));
@@ -309,8 +294,6 @@ class _TransactionScreenState extends State<TransactionScreen>
               onPressed: () async {
                 // await getWalletAccounts();
                 setState(() {
-                  print('top uooda');
-
                   topUpModal();
                 });
               },
@@ -619,7 +602,6 @@ class _TransactionScreenState extends State<TransactionScreen>
                       backgroundColor: Colors.white,
                     );
                   } else {
-                    // print(selectionBankId);
                     hmacEncryp(selectedCard.value);
                   }
                 } else {
@@ -907,7 +889,6 @@ class _TransactionScreenState extends State<TransactionScreen>
                             onChanged: (value) {
                               setState(() {
                                 selectedAccount.value = value!;
-                                print(selectedAccount);
                               });
                             },
                             items: accountList.map<DropdownMenuItem>(
@@ -1034,9 +1015,6 @@ class _TransactionScreenState extends State<TransactionScreen>
                     ),
                     onPressed: () {
                       setState(() {
-                        print(selectedAccount);
-                        print(int.parse(
-                            _amountController.text.replaceAll(',', '')));
                         if (selectedAccount.isNotEmpty &&
                             _amountController.text != '') {
                           if (int.parse(
@@ -1049,7 +1027,6 @@ class _TransactionScreenState extends State<TransactionScreen>
                               backgroundColor: Colors.white,
                             );
                           } else {
-                            // print(selectionBankId);
                             withDrawMoney();
                           }
                         } else {
@@ -1074,12 +1051,7 @@ class _TransactionScreenState extends State<TransactionScreen>
 
   rechargeFee(double amount) {
     double sum = 0;
-    print(amount);
-    print(amount / 99);
-//  + 1
     sum = amount + (amount / 99);
-    print("suymfga: $sum");
-
     return sum;
   }
 }

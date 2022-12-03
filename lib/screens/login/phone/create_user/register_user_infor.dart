@@ -111,10 +111,7 @@ class _RegisterUserInfor extends State<RegisterUserInfor> {
                     }).toList(),
                     onChanged: (value) {
                       setState(() {
-                        // var data = json.decode(json.encode(value));
-                        // print(data);
                         selectionCountry = value.toString();
-                        print(selectionCountry);
                       });
                     },
                   ),
@@ -182,9 +179,6 @@ class _RegisterUserInfor extends State<RegisterUserInfor> {
                 if (data.statusCode == 200) {
                   Get.to(() => const MainTab(indexTab: 0));
                 } else {}
-              });
-              setState(() {
-                print('ilgeh');
               });
             },
           ),
@@ -331,8 +325,6 @@ class _RegisterUserInfor extends State<RegisterUserInfor> {
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
-                    print('ssdhuis');
-                    print(value);
                     selectionGender = value.toString();
                   });
                 },

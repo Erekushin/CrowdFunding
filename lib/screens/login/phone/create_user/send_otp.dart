@@ -42,7 +42,6 @@ class _SendOtp extends State<SendOtp> with TickerProviderStateMixin {
       });
     });
     super.initState();
-    // Рш();
   }
 
   @override

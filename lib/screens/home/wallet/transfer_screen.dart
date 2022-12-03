@@ -69,15 +69,12 @@ class _TransferScreenState extends State<TransferScreen> {
         .getRequest(
             '${CoreUrl.serviceUrl}user/find-phone?search_text=$text', true, '')
         .then((data) {
-      // var res = json.decode(data.body);
-      print('finduser: ${data.body}');
       if (data.body['message'] == "success") {
         if (type == false) {
           numberController.text = data.body['result']['phone_no'];
         }
         usernameController.text = data.body['result']['first_name'];
         destUserId = data.body['result']['id'].toString();
-        // destAccountNo = data.body['result']['first_name'];
       } else {
         Get.snackbar(
           'warning_tr'.translationWord(),
@@ -89,19 +86,7 @@ class _TransferScreenState extends State<TransferScreen> {
     });
   }
 
-//   11. Шилжүүлэх
-// url: /wallet/send
-// method: post
-// body: {
-//             amount: "",
-//             dest_user_id: "", (Шилжүүлэх хүний ID)
-//             src_account_no: "", (Дансны account no)
-//             description: "",
-//           }
-
   sendTransaction(pincode) async {
-    // var bytes = utf8.encode(pincode);
-    // var digest = md5.convert(bytes);
     var bodyData = {
       "dest_user_id": destUserId,
       "amount": int.parse(priceController.text.replaceAll(',', '')),
@@ -114,7 +99,6 @@ class _TransferScreenState extends State<TransferScreen> {
         .postRequest(
             json.encode(bodyData), '${CoreUrl.serviceUrl}wallet/send', true, '')
         .then((data) {
-      // var res = json.decode(data.body);
       if (data.body['message'] == "success") {
         priceController.text = '0';
         numberController.text = '';
@@ -199,7 +183,6 @@ class _TransferScreenState extends State<TransferScreen> {
                               ],
                               onChanged: (string) {
                                 if (string != '') {
-                                  print(string);
                                   string =
                                       _formatNumber(string.replaceAll(',', ''));
                                   priceController.value = TextEditingValue(
@@ -425,7 +408,6 @@ class _TransferScreenState extends State<TransferScreen> {
                                       controller3: _controller3,
                                       controller4: _controller4,
                                       checkEvent: (val) async {
-                                        debugPrint("text ${val.length}");
                                         sendTransaction(
                                           _controller1.text +
                                               _controller2.text +
@@ -434,7 +416,6 @@ class _TransferScreenState extends State<TransferScreen> {
                                         );
                                       },
                                       context: context);
-                                  debugPrint("OK");
 
                                   ///end send hiine de
                                 } else {
@@ -682,14 +663,13 @@ class _TransferScreenState extends State<TransferScreen> {
     );
   }
 
+// ene soli2
+
   Widget _buildQrView(BuildContext context) {
     if (controller != null && mounted) {
       controller!.pauseCamera();
       controller!.resumeCamera();
-      print("end trye asd sad as");
-    } else {
-      print("end n end bnasda");
-    }
+    } else {}
     var scanArea = (MediaQuery.of(context).size.width < 400 ||
             MediaQuery.of(context).size.height < 400)
         ? 150.0

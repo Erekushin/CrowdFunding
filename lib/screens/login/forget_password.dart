@@ -66,7 +66,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
         '${CoreUrl.serviceUrl}auth/password?identity=${searchController.text}';
     Services().getRequest(url, false, '').then((data) {
       if (data.statusCode == 200) {
-        print("uccress ");
         screenChange.value = true;
       } else {
         Get.snackbar(
@@ -89,11 +88,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
     var digest = md5.convert(bytes);
     String url =
         '${CoreUrl.serviceUrl}auth/password?identity=${searchController.text}&password=$digest}&otp${otpCodeController.text}';
-    // print(url);
     Services().putRequest(json.encode(bodyData), url, false, '').then((data) {
-      var res = json.decode(data.body);
-      print('reset passport');
-      print(res);
       if (data.statusCode == 200) {
         Get.snackbar(
           'success_tr'.translationWord(),

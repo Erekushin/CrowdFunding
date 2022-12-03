@@ -3,7 +3,6 @@ import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/route_manager.dart';
-import 'package:intl/intl.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 
 class RecieveScreen extends StatefulWidget {
@@ -14,17 +13,11 @@ class RecieveScreen extends StatefulWidget {
 }
 
 class _RecieveScreenState extends State<RecieveScreen> {
-  static const _locale = 'mn';
-  String _formatNumber(String s) =>
-      NumberFormat.decimalPattern(_locale).format(double.parse(s));
-
   @override
   void initState() {
     super.initState();
   }
 
-  // var image =
-  //     Image.network(CoreUrl.fileServer + GlobalVariables.profileImage.value);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

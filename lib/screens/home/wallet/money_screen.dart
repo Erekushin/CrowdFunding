@@ -34,7 +34,6 @@ class _NMoneyScreenState extends State<MoneyScreen> {
   String selectionCart = '';
   final TextEditingController accountNumber = TextEditingController();
   final TextEditingController money = TextEditingController();
-  var bankId;
   List bankList = [];
 
   @override
@@ -51,7 +50,6 @@ class _NMoneyScreenState extends State<MoneyScreen> {
       if (data.body['message'] == "success") {
         setState(() {
           cartList.value = data.body['result'];
-          print(cartList);
         });
       }
     });

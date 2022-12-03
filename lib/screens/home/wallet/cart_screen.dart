@@ -7,10 +7,8 @@ import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/home/wallet/wallet_info.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
-import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:gerege_app_v2/widget/web_view.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -25,11 +23,7 @@ class _CartScreenState extends State<CartScreen> {
   var numberController = TextEditingController();
   late String invoice;
   late String redirectUrl;
-  final TextEditingController _amountController = TextEditingController();
   RxDouble chargeAmount = 0.0.obs;
-  static const _locale = 'mn';
-  String _formatNumber(String s) =>
-      NumberFormat.decimalPattern(_locale).format(int.parse(s));
 
   @override
   void initState() {
@@ -55,12 +49,10 @@ class _CartScreenState extends State<CartScreen> {
     var bodyData = {
       "id": id.toString(),
     };
-    print(bodyData);
     Services()
         .postRequest(json.encode(bodyData),
             '${CoreUrl.serviceUrl}wallet/card/delete', true, '')
         .then((data) {
-      print(data.body);
       if (data.statusCode == 200) {
         // Get.back();
         Get.snackbar(
@@ -71,7 +63,6 @@ class _CartScreenState extends State<CartScreen> {
         );
         getCartList();
       } else {
-        print('res cide 500');
         Get.snackbar(
           'warning_tr'.translationWord(),
           data.body['message'].toString(),
@@ -88,9 +79,6 @@ class _CartScreenState extends State<CartScreen> {
         .postRequest(json.encode(bodyData),
             '${CoreUrl.serviceUrl}wallet/card/invoice', true, '')
         .then((data) {
-      // var res = json.decode(data.body);
-      print(data.body);
-
       if (data.statusCode == 200) {
         invoice = data.body['result']['invoice'];
         redirectUrl = data.body["result"]["redirect_url"] +
@@ -142,7 +130,6 @@ class _CartScreenState extends State<CartScreen> {
         children: [
           InkWell(
             onTap: () {
-              // addCart();
               createInvoice();
             },
             child: Container(
@@ -202,8 +189,6 @@ class _CartScreenState extends State<CartScreen> {
                     child: InkWell(
                       onTap: () {
                         setState(() {
-                          // removeAccountWidget(accountList[index]);
-                          print(cartList[index]['id']);
                           cardDelete(cartList[index]['id']);
                         });
                       },
@@ -259,166 +244,5 @@ class _CartScreenState extends State<CartScreen> {
             ),
           );
         });
-  }
-
-  addCart() {
-    numberController.text = "";
-    nameController.text = "";
-    return showModalBottomSheet(
-      isDismissible: false,
-      context: context,
-      isScrollControlled: true,
-      enableDrag: false,
-      builder: (context) {
-        return SizedBox(
-          height: GlobalVariables.gHeight,
-          child: Column(
-            children: [
-              const SizedBox(height: 50),
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: const Icon(Icons.arrow_back_ios_new),
-                  ),
-                  const SizedBox(width: 100),
-                  Text(
-                    'add_cart_tr'.translationWord(),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: "MBold",
-                      fontSize: 18,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 100),
-              Container(
-                margin: const EdgeInsets.only(left: 20, right: 20),
-                child: const Divider(
-                  color: Colors.grey,
-                  height: 2,
-                ),
-              ),
-              Row(
-                children: [
-                  Container(
-                    width: 90,
-                    margin: const EdgeInsets.only(left: 20),
-                    child: Text(
-                      'cart_holder_tr'.translationWord(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 20, right: 20),
-                      child: TextField(
-                        autofocus: false,
-                        controller: nameController,
-                        keyboardType: TextInputType.text,
-                        decoration: InputDecoration(
-                          counterText: "",
-                          hintText: 'cart_holder_tr'.translationWord(),
-                          hintStyle: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                          ),
-                          contentPadding: const EdgeInsets.all(20),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 5),
-              Container(
-                margin: const EdgeInsets.only(left: 20, right: 20),
-                child: const Divider(
-                  color: Colors.grey,
-                  height: 2,
-                ),
-              ),
-              Row(
-                children: [
-                  Container(
-                    width: 90,
-                    margin: const EdgeInsets.only(left: 20),
-                    child: Text(
-                      'cart_num_tr'.translationWord(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: Container(
-                      margin: const EdgeInsets.only(left: 20, right: 20),
-                      child: TextField(
-                        controller: numberController,
-                        autofocus: false,
-                        keyboardType: TextInputType.number,
-                        decoration: InputDecoration(
-                          counterText: "",
-                          hintText: 'cart_num_tr'.translationWord(),
-                          hintStyle: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                          ),
-                          contentPadding: const EdgeInsets.all(20),
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 20, right: 20),
-                child: const Divider(
-                  color: Colors.grey,
-                  height: 2,
-                ),
-              ),
-              const SizedBox(height: 200),
-              GeregeButtonWidget(
-                radius: 10.0,
-                elevation: 0.0,
-                minWidth: GlobalVariables.gWidth / 1.6,
-                backgroundColor: CoreColor().btnBlue,
-                borderColor: CoreColor().btnBlue,
-                text: Text(
-                  'add_tr'.translationWord(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                onPressed: () {
-                  setState(() {
-                    if (nameController.text != '' &&
-                        numberController.text != '') {
-                      print('ene bolje');
-                    } else {
-                      Get.snackbar(
-                        'warning_tr'.translationWord(),
-                        'field_tr'.translationWord(),
-                        colorText: Colors.black,
-                        backgroundColor: Colors.white,
-                      );
-                    }
-                  });
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
   }
 }

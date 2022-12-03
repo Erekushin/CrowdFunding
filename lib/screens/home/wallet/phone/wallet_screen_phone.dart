@@ -10,7 +10,9 @@ import 'package:intl/intl.dart';
 
 class WalletScreenPhone extends StatelessWidget {
   static const _locale = 'mn';
-  bool loader = false;
+  static bool loader = false;
+
+  const WalletScreenPhone({super.key});
   String _formatNumber(String s) =>
       NumberFormat.decimalPattern(_locale).format(double.parse(s));
 
@@ -18,7 +20,6 @@ class WalletScreenPhone extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 140,
-      // padding: const EdgeInsets.all(20),
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: CoreColor().backgroundBlue,

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
@@ -94,11 +93,9 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
   otpSend() {
     String url =
         '${CoreUrl.serviceUrl}auth/identify?text=${_createUserController.searchController}';
-    print(url);
     Services().getRequest(url, false, '').then((data) {
       if (data.statusCode == 200) {
         screenChange.value = 1;
-        print('sda');
       } else {
         Get.snackbar(
           'warning_tr'.translationWord(),
@@ -118,15 +115,12 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
       "password": digest.toString(),
       "otp": otpCodeController.text
     };
-    print(bodyData);
     Services()
         .postRequest(bodyData, '${CoreUrl.serviceUrl}auth/register', false, '')
         .then((data) {
       // var res = json.decode(data.body);
       var res = data.body;
       if (data.statusCode == 200) {
-        // print(res['authorization']['token']);
-        // Get.back();
         GlobalVariables.gStorage
             .write("token", res['result']['authorization']['token']);
         GlobalVariables.gStorage
@@ -161,16 +155,11 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
 
   getCountryList() {
     String url = '${CoreUrl.serviceUrl}countries?page_size=500&page_number=1';
-    print("token ---------------------------------");
-    print(GlobalVariables.gStorage.read("token"));
 
     Services().getRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {
         setState(() {
           countryList.value = data.body['result']['items'];
-          print(
-              'country list orsoon -------------------------------------------------------------------');
-          print(countryList);
           screenChange.value = 2;
         });
       } else {
@@ -210,12 +199,6 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
       "gender": selectionGender == "Эр" ? "1" : "0"
     };
 
-    print("bodyMNG");
-    print(bodyMNG);
-
-    print("bodyOther");
-    print(bodyOther);
-
     Services()
         .postRequest(
             json.encode(selectionCountry == "MNG" ? bodyMNG : bodyOther),
@@ -225,12 +208,8 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
         .then((data) {
       Navigator.of(Get.overlayContext!).pop();
       var res = data.body;
-      log(json.encode(data.body));
-      print("body res");
-      print(data.body);
+
       if (data.statusCode == 200) {
-        print('kukukakak');
-        print(data.body);
       } else {
         // Get.back();
         Get.snackbar(
@@ -363,9 +342,8 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
                           onChanged: (value) {
                             setState(() {
                               // var data = json.decode(json.encode(value));
-                              // print(data);
+
                               selectionCountry = value.toString();
-                              print(selectionCountry);
                             });
                           },
                         )
@@ -429,7 +407,6 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
             ),
             onPressed: () {
               setState(() {
-                print('ilgeh');
                 documentFind();
               });
             },
@@ -577,8 +554,6 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
-                    print('ssdhuis');
-                    print(value);
                     selectionGender = value.toString();
                   });
                 },

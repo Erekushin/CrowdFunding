@@ -37,16 +37,13 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
     var bodyData = {
       "id": id.toString(),
     };
-    print(bodyData);
 
     Services()
         .postRequest(bodyData,
             '${CoreUrl.serviceUrl}wallet/bank/account/delete', true, '')
         .then((data) {
       // var res = json.decode(data.body);
-      print('dete res');
       var res = data.body;
-      print(res);
       if (res['message'] == 'success') {
         setState(() {
           Navigator.pop(context);
@@ -99,7 +96,6 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
     Services()
         .getRequest('${CoreUrl.serviceUrl}wallet/bank', true, '')
         .then((data) {
-      print('get bankclist');
       if (data.body['message'] == "success") {
         setState(() {
           bankList = data.body['result'];
@@ -129,16 +125,13 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
       "account_number": accountNumber.text,
       "account_name": GlobalVariables.firstName
     };
-    print(bodyData);
 
     Services()
         .postRequest(
             bodyData, '${CoreUrl.serviceUrl}wallet/bank/account', true, '')
         .then((data) {
-      // var res = json.decode(data.body);
-      print('burtgel res');
       var res = data.body;
-      if (res['message'] == 'success') {
+      if (data.statusCode == 200) {
         Get.snackbar(
           'success_tr'.translationWord(),
           res['message'].toString(),
@@ -185,7 +178,6 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
             InkWell(
               onTap: () {
                 setState(() {
-                  print('click');
                   getBankList();
                 });
               },
@@ -227,10 +219,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
         itemBuilder: (BuildContext context, int index) {
           return GestureDetector(
             onTap: () {
-              setState(() {
-                print('sda');
-                print(accountList[index]);
-              });
+              setState(() {});
             },
             child: Container(
               height: 200,
@@ -527,7 +516,6 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
                       onChanged: (value) {
                         // categoryValue = value.toString();
                         bankId = value;
-                        print(bankId['id']);
                       },
                     ),
                   ),

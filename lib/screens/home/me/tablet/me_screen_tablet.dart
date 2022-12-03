@@ -25,8 +25,6 @@ class _MeScreenTabletState extends State<MeScreenTablet> {
 
   @override
   void initState() {
-    print("mee ---------------------");
-    print(GlobalVariables.isForeign);
     super.initState();
   }
 
@@ -41,7 +39,6 @@ class _MeScreenTabletState extends State<MeScreenTablet> {
         body: Column(
           children: [
             Column(
-              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 20),
                 ClipRRect(
@@ -264,7 +261,6 @@ class _MeScreenTabletState extends State<MeScreenTablet> {
                                                 left: 20,
                                                 child: InkWell(
                                                   onTap: () {
-                                                    print("upload112");
                                                     // _showPickerProfile(context);
                                                   },
                                                   child: GlobalVariables

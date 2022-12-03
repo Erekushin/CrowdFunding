@@ -10,7 +10,9 @@ import 'package:intl/intl.dart';
 
 class WalletScreenTablet extends StatelessWidget {
   static const _locale = 'mn';
-  bool loader = false;
+  static bool loader = false;
+
+  const WalletScreenTablet({super.key});
   String _formatNumber(String s) =>
       NumberFormat.decimalPattern(_locale).format(double.parse(s));
 

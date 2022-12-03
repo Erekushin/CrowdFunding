@@ -28,11 +28,7 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
 
   otpSend() {
     String url = '';
-    print(url);
     Services().getRequest(url, false, '').then((data) {
-      print('ywsanbh');
-      print(data.body);
-      print(data.statusCode);
       if (data.statusCode == 200) {
       } else {
         Get.snackbar(

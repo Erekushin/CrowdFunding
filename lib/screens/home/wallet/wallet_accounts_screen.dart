@@ -34,7 +34,6 @@ class _WalletAccountsScreenState extends State<WalletAccountsScreen>
       if (data.body['message'] == "success") {
         setState(() {
           accountList = data.body['result'];
-          print(accountList);
         });
       }
     });
@@ -43,13 +42,10 @@ class _WalletAccountsScreenState extends State<WalletAccountsScreen>
   /// [addBankAccount] bank account add
   addGeregeAccount() {
     var bodyData = {};
-    print(bodyData);
 
     Services()
         .postRequest(bodyData, '${CoreUrl.serviceUrl}wallet/account', true, '')
         .then((data) {
-      // var res = json.decode(data.body);
-      print('burtgel res');
       var res = data.body;
       if (res['message'] == 'success') {
         Get.snackbar(
@@ -80,8 +76,6 @@ class _WalletAccountsScreenState extends State<WalletAccountsScreen>
             true,
             '')
         .then((data) {
-      // var res = json.decode(data.body);
-      print('defaultAccount');
       var res = data.body;
       if (res['message'] == 'success') {
         Get.snackbar(

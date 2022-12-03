@@ -1,15 +1,12 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/home/wallet/invoice_screen.dart';
-import 'package:gerege_app_v2/screens/home/wallet/money_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/phone/wallet_screen_phone.dart';
 import 'package:gerege_app_v2/screens/home/wallet/tablet/wallet_screen_tablet.dart';
-import 'package:gerege_app_v2/screens/home/wallet/wallet_info.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
@@ -55,7 +52,6 @@ class _WalletScreenState extends State<WalletScreen>
           print(
               "tab is animating. from active (getting the index) to inactive(getting the index) ");
         } else {
-          print(tabController.index);
           selectedIndex = tabController.index;
 
           if (selectedIndex == 1) {
@@ -86,10 +82,6 @@ class _WalletScreenState extends State<WalletScreen>
     Services()
         .getRequest('${CoreUrl.serviceUrl}wallet/invoice', true, '')
         .then((data) {
-      print(data.statusCode);
-      log(json.encode(data.body));
-      print('res invoice');
-      print(data.body);
       // var res = json.decode(data.body);
       if (data.statusCode == 200) {
         invoiceList.value = data.body['result'];
@@ -116,22 +108,22 @@ class _WalletScreenState extends State<WalletScreen>
         .postRequest(json.encode(dataBody),
             '${CoreUrl.serviceUrl}wallet/invoice/cancel', true, '')
         .then((data) {
-      print(data.statusCode);
-      log(json.encode(data.body));
-      print('res invoice');
-      print(data.body);
-      // var res = json.decode(data.body);
-      // if (data.statusCode == 200) {
-      // invoiceList.value = data.body['result'];
-
-      // } else {
-      //   Get.snackbar(
-      //     'warning_tr'.translationWord(),
-      //     data.body['message'],
-      //     colorText: Colors.black,
-      //     backgroundColor: Colors.white,
-      //   );
-      // }
+      if (data.statusCode == 200) {
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.black,
+          backgroundColor: Colors.white,
+        );
+        getInvoiceList();
+      } else {
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.black,
+          backgroundColor: Colors.white,
+        );
+      }
     });
   }
 
@@ -140,7 +132,6 @@ class _WalletScreenState extends State<WalletScreen>
     Services()
         .getRequest('${CoreUrl.serviceUrl}wallet/account/balance', true, '')
         .then((data) {
-      print(data.body);
       if (data.body['message'] == "success") {
         List result =
             data.body['result'].where((x) => x['is_default'] == 1).toList();
@@ -159,7 +150,7 @@ class _WalletScreenState extends State<WalletScreen>
       body: GlobalVariables.useTablet
           ? Row(
               children: [
-                SizedBox(width: 200, child: WalletScreenTablet()),
+                const SizedBox(width: 200, child: WalletScreenTablet()),
                 Expanded(
                   child: tabsAndData(),
                 ),
@@ -167,7 +158,7 @@ class _WalletScreenState extends State<WalletScreen>
             )
           : Column(
               children: [
-                WalletScreenPhone(),
+                const WalletScreenPhone(),
                 Expanded(
                   child: tabsAndData(),
                 ),
@@ -428,7 +419,6 @@ class _WalletScreenState extends State<WalletScreen>
                 ? isEmptyData("doc_empty_tr")
                 : InkWell(
                     onTap: () {
-                      print(invoiceList[index]);
                       invoiceDetail(invoiceList[index]);
                     },
                     child: Container(
@@ -589,8 +579,6 @@ class _WalletScreenState extends State<WalletScreen>
               : InkWell(
                   onTap: () {
                     setState(() {
-                      print(
-                          "https://insurance.gerege.mn/barimt/?invoice_id=${transactionDocument[index]['invoice_id']}&type=1&request_user_id=${GlobalVariables.id}&app_id=6601");
                       // Get.to(
                       //   () => CallWebView(
                       //     title: "Баримт",
@@ -669,7 +657,6 @@ class _WalletScreenState extends State<WalletScreen>
   }
 
   transactionDetail(detail) {
-    print("dotorodsadn asjdn asj : $detail");
     return showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -771,7 +758,6 @@ class _WalletScreenState extends State<WalletScreen>
   }
 
   invoiceDetail(detail) {
-    print("dotorodsadn asjdn asj : $detail");
     return showModalBottomSheet(
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
@@ -1006,7 +992,6 @@ class _WalletScreenState extends State<WalletScreen>
                               onPressed: () {
                                 setState(() {
                                   // Get.back();
-                                  print(detail['id']);
                                   invoiceCancel(detail['id']);
                                 });
                               },
@@ -1024,7 +1009,6 @@ class _WalletScreenState extends State<WalletScreen>
                               ),
                               onPressed: () {
                                 setState(() {
-                                  // print(detail['id']);
                                   pinCodeAskModal(detail['id']);
                                 });
                               },
@@ -1183,7 +1167,6 @@ class _WalletScreenState extends State<WalletScreen>
                           textInputAction: TextInputAction.done,
                           onChanged: (_) {
                             if (controller4.text.length == 1) {
-                              print('shalgayda');
                               // payInvoice(
                               //   invoiceID,
                               //   controller1.text +

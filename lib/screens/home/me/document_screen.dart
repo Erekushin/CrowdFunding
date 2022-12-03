@@ -28,10 +28,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
 
   getDocumentList() {
     String url = '${CoreUrl.serviceUrl}document';
-    print(url);
     Services().getRequest(url, true, '').then((data) {
-      print('ywsanbh');
-      print(data.body);
       if (data.statusCode == 200) {
         setState(() {
           documentList.value = data.body['result']['items'];
@@ -53,11 +50,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
 
   deleteDocument(item) {
     String url = '${CoreUrl.serviceUrl}document?id=${item['id']}';
-    print(url);
-    // print(item);
     Services().deleteRequest(url, true, '').then((data) {
-      print('delete');
-      print(data.body);
       if (data.statusCode == 200) {
         setState(() {
           Get.back();
@@ -153,7 +146,6 @@ class _DocumentScreenState extends State<DocumentScreen> {
           () => InkWell(
             onTap: () {
               setState(() {
-                print(documentList[index]);
                 deleteAlert(documentList[index]);
               });
             },

@@ -65,7 +65,6 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
 
   getCategory() {
     String url = '${CoreUrl.serviceUrl}document/category';
-    print(url);
     Services().getRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {
         setState(() {
@@ -84,7 +83,6 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
 
   getType() {
     String url = '${CoreUrl.serviceUrl}document/type?category_id=1';
-    print(url);
     Services().getRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {
         setState(() {
@@ -110,14 +108,6 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
   void _trySubmitForm() {
     final bool? isValid = _formKey.currentState?.validate();
     if (isValid == true) {
-      debugPrint('Everything looks good!');
-      debugPrint(passportNumberController.text);
-      debugPrint(yearIssue.text);
-      debugPrint(monthIssue.text);
-      debugPrint(dayIssue.text);
-      debugPrint(yearExpire.text);
-      debugPrint(monthExpire.text);
-      debugPrint(dayExpire.text);
       updatePassport();
     }
   }
@@ -147,13 +137,10 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
       "type_id": selectedPassType,
       "user_id": GlobalVariables.id,
     };
-    print("data ---");
-    print(bodyData);
     Services()
         .postRequest(json.encode(bodyData),
             "${CoreUrl.serviceUrl}document/find", true, "")
         .then((data) {
-      print(data.body);
       if (data.statusCode == 200) {
         Get.to(() => const DocumentScreen());
         Get.snackbar(
@@ -271,8 +258,7 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
             onChanged: (value) {
               setState(() {
                 var data = json.decode(json.encode(value));
-                print("category id");
-                print(data);
+
                 selectedCategory = data['id'].toString();
               });
             },
@@ -333,8 +319,7 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
             onChanged: (value) {
               setState(() {
                 var data = json.decode(json.encode(value));
-                print("pass_type_tr id");
-                print(data);
+
                 selectedPassType = data['id'].toString();
               });
             },

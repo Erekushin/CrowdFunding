@@ -226,7 +226,6 @@ class _MeScreenState extends State<MeScreen> {
                                   left: 20,
                                   child: InkWell(
                                     onTap: () {
-                                      print("upload112");
                                       // _showPickerProfile(context);
                                     },
                                     child: GlobalVariables.profileImage.value !=

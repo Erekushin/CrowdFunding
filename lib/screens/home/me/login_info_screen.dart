@@ -45,11 +45,7 @@ class _LoginInfoScreenState extends State<LoginInfoScreen> {
     var newPass = md5.convert(newBytes);
 
     String url = '${CoreUrl.serviceUrl}user/password?old=$oldPass&new=$newPass';
-    print(url);
     Services().putRequest(json.encode({}), url, true, '').then((data) {
-      print('ywsanbh');
-      print(data.body);
-      print(data.statusCode);
       if (data.statusCode == 200) {
         oldPassController.text = "";
         newPassController.text = "";
