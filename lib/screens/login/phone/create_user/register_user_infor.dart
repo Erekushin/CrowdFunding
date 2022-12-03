@@ -28,7 +28,6 @@ class _RegisterUserInfor extends State<RegisterUserInfor> {
   @override
   void initState() {
     super.initState();
-    // Рш();
   }
 
   @override

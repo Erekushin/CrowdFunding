@@ -47,7 +47,7 @@ class CreateUserController extends GetxController {
 
   Future<Response> otpSend(BuildContext context) async {
     String url =
-        '${CoreUrl.serviceUrl}/auth/identify?text=${searchController!.text}';
+        '${CoreUrl.serviceUrl}auth/identify?text=${searchController!.text}';
     final response = await Services().getRequest(url, false, '');
     return response;
   }
@@ -60,8 +60,8 @@ class CreateUserController extends GetxController {
       "password": digest.toString(),
       "otp": otpCodeController!.text
     };
-    final response = await Services().postRequest(
-        bodyData, '${CoreUrl.serviceUrl}/auth/register', false, '');
+    final response = await Services()
+        .postRequest(bodyData, '${CoreUrl.serviceUrl}auth/register', false, '');
     if (response.statusCode == 200) {
       var res = response.body;
       GlobalVariables.gStorage
@@ -106,7 +106,7 @@ class CreateUserController extends GetxController {
 
     final response = await Services().postRequest(
         json.encode(selectionCountry == "MNG" ? bodyMNG : bodyOther),
-        '${CoreUrl.serviceUrl}/document/find',
+        '${CoreUrl.serviceUrl}document/find',
         true,
         '');
     Get.back();

@@ -64,7 +64,7 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
   }
 
   getCategory() {
-    String url = '${CoreUrl.serviceUrl}/document/category';
+    String url = '${CoreUrl.serviceUrl}document/category';
     print(url);
     Services().getRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {
@@ -83,7 +83,7 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
   }
 
   getType() {
-    String url = '${CoreUrl.serviceUrl}/document/type?category_id=1';
+    String url = '${CoreUrl.serviceUrl}document/type?category_id=1';
     print(url);
     Services().getRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {

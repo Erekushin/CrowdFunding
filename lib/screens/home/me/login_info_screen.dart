@@ -46,7 +46,7 @@ class _LoginInfoScreenState extends State<LoginInfoScreen> {
 
     String url = '${CoreUrl.serviceUrl}user/password?old=$oldPass&new=$newPass';
     print(url);
-    Services().putRequest({}, url, true, '').then((data) {
+    Services().putRequest(json.encode({}), url, true, '').then((data) {
       print('ywsanbh');
       print(data.body);
       print(data.statusCode);

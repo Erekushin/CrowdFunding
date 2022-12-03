@@ -43,9 +43,9 @@ class _CartScreenState extends State<CartScreen> {
         .then((data) {
       if (data.statusCode == 200) {
         setState(() {
-          cartList.value = data.body['result']['items'];
-          print('dotr cart list');
-          print(cartList);
+          if (data.body['result'].length != 0) {
+            cartList.value = data.body['result']['items'];
+          }
         });
       }
     });

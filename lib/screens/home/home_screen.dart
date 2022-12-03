@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:gerege_app_v2/controller/sumni_scanner.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
@@ -9,7 +8,7 @@ import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:get/get.dart';
 
-import 'package:sunmi_barcode_scanner/sunmi_barcode_scanner.dart';
+// import 'package:sunmi_barcode_scanner/sunmi_barcode_scanner.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,52 +18,52 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final String _scanBarcode = 'Unknown';
+  // final String _scanBarcode = 'Unknown';
   var searchController = TextEditingController();
 
   RxList driverList = [].obs;
-  String _modelVersion = 'Unknown';
-  String _barcodeVal = 'Unknown';
-  var sunmiBarcodeScanner = SunmiBarcodeScanner();
+  // final SunmiController _sunmiController = Get.find();
+  final SunmiController _sunmiController = Get.put(SunmiController());
+  // String _modelVersion = 'Unknown';
+  // var sunmiBarcodeScanner = SunmiBarcodeScanner();
 
   @override
   void initState() {
     super.initState();
-    initPlatformState();
-    sunmiBarcodeScanner.onBarcodeScanned().listen((event) {
-      print('adsadads');
-      print(event);
-      _barcodeVal = event;
-      searchUser(event, false);
-    });
+    // initPlatformState();
+    // sunmiBarcodeScanner.onBarcodeScanned().listen((event) {
+    //   print('adsadads');
+    //   print(event);
+    //   searchUser(event, false);
+    // });
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String modelVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      modelVersion = (await sunmiBarcodeScanner.getScannerModel()).toString();
-    } on PlatformException {
-      modelVersion = 'Failed to get model version.';
-    }
+  // Future<void> initPlatformState() async {
+  //   String modelVersion;
+  //   // Platform messages may fail, so we use a try/catch PlatformException.
+  //   try {
+  //     modelVersion = (await sunmiBarcodeScanner.getScannerModel()).toString();
+  //   } on PlatformException {
+  //     modelVersion = 'Failed to get model version.';
+  //   }
 
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
+  //   // If the widget was removed from the tree while the asynchronous platform
+  //   // message was in flight, we want to discard the reply rather than calling
+  //   // setState to update our non-existent appearance.
+  //   if (!mounted) return;
 
-    setState(() {
-      _modelVersion = modelVersion;
-      print('model version');
-      print(_modelVersion);
-      print('model versiossn');
-    });
-  }
+  //   setState(() {
+  //     _modelVersion = modelVersion;
+  //     print('model version');
+  //     print(_modelVersion);
+  //     print('model versiossn');
+  //   });
+  // }
 
   searchUser(text, type) {
     // {{DOMAIN}}/user/find?search_text=вю96042818
-    String url = '${CoreUrl.serviceUrl}/user/find?search_text=$text';
+    String url = '${CoreUrl.serviceUrl}user/find?search_text=$text';
     print(url);
     Services().getRequest(url, true, '').then((data) {
       print('ywsanbh');
@@ -94,36 +93,24 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void scanBarcode() async {
-    String barcode = await FlutterBarcodeScanner.scanBarcode(
-        "#ff6666", "Буцах", true, ScanMode.BARCODE);
-    setState(() {
-      if (barcode.isNotEmpty) {
-        // _barcodeString = barcode;
-        // _showForm = true;
-        print('sad');
-        print(barcode);
-        searchUser(barcode, false);
-      } else {
-        print('"hidsosdodo"');
-      }
-    });
-
-    // Don't show form if barcode sacnner is cancelled
-    if (barcode == "-1") {
-      // _showForm = false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    ///sunmi reader unshad bj bn
+    if (GlobalVariables.usePos != "0") {
+      ever(_sunmiController.codeVal, (value) {
+        setState(() {
+          print("$value end utga oorchlgdd bn l da");
+          searchUser(value, false);
+        });
+      });
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
       bottomSheet: Container(
         color: Colors.white,
         margin: const EdgeInsets.only(bottom: 20),
-        child: _modelVersion == "0"
+        child: GlobalVariables.usePos == "0"
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -143,10 +130,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                   RawMaterialButton(
-                    onPressed: () {
+                    onPressed: () async {
                       // startBarcodeScanStream();
 
-                      scanBarcode();
+                      // scanBarcode();
+                      var barCodeData = await Reader().scannerQrBarCode();
+                      if (barCodeData != "-1") {
+                        searchUser(barCodeData, false);
+                      }
                     },
                     elevation: 2.0,
                     fillColor: Colors.white,

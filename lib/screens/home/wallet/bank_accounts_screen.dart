@@ -41,7 +41,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
 
     Services()
         .postRequest(bodyData,
-            '${CoreUrl.serviceUrl}/wallet/bank/account/delete', true, '')
+            '${CoreUrl.serviceUrl}wallet/bank/account/delete', true, '')
         .then((data) {
       // var res = json.decode(data.body);
       print('dete res');
@@ -133,7 +133,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
 
     Services()
         .postRequest(
-            bodyData, '${CoreUrl.serviceUrl}/wallet/bank/account', true, '')
+            bodyData, '${CoreUrl.serviceUrl}wallet/bank/account', true, '')
         .then((data) {
       // var res = json.decode(data.body);
       print('burtgel res');

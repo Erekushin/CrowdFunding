@@ -46,7 +46,7 @@ class _WalletAccountsScreenState extends State<WalletAccountsScreen>
     print(bodyData);
 
     Services()
-        .postRequest(bodyData, '${CoreUrl.serviceUrl}/wallet/account', true, '')
+        .postRequest(bodyData, '${CoreUrl.serviceUrl}wallet/account', true, '')
         .then((data) {
       // var res = json.decode(data.body);
       print('burtgel res');
@@ -76,7 +76,7 @@ class _WalletAccountsScreenState extends State<WalletAccountsScreen>
     Services()
         .postRequest(
             bodyData,
-            '${CoreUrl.serviceUrl}/wallet/account/default?account_no=$id',
+            '${CoreUrl.serviceUrl}wallet/account/default?account_no=$id',
             true,
             '')
         .then((data) {

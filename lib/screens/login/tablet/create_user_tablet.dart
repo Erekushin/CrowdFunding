@@ -93,7 +93,7 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
 
   otpSend() {
     String url =
-        '${CoreUrl.serviceUrl}/auth/identify?text=${_createUserController.searchController}';
+        '${CoreUrl.serviceUrl}auth/identify?text=${_createUserController.searchController}';
     print(url);
     Services().getRequest(url, false, '').then((data) {
       if (data.statusCode == 200) {
@@ -120,7 +120,7 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
     };
     print(bodyData);
     Services()
-        .postRequest(bodyData, '${CoreUrl.serviceUrl}/auth/register', false, '')
+        .postRequest(bodyData, '${CoreUrl.serviceUrl}auth/register', false, '')
         .then((data) {
       // var res = json.decode(data.body);
       var res = data.body;
@@ -160,7 +160,7 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
   }
 
   getCountryList() {
-    String url = '${CoreUrl.serviceUrl}/countries?page_size=500&page_number=1';
+    String url = '${CoreUrl.serviceUrl}countries?page_size=500&page_number=1';
     print("token ---------------------------------");
     print(GlobalVariables.gStorage.read("token"));
 
@@ -219,7 +219,7 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
     Services()
         .postRequest(
             json.encode(selectionCountry == "MNG" ? bodyMNG : bodyOther),
-            '${CoreUrl.serviceUrl}/document/find',
+            '${CoreUrl.serviceUrl}document/find',
             true,
             '')
         .then((data) {
@@ -315,7 +315,7 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
                 ),
                 const SizedBox(height: 20),
                 Obx(
-                  () => countryList.length > 0
+                  () => countryList.isNotEmpty
                       ? DropdownButtonFormField(
                           iconEnabledColor: CoreColor().backgroundBlue,
                           iconDisabledColor: CoreColor().backgroundBlue,

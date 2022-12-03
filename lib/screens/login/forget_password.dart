@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
+import 'package:gerege_app_v2/screens/login/phone/login_screen.dart';
+import 'package:gerege_app_v2/screens/login/tablet/login_screen_tablet.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
@@ -59,22 +61,22 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
   }
 
   otpSend() {
-    screenChange.value = true;
-    // String url =
-    //     '${CoreUrl.serviceUrl}/auth/password?identity=${searchController.text}';
-    // Services().getRequest(url, false, '').then((data) {
-    //   if (data.statusCode == 200) {
-    //     print("uccress ");
-    //     screenChange.value = true;
-    //   } else {
-    //     Get.snackbar(
-    //       'warning_tr'.translationWord(),
-    //       data.body['message'],
-    //       colorText: Colors.white,
-    //       backgroundColor: Colors.red.withOpacity(0.2),
-    //     );
-    //   }
-    // });
+    // screenChange.value = true;
+    String url =
+        '${CoreUrl.serviceUrl}auth/password?identity=${searchController.text}';
+    Services().getRequest(url, false, '').then((data) {
+      if (data.statusCode == 200) {
+        print("uccress ");
+        screenChange.value = true;
+      } else {
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.white,
+          backgroundColor: Colors.red.withOpacity(0.2),
+        );
+      }
+    });
   }
 
   resetPassword() {
@@ -85,16 +87,25 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
     };
     var bytes = utf8.encode(passwordController.text);
     var digest = md5.convert(bytes);
-    print(bodyData);
     String url =
-        '${CoreUrl.serviceUrl}/auth/password?identity=${searchController.text}&password=$digest}&otp${otpCodeController.text}';
+        '${CoreUrl.serviceUrl}auth/password?identity=${searchController.text}&password=$digest}&otp${otpCodeController.text}';
     // print(url);
-    Services().putRequest(bodyData, url, false, '').then((data) {
+    Services().putRequest(json.encode(bodyData), url, false, '').then((data) {
       var res = json.decode(data.body);
       print('reset passport');
       print(res);
       if (data.statusCode == 200) {
-        // screenChange.value = true;
+        Get.snackbar(
+          'success_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.white,
+          backgroundColor: Colors.red.withOpacity(0.2),
+        );
+        if (GlobalVariables.useTablet) {
+          Get.to(() => const LoginScreenTablet());
+        } else {
+          Get.to(() => const LoginScreen());
+        }
       } else {
         Get.snackbar(
           'warning_tr'.translationWord(),

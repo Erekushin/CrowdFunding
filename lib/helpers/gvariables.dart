@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 
 class GlobalVariables {
   static bool useTablet = false;
+  static String usePos = "";
   static RxBool isTabletSidebar = true.obs;
   static double gWidth = Get.width;
   static double gHeight = Get.height;
@@ -89,7 +90,7 @@ class GlobalVariables {
 
   static updateUserInformation() {
     String url =
-        '${CoreUrl.serviceUrl}/user/find?search_text=${GlobalVariables.id}';
+        '${CoreUrl.serviceUrl}user/find?search_text=${GlobalVariables.id}';
     print(url);
     Services().getRequest(url, true, '').then((data) {
       print('ywsanbh');

@@ -27,7 +27,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
   }
 
   getDocumentList() {
-    String url = '${CoreUrl.serviceUrl}/document';
+    String url = '${CoreUrl.serviceUrl}document';
     print(url);
     Services().getRequest(url, true, '').then((data) {
       print('ywsanbh');

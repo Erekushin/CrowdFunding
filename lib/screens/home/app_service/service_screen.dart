@@ -14,23 +14,6 @@ class ServiceScreen extends StatefulWidget {
 class _ServiceScreenState extends State<ServiceScreen> {
   List serviceData = [
     {"id": 0, "img": "achilt.png", "name": "Шалгах"},
-    {"id": 1, "img": "garah2.png", "name": "Орсон"},
-    {"id": 2, "img": "garaltiinPuu.png", "name": "Зогсоол"},
-    {"id": 3, "img": "huchilt1.png", "name": "Анхны пүү"},
-    {"id": 4, "img": "oroltiinPuu.png", "name": "Ачих"},
-    {"id": 5, "img": "oruulah.png", "name": "Тохируулгын пүү"},
-    {"id": 6, "img": "shalgalt1.png", "name": "Хучилт"},
-    {"id": 7, "img": "tohiruulga1.png", "name": "Гаралтын пүү"},
-    {"id": 8, "img": "zogsool2.png", "name": "Гарсан"},
-    // 1    Шалгах
-    // 2    Орсон
-    // 3    Зогсоол
-    // 4    Анхны пүү
-    // 5    Ачих
-    // 6    Тохируулгын пүү
-    // 7    Хучилт
-    // 8    Гаралтын пүү
-    // 9    Гарсан
   ];
 
   @override

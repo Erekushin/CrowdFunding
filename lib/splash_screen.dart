@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/login/phone/login_screen.dart';
@@ -19,11 +17,6 @@ class SplashScreen extends StatefulWidget {
 
 class _MyHomePageState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  // var contr;
-  // var storage = GetStorage();
-  // AnimationController? controller;
-  // Animation<double>? animation;
-
   late final AnimationController _controller = AnimationController(
     duration: const Duration(seconds: 3),
     vsync: this,
@@ -35,7 +28,6 @@ class _MyHomePageState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
-    initDesktop();
     const oneSec = Duration(milliseconds: 2000);
     timer = Timer.periodic(
       oneSec,
@@ -47,12 +39,9 @@ class _MyHomePageState extends State<SplashScreen>
         } else {
           setState(() {
             _start.value--;
-            // GlobalVariables.useTablet
             if (GlobalVariables.useTablet) {
-              print("const ScreenTablet");
               Get.to(() => const LoginScreenTablet());
             } else {
-              print("const LoginScreen()");
               Get.to(() => const LoginScreen());
             }
           });
@@ -61,28 +50,12 @@ class _MyHomePageState extends State<SplashScreen>
     );
   }
 
-  static initDesktop() async {
-    print("kIsWeb: $kIsWeb");
-    // print("windows: ${Platform.isWindows}");
-    // print("linux: ${Platform.isLinux}");
-    // print("mac: ${Platform.isMacOS}");
-
-    if (!kIsWeb &&
-        (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
-      // await DesktopWindow.setMinWindowSize(const Size(750, 400));
-      print('wetdsadas');
-    } else {
-      print('elso');
-    }
-  }
-
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
   }
 
-// final animation = Tween(begin: 0, end: 2 = math.pi).animate(_controller);
   @override
   Widget build(BuildContext context) {
     return Scaffold(

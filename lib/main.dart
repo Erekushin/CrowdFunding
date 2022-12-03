@@ -12,7 +12,7 @@ void main() async {
 
   /// false -> phone true-> tablet
   GlobalVariables.useTablet = DesktopHelper().getDeviceType();
-  WidgetsFlutterBinding.ensureInitialized();
+  DesktopHelper().getModelVersion();
   if (GlobalVariables.useTablet) {
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
@@ -30,7 +30,6 @@ class Main extends StatelessWidget {
   const Main({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    // final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
     return GetMaterialApp(
       enableLog: true,
       logWriterCallback: localLogWriter,

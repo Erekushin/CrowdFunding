@@ -1,5 +1,10 @@
+import 'package:flutter/services.dart';
+import 'package:gerege_app_v2/controller/sumni_scanner.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/helpers/language_translation.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:get/get.dart';
+import 'package:sunmi_barcode_scanner/sunmi_barcode_scanner.dart';
 
 /// string extension capitalize
 extension StringExtension on String {
@@ -46,5 +51,31 @@ class GlobalValidator {
     } else {
       return "phone_regex_tr".translationWord();
     }
+  }
+}
+
+class Reader {
+  var sunmiBarcodeScanner = SunmiBarcodeScanner();
+
+  scannerQrBarCode() async {
+    String scanData;
+    try {
+      scanData = await FlutterBarcodeScanner.scanBarcode(
+        '#ff6666',
+        'Буцах',
+        true,
+        ScanMode.DEFAULT,
+      );
+      return scanData;
+    } on PlatformException {
+      return null;
+    }
+  }
+
+  sunmiScanner() {
+    final SunmiController sunmiController = Get.put(SunmiController());
+    sunmiBarcodeScanner.onBarcodeScanned().listen((event) {
+      sunmiController.codeVal.value = event;
+    });
   }
 }
