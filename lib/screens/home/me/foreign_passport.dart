@@ -17,7 +17,7 @@ class ForeignPassScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ForeignPassScreenState createState() => _ForeignPassScreenState();
+  State<ForeignPassScreen> createState() => _ForeignPassScreenState();
 }
 
 class _ForeignPassScreenState extends State<ForeignPassScreen> {
@@ -29,8 +29,6 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
   List passportType = [];
 
   List passportCategory = [];
-
-  var mrzData;
 
   bool flashLight = false;
   int resendSecond = 60;

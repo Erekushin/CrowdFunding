@@ -31,7 +31,6 @@ class _InfoScreenState extends State<InfoScreen> {
 
   getNews() {
     String url = '${CoreUrl.serviceUrl}news?page_size=10&page_number=1';
-    print(url);
     Services().getRequest(url, true, '').then((data) {
       print('getNews getNews getNews');
       print(data.body);
