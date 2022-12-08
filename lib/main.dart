@@ -7,6 +7,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:flutter/services.dart';
 
 void main() async {
+  //erek changes
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
 
