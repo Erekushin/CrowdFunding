@@ -58,7 +58,7 @@ class _TransactionScreenState extends State<TransactionScreen>
 
   getCartList() {
     Services()
-        .getRequest('${CoreUrl.serviceUrl}wallet/card', true, '')
+        .getRequest('${CoreUrl.crowdfund}wallet/card', true, '')
         .then((data) {
       if (data.statusCode == 200) {
         setState(() {
@@ -74,7 +74,7 @@ class _TransactionScreenState extends State<TransactionScreen>
   /// [getBankAccounts] bank account list
   getBankAccounts() async {
     Services()
-        .getRequest('${CoreUrl.serviceUrl}wallet/bank/account', true, '')
+        .getRequest('${CoreUrl.crowdfund}wallet/bank/account', true, '')
         .then((data) {
       if (data.statusCode == 200) {
         setState(() {
@@ -118,7 +118,7 @@ class _TransactionScreenState extends State<TransactionScreen>
     );
     Services()
         .postRequest(json.encode(bodyData),
-            '${CoreUrl.serviceUrl}wallet/card/deposit', true, '')
+            '${CoreUrl.crowdfund}wallet/card/deposit', true, '')
         .then((data) {
       if (data.statusCode == 200) {
         Get.back();
@@ -161,7 +161,7 @@ class _TransactionScreenState extends State<TransactionScreen>
 
     Services()
         .postRequest(json.encode(bodyData),
-            '${CoreUrl.serviceUrl}wallet/withdraw', true, '')
+            '${CoreUrl.crowdfund}wallet/withdraw', true, '')
         .then((data) {
       if (data.statusCode == 200) {
         // Get.back();

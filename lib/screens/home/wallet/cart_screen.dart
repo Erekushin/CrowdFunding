@@ -33,7 +33,7 @@ class _CartScreenState extends State<CartScreen> {
 
   getCartList() {
     Services()
-        .getRequest('${CoreUrl.serviceUrl}wallet/card', true, '')
+        .getRequest('${CoreUrl.crowdfund}wallet/card', true, '')
         .then((data) {
       if (data.statusCode == 200) {
         setState(() {
@@ -51,7 +51,7 @@ class _CartScreenState extends State<CartScreen> {
     };
     Services()
         .postRequest(json.encode(bodyData),
-            '${CoreUrl.serviceUrl}wallet/card/delete', true, '')
+            '${CoreUrl.crowdfund}wallet/card/delete', true, '')
         .then((data) {
       if (data.statusCode == 200) {
         // Get.back();
@@ -77,7 +77,7 @@ class _CartScreenState extends State<CartScreen> {
     var bodyData = {};
     Services()
         .postRequest(json.encode(bodyData),
-            '${CoreUrl.serviceUrl}wallet/card/invoice', true, '')
+            '${CoreUrl.crowdfund}wallet/card/invoice', true, '')
         .then((data) {
       if (data.statusCode == 200) {
         invoice = data.body['result']['invoice'];
@@ -177,7 +177,7 @@ class _CartScreenState extends State<CartScreen> {
                 borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                 image: DecorationImage(
                   image: NetworkImage(
-                      "${CoreUrl.fileServer}${cartList[index]['bank']['img']}"),
+                      "${CoreUrl.crowdfund}${cartList[index]['bank']['img']}"),
                   fit: BoxFit.fill,
                 ),
               ),

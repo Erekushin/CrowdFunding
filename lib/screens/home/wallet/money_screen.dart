@@ -45,7 +45,7 @@ class _NMoneyScreenState extends State<MoneyScreen> {
   /// [getBankAccounts] bank account list
   getBankAccounts() async {
     Services()
-        .getRequest('${CoreUrl.serviceUrl}wallet/bank/account', true, '')
+        .getRequest('${CoreUrl.crowdfund}wallet/bank/account', true, '')
         .then((data) {
       if (data.body['message'] == "success") {
         setState(() {

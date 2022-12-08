@@ -7,6 +7,8 @@ import 'package:gerege_app_v2/controller/create_user_controller.dart';
 import 'package:get/get.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 
+import '../../../../helpers/logging.dart';
+
 class SendOtp extends StatefulWidget {
   const SendOtp({Key? key, this.onPressed}) : super(key: key);
 
@@ -17,6 +19,7 @@ class SendOtp extends StatefulWidget {
 }
 
 class _SendOtp extends State<SendOtp> with TickerProviderStateMixin {
+  final crowdlog = logger(_SendOtp);
   static final CreateUserController _createUserController =
       Get.put(CreateUserController());
   late TabController tabController;
@@ -169,25 +172,36 @@ class _SendOtp extends State<SendOtp> with TickerProviderStateMixin {
               ),
               onPressed: () async {
                 if (formKey.currentState!.validate()) {
-                  await _createUserController.otpSend(context).then(
-                    (data) {
-                      print("0000000000000000000000000000000000");
-                      print(data.body);
-                      if (data.statusCode == 200) {
-                        setState(() {
-                          screenChange = 1;
-                        });
-                        widget.onPressed!(screenChange);
-                      } else {
-                        Get.snackbar(
-                          'warning_tr'.translationWord(),
-                          data.body['message'],
-                          colorText: Colors.white,
-                          backgroundColor: Colors.grey.withOpacity(0.2),
-                        );
-                      }
-                    },
-                  );
+                  try {
+                    await _createUserController.otpSend(context).then(
+                      (data) {
+                        print("0000000000000000000000000000000000");
+                        print(data.body);
+                        crowdlog.wtf(
+                            '---OTP REQ---:returned data ${data.body.toString()}');
+                        if (data.statusCode == 200) {
+                          setState(() {
+                            screenChange = 1;
+                          });
+                          widget.onPressed!(screenChange);
+                        } else {
+                          Get.snackbar(
+                            'warning_tr'.translationWord(),
+                            data.body['message'],
+                            colorText: Colors.white,
+                            backgroundColor: Colors.grey.withOpacity(0.2),
+                          );
+                        }
+                      },
+                    );
+                  } catch (e) {
+                    Get.snackbar(
+                      'warning_tr'.translationWord(),
+                      e.toString(),
+                      colorText: Colors.white,
+                      backgroundColor: Colors.grey.withOpacity(0.2),
+                    );
+                  }
                 }
               },
             ),

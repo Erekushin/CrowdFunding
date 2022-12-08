@@ -9,6 +9,8 @@ import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:gerege_app_v2/widget/gerege_textfield.dart';
 import 'package:get/get.dart';
 
+import '../../../controller/content.dart';
+
 /// [LoginScreen] login user screen
 
 class LoginScreen extends StatefulWidget {

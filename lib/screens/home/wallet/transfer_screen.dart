@@ -67,7 +67,7 @@ class _TransferScreenState extends State<TransferScreen> {
   findUser(text, type) async {
     Services()
         .getRequest(
-            '${CoreUrl.serviceUrl}user/find-phone?search_text=$text', true, '')
+            '${CoreUrl.crowdfund}user/find-phone?search_text=$text', true, '')
         .then((data) {
       if (data.body['message'] == "success") {
         if (type == false) {
@@ -97,7 +97,7 @@ class _TransferScreenState extends State<TransferScreen> {
 
     Services()
         .postRequest(
-            json.encode(bodyData), '${CoreUrl.serviceUrl}wallet/send', true, '')
+            json.encode(bodyData), '${CoreUrl.crowdfund}wallet/send', true, '')
         .then((data) {
       if (data.body['message'] == "success") {
         priceController.text = '0';

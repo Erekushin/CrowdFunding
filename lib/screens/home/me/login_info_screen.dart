@@ -44,7 +44,7 @@ class _LoginInfoScreenState extends State<LoginInfoScreen> {
     var newBytes = utf8.encode(newPassController.text);
     var newPass = md5.convert(newBytes);
 
-    String url = '${CoreUrl.serviceUrl}user/password?old=$oldPass&new=$newPass';
+    String url = '${CoreUrl.crowdfund}user/password?old=$oldPass&new=$newPass';
     Services().putRequest(json.encode({}), url, true, '').then((data) {
       if (data.statusCode == 200) {
         oldPassController.text = "";

@@ -83,7 +83,7 @@ class _CoreInfoScreenState extends State<CoreInfoScreen> {
 
   updateUser(body) {
     Services()
-        .putRequest(json.encode(body), '${CoreUrl.serviceUrl}user', true, '')
+        .putRequest(json.encode(body), '${CoreUrl.crowdfund}user', true, '')
         .then((data) {
       if (data.statusCode == 200) {
         GlobalVariables.updateUserInformation();

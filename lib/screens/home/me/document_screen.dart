@@ -27,7 +27,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
   }
 
   getDocumentList() {
-    String url = '${CoreUrl.serviceUrl}document';
+    String url = '${CoreUrl.crowdfund}document';
     Services().getRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {
         setState(() {
@@ -49,7 +49,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
   }
 
   deleteDocument(item) {
-    String url = '${CoreUrl.serviceUrl}document?id=${item['id']}';
+    String url = '${CoreUrl.crowdfund}document?id=${item['id']}';
     Services().deleteRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {
         setState(() {

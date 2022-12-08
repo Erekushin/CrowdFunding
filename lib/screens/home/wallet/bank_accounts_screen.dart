@@ -39,8 +39,8 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
     };
 
     Services()
-        .postRequest(bodyData,
-            '${CoreUrl.serviceUrl}wallet/bank/account/delete', true, '')
+        .postRequest(bodyData, '${CoreUrl.crowdfund}wallet/bank/account/delete',
+            true, '')
         .then((data) {
       // var res = json.decode(data.body);
       var res = data.body;
@@ -94,7 +94,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
   /// [getBankAccounts] bank account list
   getBankList() async {
     Services()
-        .getRequest('${CoreUrl.serviceUrl}wallet/bank', true, '')
+        .getRequest('${CoreUrl.crowdfund}wallet/bank', true, '')
         .then((data) {
       if (data.body['message'] == "success") {
         setState(() {
@@ -108,7 +108,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
   /// [getBankAccounts] bank account list
   getBankAccounts() async {
     Services()
-        .getRequest('${CoreUrl.serviceUrl}wallet/bank/account', true, '')
+        .getRequest('${CoreUrl.crowdfund}wallet/bank/account', true, '')
         .then((data) {
       if (data.body['message'] == "success") {
         setState(() {
@@ -128,7 +128,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
 
     Services()
         .postRequest(
-            bodyData, '${CoreUrl.serviceUrl}wallet/bank/account', true, '')
+            bodyData, '${CoreUrl.crowdfund}wallet/bank/account', true, '')
         .then((data) {
       var res = data.body;
       if (data.statusCode == 200) {
@@ -229,7 +229,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
                 borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                 image: DecorationImage(
                   image: NetworkImage(
-                      "${CoreUrl.fileServer}${accountList[index]['bank']['img']}"),
+                      "${CoreUrl.crowdfund}${accountList[index]['bank']['img']}"),
                   fit: BoxFit.fill,
                 ),
               ),

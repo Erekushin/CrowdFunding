@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   searchUser(text, type) {
     // {{DOMAIN}}/user/find?search_text=вю96042818
-    String url = '${CoreUrl.serviceUrl}user/find?search_text=$text';
+    String url = '${CoreUrl.crowdfund}user/find?search_text=$text';
     Services().getRequest(url, true, '').then((data) {
       if (data.body['message'] == "success") {
         driverList.add(data.body['result']);

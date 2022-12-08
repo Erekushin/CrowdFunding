@@ -34,7 +34,7 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
   /// [getWalletAccounts] wallet account list
   getWalletAccounts() async {
     Services()
-        .getRequest('${CoreUrl.serviceUrl}wallet/account/balance', true, '')
+        .getRequest('${CoreUrl.crowdfund}wallet/account/balance', true, '')
         .then((data) {
       if (data.body['message'] == "success") {
         setState(() {

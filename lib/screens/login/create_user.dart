@@ -9,6 +9,8 @@ import 'package:gerege_app_v2/screens/login/phone/create_user/register_user.dart
 import 'package:gerege_app_v2/screens/login/phone/create_user/register_user_infor.dart';
 import 'package:get/get.dart';
 
+import '../content_home/home.dart';
+
 /// [CreateUserScreen] create user screen
 
 class CreateUserScreen extends StatefulWidget {
@@ -32,7 +34,7 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
   }
 
   getCountryList() {
-    String url = '${CoreUrl.serviceUrl}countries?page_size=500&page_number=1';
+    String url = '${CoreUrl.crowdfund}countries?page_size=500&page_number=1';
     Services().getRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {
         setState(() {
@@ -93,7 +95,8 @@ class _CreateUserScreenState extends State<CreateUserScreen> {
                   : RegisterUserInfor(
                       countryList: countryList,
                       onPressed: (val) {
-                        Get.to(() => const MainTab(indexTab: 0));
+                        // Get.to(() => const MainTab(indexTab: 0));
+                        Get.to(() => const ContentHome());
                       },
                     ),
         ),

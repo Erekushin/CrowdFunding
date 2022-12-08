@@ -8,7 +8,11 @@ import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:get/get.dart';
 import 'package:crypto/crypto.dart';
 
+import '../helpers/logging.dart';
+import 'content.dart';
+
 class LoginController extends GetxController {
+  final crowdlog = logger(LoginController);
   TextEditingController? searchText;
   TextEditingController? passwordTextController;
   TextEditingController? deviceIdTextController;
@@ -41,19 +45,32 @@ class LoginController extends GetxController {
 
     Services()
         .postRequest(
-            json.encode(bodyData), '${CoreUrl.serviceUrl}auth/login', false, '')
+            json.encode(bodyData), '${CoreUrl.crowdfund}auth/login', false, '')
         .then((data) {
       Navigator.of(Get.overlayContext!).pop();
       var res = data.body;
-      if (data.statusCode == 200) {
-        GlobalVariables.gStorage.write("token", res['authorization']['token']);
-        GlobalVariables.gStorage.write('userInformation', res['user']);
-        GlobalVariables.storageToVar();
-        Get.to(() => const MainTab(indexTab: 0));
-      } else {
+      crowdlog.wtf(
+          '---LOGIN---: sent data $bodyData:.................returned data ${data.body.toString()}');
+      try {
+        if (data.statusCode == 200) {
+          GlobalVariables.gStorage
+              .write("token", res['authorization']['token']);
+          GlobalVariables.gStorage.write('userInformation', res['user']);
+          GlobalVariables.storageToVar();
+          // Get.to(() => const MainTab(indexTab: 0));
+          Get.find<ContentCont>().getListData(context, type);
+        } else {
+          Get.snackbar(
+            'warning_tr'.translationWord(),
+            res['message'].toString(),
+            backgroundColor: Colors.white60,
+            colorText: Colors.black,
+          );
+        }
+      } catch (e) {
         Get.snackbar(
           'warning_tr'.translationWord(),
-          res['message'].toString(),
+          e.toString(),
           backgroundColor: Colors.white60,
           colorText: Colors.black,
         );

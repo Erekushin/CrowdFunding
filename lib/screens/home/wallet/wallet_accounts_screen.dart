@@ -29,7 +29,7 @@ class _WalletAccountsScreenState extends State<WalletAccountsScreen>
   /// [getWalletAccounts] wallet account list
   getWalletAccounts() async {
     Services()
-        .getRequest('${CoreUrl.serviceUrl}wallet/account/balance', true, '')
+        .getRequest('${CoreUrl.crowdfund}wallet/account/balance', true, '')
         .then((data) {
       if (data.body['message'] == "success") {
         setState(() {
@@ -44,7 +44,7 @@ class _WalletAccountsScreenState extends State<WalletAccountsScreen>
     var bodyData = {};
 
     Services()
-        .postRequest(bodyData, '${CoreUrl.serviceUrl}wallet/account', true, '')
+        .postRequest(bodyData, '${CoreUrl.crowdfund}wallet/account', true, '')
         .then((data) {
       var res = data.body;
       if (res['message'] == 'success') {
@@ -72,7 +72,7 @@ class _WalletAccountsScreenState extends State<WalletAccountsScreen>
     Services()
         .postRequest(
             bodyData,
-            '${CoreUrl.serviceUrl}wallet/account/default?account_no=$id',
+            '${CoreUrl.crowdfund}wallet/account/default?account_no=$id',
             true,
             '')
         .then((data) {

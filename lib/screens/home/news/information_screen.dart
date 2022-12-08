@@ -30,7 +30,7 @@ class _InfoScreenState extends State<InfoScreen> {
   // GET https://go-backend.gerege.mn/template/news?title&page_size&page_number
 
   getNews() {
-    String url = '${CoreUrl.serviceUrl}news?page_size=10&page_number=1';
+    String url = '${CoreUrl.crowdfund}news?page_size=10&page_number=1';
     Services().getRequest(url, true, '').then((data) {
       print('getNews getNews getNews');
       print(data.body);

@@ -62,7 +62,7 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
   }
 
   getCategory() {
-    String url = '${CoreUrl.serviceUrl}document/category';
+    String url = '${CoreUrl.crowdfund}document/category';
     Services().getRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {
         setState(() {
@@ -80,7 +80,7 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
   }
 
   getType() {
-    String url = '${CoreUrl.serviceUrl}document/type?category_id=1';
+    String url = '${CoreUrl.crowdfund}document/type?category_id=1';
     Services().getRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {
         setState(() {
@@ -136,8 +136,8 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
       "user_id": GlobalVariables.id,
     };
     Services()
-        .postRequest(json.encode(bodyData),
-            "${CoreUrl.serviceUrl}document/find", true, "")
+        .postRequest(json.encode(bodyData), "${CoreUrl.crowdfund}document/find",
+            true, "")
         .then((data) {
       if (data.statusCode == 200) {
         Get.to(() => const DocumentScreen());

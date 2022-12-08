@@ -80,7 +80,7 @@ class _WalletScreenState extends State<WalletScreen>
     loader = true;
 
     Services()
-        .getRequest('${CoreUrl.serviceUrl}wallet/invoice', true, '')
+        .getRequest('${CoreUrl.crowdfund}wallet/invoice', true, '')
         .then((data) {
       // var res = json.decode(data.body);
       if (data.statusCode == 200) {
@@ -106,7 +106,7 @@ class _WalletScreenState extends State<WalletScreen>
     var dataBody = {"id": id};
     Services()
         .postRequest(json.encode(dataBody),
-            '${CoreUrl.serviceUrl}wallet/invoice/cancel', true, '')
+            '${CoreUrl.crowdfund}wallet/invoice/cancel', true, '')
         .then((data) {
       if (data.statusCode == 200) {
         Get.snackbar(
@@ -130,7 +130,7 @@ class _WalletScreenState extends State<WalletScreen>
   ///[getAccountBalance] wallet balance default account
   getAccountBalance() async {
     Services()
-        .getRequest('${CoreUrl.serviceUrl}wallet/account/balance', true, '')
+        .getRequest('${CoreUrl.crowdfund}wallet/account/balance', true, '')
         .then((data) {
       if (data.body['message'] == "success") {
         List result =

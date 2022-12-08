@@ -92,7 +92,7 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
 
   otpSend() {
     String url =
-        '${CoreUrl.serviceUrl}auth/identify?text=${_createUserController.searchController}';
+        '${CoreUrl.crowdfund}auth/identify?text=${_createUserController.searchController}';
     Services().getRequest(url, false, '').then((data) {
       if (data.statusCode == 200) {
         screenChange.value = 1;
@@ -116,7 +116,7 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
       "otp": otpCodeController.text
     };
     Services()
-        .postRequest(bodyData, '${CoreUrl.serviceUrl}auth/register', false, '')
+        .postRequest(bodyData, '${CoreUrl.crowdfund}auth/register', false, '')
         .then((data) {
       // var res = json.decode(data.body);
       var res = data.body;
@@ -154,7 +154,7 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
   }
 
   getCountryList() {
-    String url = '${CoreUrl.serviceUrl}countries?page_size=500&page_number=1';
+    String url = '${CoreUrl.crowdfund}countries?page_size=500&page_number=1';
 
     Services().getRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {
@@ -202,7 +202,7 @@ class _CreateUserTabletScreenState extends State<CreateUserTabletScreen>
     Services()
         .postRequest(
             json.encode(selectionCountry == "MNG" ? bodyMNG : bodyOther),
-            '${CoreUrl.serviceUrl}document/find',
+            '${CoreUrl.crowdfund}document/find',
             true,
             '')
         .then((data) {

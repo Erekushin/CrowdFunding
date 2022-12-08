@@ -86,7 +86,7 @@ class GlobalVariables {
   ///[updateUserInformation] update user information
   static updateUserInformation() {
     String url =
-        '${CoreUrl.serviceUrl}user/find?search_text=${GlobalVariables.id}';
+        '${CoreUrl.crowdfund}user/find?search_text=${GlobalVariables.id}';
     Services().getRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {
         GlobalVariables.gStorage.write('userInformation', data.body['result']);
@@ -115,4 +115,7 @@ class GlobalVariables {
     }
     return "";
   }
+
+  static double height = Get.height;
+  static double width = Get.width;
 }

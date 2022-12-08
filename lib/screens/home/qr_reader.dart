@@ -88,7 +88,7 @@ class _QRViewScannerState extends State<QRViewScanner> {
   loginQr(searchText) {
     var bodyData = {"search_text": searchText};
     print(bodyData);
-    String url = "${CoreUrl.serviceUrl}auth/qrlogin?serial_no=$searchText";
+    String url = "${CoreUrl.crowdfund}auth/qrlogin?serial_no=$searchText";
     print(url);
     // GET {{local}}/auth/qrlogin?serial_no=12312312313123
     Services().getRequest(url, true, "").then((data) {

@@ -63,7 +63,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
   otpSend() {
     // screenChange.value = true;
     String url =
-        '${CoreUrl.serviceUrl}auth/password?identity=${searchController.text}';
+        '${CoreUrl.crowdfund}auth/password?identity=${searchController.text}';
     Services().getRequest(url, false, '').then((data) {
       if (data.statusCode == 200) {
         screenChange.value = true;
@@ -87,7 +87,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
     var bytes = utf8.encode(passwordController.text);
     var digest = md5.convert(bytes);
     String url =
-        '${CoreUrl.serviceUrl}auth/password?identity=${searchController.text}&password=$digest}&otp${otpCodeController.text}';
+        '${CoreUrl.crowdfund}auth/password?identity=${searchController.text}&password=$digest}&otp${otpCodeController.text}';
     Services().putRequest(json.encode(bodyData), url, false, '').then((data) {
       if (data.statusCode == 200) {
         Get.snackbar(

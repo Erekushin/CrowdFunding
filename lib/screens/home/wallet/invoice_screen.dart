@@ -67,7 +67,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
   findUser(text, type) async {
     Services()
         .getRequest(
-            '${CoreUrl.serviceUrl}user/find-phone?search_text=$text', true, '')
+            '${CoreUrl.crowdfund}user/find-phone?search_text=$text', true, '')
         .then((data) {
       if (data.body['message'] == "success") {
         if (type == false) {
@@ -95,7 +95,7 @@ class _InvoiceScreenState extends State<InvoiceScreen> {
 
     Services()
         .postRequest(json.encode(bodyData),
-            '${CoreUrl.serviceUrl}wallet/invoice', true, '')
+            '${CoreUrl.crowdfund}wallet/invoice', true, '')
         .then((data) {
       // var res = json.decode(data.body);
       if (data.body['message'] == "success") {
