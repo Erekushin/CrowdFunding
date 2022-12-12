@@ -10,6 +10,8 @@ import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/web_view.dart';
 import 'package:get/get.dart';
 
+import '../../../helpers/logging.dart';
+
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
 
@@ -18,6 +20,7 @@ class CartScreen extends StatefulWidget {
 }
 
 class _CartScreenState extends State<CartScreen> {
+  final crowdlog = logger(_CartScreenState);
   RxList cartList = [].obs;
   var nameController = TextEditingController();
   var numberController = TextEditingController();
@@ -79,6 +82,8 @@ class _CartScreenState extends State<CartScreen> {
         .postRequest(json.encode(bodyData),
             '${CoreUrl.crowdfund}wallet/card/invoice', true, '')
         .then((data) {
+      crowdlog.wtf(
+          '---CREATE INVOICE---: sent data $bodyData:.................returned data ${data.body.toString()}');
       if (data.statusCode == 200) {
         invoice = data.body['result']['invoice'];
         redirectUrl = data.body["result"]["redirect_url"] +

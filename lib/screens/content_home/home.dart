@@ -1,8 +1,16 @@
+import 'dart:convert';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../controller/content.dart';
+import '../../helpers/core_url.dart';
+import '../../helpers/gvariables.dart';
+import '../../helpers/logging.dart';
+import '../../services/get_service.dart';
 import '../../widget/appbar_squeare.dart';
+import '../../widget/sidebar.dart';
 import 'content.dart';
 
 class ContentHome extends StatefulWidget {
@@ -13,7 +21,9 @@ class ContentHome extends StatefulWidget {
 }
 
 class _ContentHomeState extends State<ContentHome> {
-  static final ContentCont _contentCont = Get.put(ContentCont());
+  final crowdlog = logger(_ContentHomeState);
+  GlobalKey<ScaffoldState> menuSidebarKey = GlobalKey<ScaffoldState>();
+  RxList projectList = [].obs;
   String option = '1';
   List<DropdownMenuItem<String>> dropitems(List<dynamic> optionList) {
     return optionList.map((item) {
@@ -28,24 +38,53 @@ class _ContentHomeState extends State<ContentHome> {
     }).toList();
   }
 
+  @override
+  void initState() {
+    super.initState();
+    getProjectList();
+  }
+
   void getProjectList() async {
-    await _contentCont.getListData(context).then(
-      (data) {
-        if (data.statusCode == 200) {}
-      },
-    );
+    await Services()
+        .getRequest('${CoreUrl.crowdfund}crowdfund', true, '')
+        .then((data) {
+      // Navigator.of(Get.overlayContext!).pop();
+      var res = data.body;
+      crowdlog.wtf(
+          '---GET PROJECT LIST---:TOKEN: ${GlobalVariables.gStorage.read("token")}.................returned data ${data.body.toString()}');
+      if (data.statusCode == 200) {
+        projectList.value = data.body['result']['items'];
+      } else {
+        print("wtf");
+        print(res);
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          res['message'].toString(),
+          backgroundColor: Colors.white60,
+          colorText: Colors.black,
+        );
+      }
+      // print(data.body['authorization']['token']);
+      // log(data.body);
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    getProjectList();
+    print('project list item count ${projectList.length}');
     return Scaffold(
+      key: menuSidebarKey,
+      drawer: Sidebar(
+        menuAction: () {
+          menuSidebarKey.currentState?.closeDrawer();
+        },
+      ),
       appBar: AppbarSquare(
         title: 'CrowdfundingMN',
         menuAction: () {
-          setState(() {
-            print('fdf');
-          });
+          menuSidebarKey.currentState!.openDrawer();
+          print(menuSidebarKey.currentState.toString());
+          print('object');
         },
         color: const Color(0xFF00AB44),
       ),
@@ -99,8 +138,9 @@ class _ContentHomeState extends State<ContentHome> {
             child: PageView(
               children: [
                 ListView.builder(
-                    itemCount: 3,
+                    itemCount: projectList.length,
                     itemBuilder: (c, i) {
+                      var item = projectList[i];
                       return InkWell(
                         onTap: () {
                           Get.to(() => const Content());
@@ -132,16 +172,16 @@ class _ContentHomeState extends State<ContentHome> {
                               const SizedBox(
                                 height: 10,
                               ),
-                              const Text(
-                                'Hicarix Badge : LED Bulletin Board using B&W technology',
-                                style: TextStyle(
+                              Text(
+                                item['name'],
+                                style: const TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 16),
                               ),
                               const SizedBox(
                                 height: 10,
                               ),
-                              const Text(
-                                ' An elegant LED badge that draws images using B&W technology from a phone screen. Express your creativity with this badge, made in Japan',
+                              Text(
+                                item['description'],
                                 maxLines: 2,
                                 softWrap: true,
                                 overflow: TextOverflow.ellipsis,
@@ -152,7 +192,7 @@ class _ContentHomeState extends State<ContentHome> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  greenInfo('₮231,850 raised'),
+                                  greenInfo(item['amount'].toString()),
                                   littleSpacer(),
                                   greenInfo('32 donations'),
                                   littleSpacer(),
@@ -194,9 +234,9 @@ class _ContentHomeState extends State<ContentHome> {
 
   Widget greenInfo(String txt) {
     return Text(
-      'fdfdf',
-      style: TextStyle(
-          fontWeight: FontWeight.bold, color: const Color(0xFF00AB44)),
+      txt,
+      style: const TextStyle(
+          fontWeight: FontWeight.bold, color: Color(0xFF00AB44), fontSize: 11),
     );
   }
 

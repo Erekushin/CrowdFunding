@@ -37,7 +37,7 @@ class WalletScreenPhone extends StatelessWidget {
                 children: [
                   const ImageIcon(
                     AssetImage(
-                      "assets/icons/money.png",
+                      "assets/icons/money.jpg",
                     ),
                     size: 60,
                     color: Colors.white,
@@ -63,7 +63,7 @@ class WalletScreenPhone extends StatelessWidget {
                 children: [
                   const ImageIcon(
                     AssetImage(
-                      "assets/icons/wallettool.png",
+                      "assets/icons/money.jpg",
                     ),
                     size: 60,
                     color: Colors.white,

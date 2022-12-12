@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:crypto/crypto.dart';
 
 import '../helpers/logging.dart';
-import 'content.dart';
+import '../screens/content_home/home.dart';
 
 class LoginController extends GetxController {
   final crowdlog = logger(LoginController);
@@ -58,7 +58,7 @@ class LoginController extends GetxController {
           GlobalVariables.gStorage.write('userInformation', res['user']);
           GlobalVariables.storageToVar();
           // Get.to(() => const MainTab(indexTab: 0));
-          Get.find<ContentCont>().getListData(context, type);
+          Get.to(() => const ContentHome());
         } else {
           Get.snackbar(
             'warning_tr'.translationWord(),

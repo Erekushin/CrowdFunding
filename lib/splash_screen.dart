@@ -1,12 +1,15 @@
 import 'dart:async';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/screens/login/phone/login_screen.dart';
-import 'package:gerege_app_v2/screens/login/tablet/login_screen_tablet.dart';
+import 'package:gerege_app_v2/screens/login/main_login/login_screen.dart';
 import 'package:get/get.dart';
-import 'dart:math' as math;
-
+// import 'dart:math' as math;
+// import 'package:crowdfund_app/style/color.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'helpers/gvariables.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -17,10 +20,15 @@ class SplashScreen extends StatefulWidget {
 
 class _MyHomePageState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(seconds: 3),
-    vsync: this,
-  )..repeat();
+  // var contr;
+  // var storage = GetStorage();
+  // AnimationController? controller;
+  // Animation<double>? animation;
+
+  // late final AnimationController _controller = AnimationController(
+  //   duration: const Duration(seconds: 3),
+  //   vsync: this,
+  // )..repeat();
   late Timer timer;
   final RxInt _start = 1.obs;
   var storage = GetStorage();
@@ -28,6 +36,7 @@ class _MyHomePageState extends State<SplashScreen>
   @override
   void initState() {
     super.initState();
+    initDesktop();
     const oneSec = Duration(milliseconds: 2000);
     timer = Timer.periodic(
       oneSec,
@@ -39,23 +48,35 @@ class _MyHomePageState extends State<SplashScreen>
         } else {
           setState(() {
             _start.value--;
-            if (GlobalVariables.useTablet) {
-              Get.to(() => const LoginScreenTablet());
-            } else {
-              Get.to(() => const LoginScreen());
-            }
+            Get.to(() => const LoginScreen());
           });
         }
       },
     );
   }
 
+  static initDesktop() async {
+    print("kIsWeb: $kIsWeb");
+    // print("windows: ${Platform.isWindows}");
+    // print("linux: ${Platform.isLinux}");
+    // print("mac: ${Platform.isMacOS}");
+
+    if (!kIsWeb &&
+        (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
+      // await DesktopWindow.setMinWindowSize(const Size(750, 400));
+      print('desktop');
+    } else {
+      print('elso');
+    }
+  }
+
   @override
   void dispose() {
-    _controller.dispose();
+    // _controller.dispose();
     super.dispose();
   }
 
+// final animation = Tween(begin: 0, end: 2 = math.pi).animate(_controller);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,8 +85,8 @@ class _MyHomePageState extends State<SplashScreen>
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromRGBO(67, 119, 222, 1),
-              Color.fromRGBO(0, 58, 172, 1),
+              Color.fromARGB(255, 0, 171, 68),
+              Color.fromRGBO(0, 147, 58, 1),
             ],
             begin: Alignment.bottomLeft,
             end: Alignment.topCenter,
@@ -73,55 +94,46 @@ class _MyHomePageState extends State<SplashScreen>
             tileMode: TileMode.mirror,
           ),
         ),
-        child: Stack(
-          children: [
-            Obx(() => AnimatedPositioned(
-                  duration: const Duration(milliseconds: 300),
-                  top: 250,
-                  left: _start.value == 0
-                      ? ((GlobalVariables.gWidth / 3) - 35)
-                      : ((GlobalVariables.gWidth / 2) - 35),
-                  child: AnimatedBuilder(
-                    animation: _controller,
-                    child: Row(
-                      children: [
-                        Center(
-                          child: Image.asset(
-                            'assets/images/solo_logo.png',
-                          ),
-                        ),
-                        _start.value == 0
-                            ? const SizedBox(width: 15)
-                            : Container(),
-                        _start.value == 0
-                            ? AnimatedOpacity(
-                                opacity: 1.0,
-                                duration: const Duration(milliseconds: 500),
-                                child: Image.asset(
-                                  'assets/images/gerege_title.png',
-                                ),
-                              )
-                            : Container(),
-                      ],
+        child:
+            // Stack(
+            //   children: [
+            Container(
+          // duration: const Duration(milliseconds: 300),
+          margin: const EdgeInsets.only(top: 307),
+          // top: 307,
+          width: GlobalVariables.gWidth,
+          height: GlobalVariables.gHeight,
+          // left: _start.value == 0
+          //     ? ((GlobalVariables.gWidth / 3) - 35)
+          //     : ((GlobalVariables.gWidth / 2) - 35),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "CrowdfundingMN",
+                  style: GoogleFonts.ubuntu(
+                    textStyle: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 30,
                     ),
-                    builder: (BuildContext context, Widget? child) {
-                      return Transform.rotate(
-                        angle: _start.value == 0
-                            ? _controller.value * 0 * math.pi
-                            : _controller.value * 1.0 * math.pi,
-                        child: child,
-                      );
-                    },
                   ),
-                )),
-            Positioned(
-              bottom: 0,
-              right: 180,
-              child: Image.asset(
-                "assets/images/emblem.png",
+                ),
+              ]
+              // animation: _controller,
+              // child: Row(
+              //   children: [
+              //     Center(
+              //       child: Image.asset(
+              //         'assets/images/solo_logo.png',
+              //       ),
+              //     ),
+              //   ],
+              // ),
               ),
-            ),
-          ],
+          //   ),
+          // ],
         ),
       ),
     );
