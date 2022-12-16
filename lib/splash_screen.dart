@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/screens/login/main_login/login_screen.dart';
+import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 // import 'dart:math' as math;
 // import 'package:crowdfund_app/style/color.dart';
@@ -20,6 +21,12 @@ class SplashScreen extends StatefulWidget {
 
 class _MyHomePageState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
+  double _fontSize = 2;
+  double _textOpacity = 0.0;
+  double _containerSize = 1.5;
+  double _containerOpacity = 0.0;
+  late AnimationController _controller;
+  late Animation<double> animation1;
   // var contr;
   // var storage = GetStorage();
   // AnimationController? controller;
@@ -37,22 +44,34 @@ class _MyHomePageState extends State<SplashScreen>
   void initState() {
     super.initState();
     initDesktop();
-    const oneSec = Duration(milliseconds: 2000);
-    timer = Timer.periodic(
-      oneSec,
-      (Timer timer) {
-        if (_start.value == 0) {
-          setState(() {
-            timer.cancel();
-          });
-        } else {
-          setState(() {
-            _start.value--;
-            Get.to(() => const LoginScreen());
-          });
-        }
-      },
-    );
+    _controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 3));
+
+    animation1 = Tween<double>(begin: 40, end: 20).animate(CurvedAnimation(
+        parent: _controller, curve: Curves.fastLinearToSlowEaseIn))
+      ..addListener(() {
+        setState(() {
+          _textOpacity = 1.0;
+        });
+      });
+
+    _controller.forward();
+
+    Timer(const Duration(seconds: 2), () {
+      setState(() {
+        _fontSize = 1.06;
+      });
+    });
+
+    Timer(const Duration(seconds: 2), () {
+      setState(() {
+        _containerSize = 2;
+        _containerOpacity = 1;
+      });
+    });
+    Timer(const Duration(seconds: 4), () {
+      Get.to(() => const LoginScreen());
+    });
   }
 
   static initDesktop() async {
@@ -80,61 +99,29 @@ class _MyHomePageState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              Color.fromARGB(255, 0, 171, 68),
-              Color.fromRGBO(0, 147, 58, 1),
-            ],
-            begin: Alignment.bottomLeft,
-            end: Alignment.topCenter,
-            stops: [0.0, 1.0],
-            tileMode: TileMode.mirror,
+      backgroundColor: CoreColor().backgroundGreen,
+      body: Stack(
+        children: [
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 2000),
+            curve: Curves.fastLinearToSlowEaseIn,
+            height: GlobalVariables.gHeight / _fontSize,
           ),
-        ),
-        child:
-            // Stack(
-            //   children: [
-            Container(
-          // duration: const Duration(milliseconds: 300),
-          margin: const EdgeInsets.only(top: 307),
-          // top: 307,
-          width: GlobalVariables.gWidth,
-          height: GlobalVariables.gHeight,
-          // left: _start.value == 0
-          //     ? ((GlobalVariables.gWidth / 3) - 35)
-          //     : ((GlobalVariables.gWidth / 2) - 35),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "CrowdfundingMN",
-                  style: GoogleFonts.ubuntu(
-                    textStyle: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 30,
-                    ),
-                  ),
+          AnimatedOpacity(
+            duration: const Duration(milliseconds: 1000),
+            opacity: _textOpacity,
+            child: Center(
+              child: Text(
+                'CrowdFundingMN',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: animation1.value,
                 ),
-              ]
-              // animation: _controller,
-              // child: Row(
-              //   children: [
-              //     Center(
-              //       child: Image.asset(
-              //         'assets/images/solo_logo.png',
-              //       ),
-              //     ),
-              //   ],
-              // ),
               ),
-          //   ),
-          // ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }

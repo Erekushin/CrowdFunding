@@ -15,6 +15,8 @@ import 'package:get/state_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/intl.dart';
 
+import '../../../helpers/logging.dart';
+
 class WalletScreen extends StatefulWidget {
   const WalletScreen({Key? key}) : super(key: key);
 
@@ -24,6 +26,7 @@ class WalletScreen extends StatefulWidget {
 
 class _WalletScreenState extends State<WalletScreen>
     with TickerProviderStateMixin {
+  final crowdlog = logger(_WalletScreenState);
   late TabController tabController;
   int selectedIndex = 0;
   RxBool hideMoney = true.obs;
@@ -132,12 +135,22 @@ class _WalletScreenState extends State<WalletScreen>
     Services()
         .getRequest('${CoreUrl.crowdfund}wallet/account/balance', true, '')
         .then((data) {
-      if (data.body['message'] == "success") {
-        List result =
-            data.body['result'].where((x) => x['is_default'] == 1).toList();
-        GlobalVariables.accountBalance.value = result[0]['balance'];
-      } else {
-        GlobalVariables.accountBalance.value = 0;
+      crowdlog.wtf('---LOGIN---:returned data ${data.body.toString()}');
+      try {
+        if (data.body['message'] == "success") {
+          List result =
+              data.body['result'].where((x) => x['is_default'] == 1).toList();
+          GlobalVariables.accountBalance.value = result[0]['balance'];
+        } else {
+          GlobalVariables.accountBalance.value = 0;
+        }
+      } catch (e) {
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          e.toString(),
+          backgroundColor: Colors.white60,
+          colorText: Colors.black,
+        );
       }
     });
   }

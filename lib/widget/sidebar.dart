@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
 import '../screens/home/wallet/wallet_screen.dart';
+import '../screens/wallet/wallet_main.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key, required this.menuAction});
@@ -59,6 +61,11 @@ class _SidebarState extends State<Sidebar> {
                       menuComponent(
                           context, FontAwesomeIcons.magnifyingGlass, 'Хэтэвч',
                           () {
+                        // Get.to(() => const WalletScreen());
+                        Get.to(() => const WalletMain());
+                      }),
+                      menuComponent(context, FontAwesomeIcons.magnifyingGlass,
+                          'Хэтэвч huuchin', () {
                         Get.to(() => const WalletScreen());
                       }),
                       menuComponent(context, FontAwesomeIcons.solidBell,
@@ -142,7 +149,7 @@ class _SidebarState extends State<Sidebar> {
             children: [
               Icon(
                 icon,
-                color: const Color(0xff465C94),
+                color: CoreColor.mainGreen,
                 size: 18,
               ),
               const SizedBox(

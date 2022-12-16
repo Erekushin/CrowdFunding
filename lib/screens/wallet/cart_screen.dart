@@ -10,7 +10,7 @@ import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/web_view.dart';
 import 'package:get/get.dart';
 
-import '../../../helpers/logging.dart';
+import '../../helpers/logging.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -114,7 +114,7 @@ class _CartScreenState extends State<CartScreen> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Get.to(() => const WalletInfoScreen());
+            Get.back();
           },
           icon: const Icon(
             Icons.arrow_back,
@@ -182,7 +182,7 @@ class _CartScreenState extends State<CartScreen> {
                 borderRadius: const BorderRadius.all(Radius.circular(8.0)),
                 image: DecorationImage(
                   image: NetworkImage(
-                      "${CoreUrl.crowdfund}${cartList[index]['bank']['img']}"),
+                      "${CoreUrl.fileServer}${cartList[index]['bank']['img']}"),
                   fit: BoxFit.fill,
                 ),
               ),
@@ -211,14 +211,17 @@ class _CartScreenState extends State<CartScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          cartList[index]['card_holder']
-                              .toString()
-                              .toUpperCase(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                        SizedBox(
+                          width: GlobalVariables.gWidth * .5,
+                          child: Text(
+                            cartList[index]['card_holder']
+                                .toString()
+                                .toUpperCase(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                         const Text(

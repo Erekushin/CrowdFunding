@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/screens/home/wallet/cart_screen.dart';
+import 'package:gerege_app_v2/screens/wallet/cart_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/pay_config_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/transaction.dart';
-import 'package:gerege_app_v2/screens/home/wallet/transfer_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/wallet_accounts_screen.dart';
 import 'package:gerege_app_v2/screens/main_tab.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
@@ -44,20 +43,18 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
     });
   }
 
-  back() {
-    Get.to(() => const MainTab(indexTab: 3));
-  }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: () => back(),
+      onWillPop: () async {
+        Get.back();
+        return true;
+      },
       child: Scaffold(
         backgroundColor: CoreColor().btnGrey,
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              // Get.back();
               Get.to(() => const MainTab(indexTab: 3));
             },
             icon: const Icon(
@@ -77,7 +74,7 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
           actions: [
             TextButton(
               onPressed: () {
-                Get.to(() => const TransferScreen());
+                // Get.to(() => const TransferScreen());
               },
               child: const Text(
                 'Transaction',
@@ -89,11 +86,7 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            listWidget(),
-          ],
-        ),
+        body: listWidget(),
       ),
     );
   }

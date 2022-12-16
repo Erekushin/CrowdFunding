@@ -1,341 +1,131 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gerege_app_v2/helpers/core_url.dart';
+import 'package:flutter/src/widgets/container.dart';
+import 'package:flutter/src/widgets/framework.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
-import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/services/get_service.dart';
-import 'package:gerege_app_v2/style/color.dart';
-import 'package:gerege_app_v2/widget/gerege_button.dart';
-
-import 'package:get/route_manager.dart';
-import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 
-import '../../../helpers/logging.dart';
+import '../../helpers/core_url.dart';
+import '../../helpers/gvariables.dart';
+import '../../helpers/helperfuncs.dart';
+import '../../helpers/logging.dart';
+import '../../services/get_service.dart';
+import '../../style/color.dart';
+import '../../widget/appbar_squeare.dart';
+import '../../widget/empty.dart';
+import '../../widget/gerege_button.dart';
+import '../home/wallet/invoice_screen.dart';
+import 'bank_accounts_screen.dart';
+import 'cart_screen.dart';
 
-class TransactionScreen extends StatefulWidget {
-  const TransactionScreen({Key? key}) : super(key: key);
+class WalletMain extends StatefulWidget {
+  const WalletMain({super.key});
 
   @override
-  State<StatefulWidget> createState() => _TransactionScreenState();
+  State<WalletMain> createState() => _WalletMainState();
 }
 
-class _TransactionScreenState extends State<TransactionScreen>
-    with TickerProviderStateMixin {
-  final crowdlog = logger(_TransactionScreenState);
+class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
+  final crowdlog = logger(_WalletMainState);
+
+  bool loader = false;
+  RxList invoiceList = [].obs;
+  RxList transactionList = [].obs;
+  RxList transactionDocument = [].obs;
   static const _locale = 'mn';
   String _formatNumber(String s) =>
       NumberFormat.decimalPattern(_locale).format(double.parse(s));
+
+//#region...........FUNCTIONS..............
+
+  ///[getAccountBalance] wallet balance default account
+  getAccountBalance() async {
+    Services()
+        .getRequest('${CoreUrl.crowdfund}wallet/account/balance', true, '')
+        .then((data) {
+      crowdlog.wtf('---LOGIN---:returned data ${data.body.toString()}');
+      try {
+        if (data.body['message'] == "success") {
+          List result =
+              data.body['result'].where((x) => x['is_default'] == 1).toList();
+          GlobalVariables.accountBalance.value = result[0]['balance'];
+        } else {
+          GlobalVariables.accountBalance.value = 0;
+        }
+      } catch (e) {
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          e.toString(),
+          backgroundColor: Colors.white60,
+          colorText: Colors.black,
+        );
+      }
+    });
+  }
+
+  ///[getInvoiceList] get invoice list
+  getInvoiceList() async {
+    loader = true;
+
+    Services()
+        .getRequest('${CoreUrl.crowdfund}wallet/invoice', true, '')
+        .then((data) {
+      crowdlog.wtf('----INVOICE LIST---${data.body.toString()}');
+      if (data.statusCode == 200) {
+        invoiceList.value = data.body['result'];
+        setState(() {
+          loader = false;
+        });
+      } else {
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.black,
+          backgroundColor: Colors.white,
+        );
+      }
+    });
+  }
+
+  invoiceCancel(id) async {
+    var dataBody = {"id": id};
+    Services()
+        .postRequest(json.encode(dataBody),
+            '${CoreUrl.crowdfund}wallet/invoice/cancel', true, '')
+        .then((data) {
+      if (data.statusCode == 200) {
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.black,
+          backgroundColor: Colors.white,
+        );
+        getInvoiceList();
+      } else {
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.black,
+          backgroundColor: Colors.white,
+        );
+      }
+    });
+  }
+
+  //#region..........ЦЭНЭГЛЭХ..................
   RxDouble chargeAmount = 0.0.obs;
+  late TabController tabContCharge;
+  RxInt selectedIndexCharge = 0.obs;
   final TextEditingController _amountController = TextEditingController();
-  // RxList cardList = [].obs;
-  RxList accountList = [].obs;
-
-  late TabController tabController;
-  RxInt selectedIndex = 0.obs;
-  RxList cartList = [].obs;
-
-  RxMap selectedCard = {}.obs;
-  RxMap selectedAccount = {}.obs;
-
-  @override
-  void initState() {
-    super.initState();
-    getCartList();
-    tabController = TabController(
-      initialIndex: 0,
-      length: 2, //1,
-      vsync: this,
-    );
-    tabController.addListener(() {
-      setState(() {
-        selectedIndex.value = tabController.index;
-      });
-    });
-  }
-
-  getCartList() {
-    Services()
-        .getRequest('${CoreUrl.crowdfund}wallet/card', true, '')
-        .then((data) {
-      if (data.statusCode == 200) {
-        setState(() {
-          cartList.value = data.body['result']['items'];
-          if (cartList.isNotEmpty) {
-            selectedCard.value = cartList[0];
-          }
-        });
-      }
-    });
-  }
-
-  /// [getBankAccounts] bank account list
-  getBankAccounts() async {
-    Services()
-        .getRequest('${CoreUrl.crowdfund}wallet/bank/account', true, '')
-        .then((data) {
-      if (data.statusCode == 200) {
-        setState(() {
-          accountList.value = data.body['result'];
-          if (accountList.isNotEmpty) {
-            selectedAccount.value = accountList[0];
-          }
-        });
-      }
-    });
-  }
-
-  hmacEncryp(selected) {
-    var hmackey = utf8.encode("Bm2#3Z8]HID(&Wt");
-
-    String hmacValue = selected['id'].toString() +
-        _amountController.text.replaceAll(',', '') +
-        chargeAmount.value.floor().toString();
-
-    var hmacSha256 = Hmac(sha256, hmackey); // HMAC-SHA256
-    var digest = hmacSha256.convert(utf8.encode(hmacValue));
-    var bodyData = {
-      // "type": "charge",
-      "hash": digest.toString(),
-      "card_token_id": selected['id'].toString(),
-      "card_no": selected['card_number'],
-      "device_type": Platform.isAndroid == true ? 'android' : "ios",
-      "amount": chargeAmount.value.floor(),
-      "charge_percent": 1,
-      "charge_amount": int.parse(_amountController.text.replaceAll(',', '')),
-    };
-    cardPay(bodyData);
-  }
-
-  cardPay(bodyData) {
-    Get.dialog(
-      const Center(
-        child: CircularProgressIndicator(),
-      ),
-      barrierDismissible: false,
-    );
-    Services()
-        .postRequest(json.encode(bodyData),
-            '${CoreUrl.crowdfund}wallet/card/deposit', true, '')
-        .then((data) {
-      crowdlog.wtf(
-          '---CARD PAY---: sent data $bodyData:.................returned data ${data.body.toString()}');
-      if (data.statusCode == 200) {
-        Get.back();
-        Get.back();
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.black,
-          backgroundColor: Colors.white,
-        );
-        GlobalVariables.accountBalance.value =
-            GlobalVariables.accountBalance.value +
-                int.parse(_amountController.text.replaceAll(',', ''));
-      } else {
-        Navigator.of(Get.overlayContext!).pop();
-
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.black,
-          backgroundColor: Colors.white,
-        );
-      }
-    });
-  }
-
-  withDrawMoney() async {
-    Get.dialog(
-      const Center(
-        child: CircularProgressIndicator(),
-      ),
-      barrierDismissible: false,
-    );
-    var bodyData = {
-      "bank_account_id": selectedAccount['id'].toString(),
-      "account_number":
-          GlobalVariables.accountNoList[0]['account_no'].toString(),
-      "amount": int.parse(_amountController.text.replaceAll(',', ''))
-    };
-
-    Services()
-        .postRequest(json.encode(bodyData),
-            '${CoreUrl.crowdfund}wallet/withdraw', true, '')
-        .then((data) {
-      if (data.statusCode == 200) {
-        // Get.back();
-        Get.back();
-        Get.back();
-        Get.snackbar(
-          'success_tr'.translationWord(),
-          data.body['message'].toString().translationWord(),
-          colorText: Colors.black,
-          backgroundColor: Colors.white,
-        );
-
-        GlobalVariables.accountBalance.value =
-            GlobalVariables.accountBalance.value -
-                int.parse(_amountController.text.replaceAll(',', ''));
-      } else {
-        // Get.back();
-        Navigator.of(Get.overlayContext!).pop();
-        // Get.back();
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.white,
-          backgroundColor: CoreColor().backgroundYellow.withOpacity(0.2),
-        );
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: const Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
-        elevation: 0.0,
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        actions: [
-          TextButton(
-            child: Text(
-              'sds',
-              style: const TextStyle(
-                color: Colors.black,
-              ),
-            ),
-            onPressed: () {
-              // Get.to(() => const TransferScreen());
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          GlobalVariables.useTablet
-              ? const SizedBox(height: 30)
-              : const SizedBox(height: 100),
-          const Center(
-            child: Icon(
-              Icons.monetization_on,
-              size: 80,
-              color: Colors.yellow,
-            ),
-          ),
-          const SizedBox(height: 10),
-          Center(
-            child: Text(
-              'remainder_tr'.translationWord(),
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 18,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Center(
-            child: Obx(
-              () => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    _formatNumber(GlobalVariables.accountBalance.value
-                        .toString()
-                        .replaceAll(',', '')),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    child: const Text(
-                      '₮',
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ),
-          ),
-          const Spacer(),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: GeregeButtonWidget(
-              radius: 10.0,
-              elevation: 0.0,
-              minWidth: GlobalVariables.gWidth / 1.6,
-              backgroundColor: CoreColor().btnBlue,
-              borderColor: CoreColor().btnBlue,
-              text: Text(
-                'topup_tr'.translationWord(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-              onPressed: () async {
-                // await getWalletAccounts();
-                setState(() {
-                  topUpModal();
-                });
-              },
-            ),
-          ),
-          const SizedBox(height: 20),
-          Container(
-            alignment: Alignment.bottomCenter,
-            child: GeregeButtonWidget(
-              radius: 10.0,
-              elevation: 0.0,
-              minWidth: GlobalVariables.gWidth / 1.6,
-              backgroundColor: CoreColor().btnGrey,
-              borderColor: CoreColor().btnGrey,
-              text: Text(
-                'withdraw_tr'.translationWord(),
-                style: TextStyle(
-                  color: CoreColor().btnBlue,
-                  fontSize: 16,
-                ),
-              ),
-              onPressed: () async {
-                await getBankAccounts();
-                setState(() {
-                  withdrawModal();
-                });
-              },
-            ),
-          ),
-          GlobalVariables.useTablet
-              ? const SizedBox(height: 50)
-              : const SizedBox(height: 120),
-        ],
-      ),
-    );
-  }
-
-  topUpModal() {
+  chargeModal() {
     _amountController.text = "";
     chargeAmount.value = 0;
     return showModalBottomSheet(
@@ -371,7 +161,7 @@ class _TransactionScreenState extends State<TransactionScreen>
                       indicatorColor: CoreColor().backgroundButton,
                       labelColor: Colors.black,
                       unselectedLabelColor: Colors.grey,
-                      controller: tabController,
+                      controller: tabContCharge,
                       tabs: [
                         Tab(
                           text: 'cart_tr'.translationWord(),
@@ -383,7 +173,7 @@ class _TransactionScreenState extends State<TransactionScreen>
                     ),
                   ),
                 ),
-                selectedIndex.value == 0
+                selectedIndexCharge.value == 0
                     ? Expanded(
                         child: topupCart(),
                       )
@@ -398,6 +188,9 @@ class _TransactionScreenState extends State<TransactionScreen>
     );
   }
 
+//#region...........card section of CHARGE...............
+  RxMap selectedCard = {}.obs;
+  RxList cartList = [].obs;
   topupCart() {
     return SingleChildScrollView(
       child: Column(
@@ -624,6 +417,74 @@ class _TransactionScreenState extends State<TransactionScreen>
     );
   }
 
+  rechargeFee(double amount) {
+    double sum = 0;
+    sum = amount + (amount / 99);
+    return sum;
+  }
+
+  hmacEncryp(selected) {
+    var hmackey = utf8.encode("Bm2#3Z8]HID(&Wt");
+
+    String hmacValue = selected['id'].toString() +
+        _amountController.text.replaceAll(',', '') +
+        chargeAmount.value.floor().toString();
+
+    var hmacSha256 = Hmac(sha256, hmackey); // HMAC-SHA256
+    var digest = hmacSha256.convert(utf8.encode(hmacValue));
+    var bodyData = {
+      // "type": "charge",
+      "hash": digest.toString(),
+      "card_token_id": selected['id'].toString(),
+      "card_no": selected['card_number'],
+      "device_type": Platform.isAndroid == true ? 'android' : "ios",
+      "amount": chargeAmount.value.floor(),
+      "charge_percent": 1,
+      "charge_amount": int.parse(_amountController.text.replaceAll(',', '')),
+    };
+    cardPay(bodyData);
+  }
+
+  cardPay(bodyData) {
+    Get.dialog(
+      const Center(
+        child: CircularProgressIndicator(),
+      ),
+      barrierDismissible: false,
+    );
+    Services()
+        .postRequest(json.encode(bodyData),
+            '${CoreUrl.crowdfund}wallet/card/deposit', true, '')
+        .then((data) {
+      crowdlog.wtf(
+          '---CARD PAY---: sent data $bodyData:.................returned data ${data.body.toString()}');
+      if (data.statusCode == 200) {
+        Get.back();
+        Get.back();
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.black,
+          backgroundColor: Colors.white,
+        );
+        GlobalVariables.accountBalance.value =
+            GlobalVariables.accountBalance.value +
+                int.parse(_amountController.text.replaceAll(',', ''));
+      } else {
+        Navigator.of(Get.overlayContext!).pop();
+
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.black,
+          backgroundColor: Colors.white,
+        );
+      }
+    });
+  }
+
+  //#endregion..........................
+//#region...........account section of CHARGE.............
   accountListWidget() {
     return SingleChildScrollView(
       child: Column(
@@ -818,6 +679,28 @@ class _TransactionScreenState extends State<TransactionScreen>
         ],
       ),
     );
+  }
+//#endregion........................
+  //#endregion........................................
+
+//#region..........ТАТАХ.............
+  RxList accountList = [].obs;
+  RxMap selectedAccount = {}.obs;
+
+  /// [getBankAccounts] bank account list
+  getBankAccounts() async {
+    Services()
+        .getRequest('${CoreUrl.crowdfund}wallet/bank/account', true, '')
+        .then((data) {
+      if (data.statusCode == 200) {
+        setState(() {
+          accountList.value = data.body['result'];
+          if (accountList.isNotEmpty) {
+            selectedAccount.value = accountList[0];
+          }
+        });
+      }
+    });
   }
 
   withdrawModal() {
@@ -1053,9 +936,430 @@ class _TransactionScreenState extends State<TransactionScreen>
     );
   }
 
-  rechargeFee(double amount) {
-    double sum = 0;
-    sum = amount + (amount / 99);
-    return sum;
+  withDrawMoney() async {
+    Get.dialog(
+      const Center(
+        child: CircularProgressIndicator(),
+      ),
+      barrierDismissible: false,
+    );
+    var bodyData = {
+      "bank_account_id": selectedAccount['id'].toString(),
+      "account_number":
+          GlobalVariables.accountNoList[0]['account_no'].toString(),
+      "amount": int.parse(_amountController.text.replaceAll(',', ''))
+    };
+
+    Services()
+        .postRequest(json.encode(bodyData),
+            '${CoreUrl.crowdfund}wallet/withdraw', true, '')
+        .then((data) {
+      if (data.statusCode == 200) {
+        // Get.back();
+        Get.back();
+        Get.back();
+        Get.snackbar(
+          'success_tr'.translationWord(),
+          data.body['message'].toString().translationWord(),
+          colorText: Colors.black,
+          backgroundColor: Colors.white,
+        );
+
+        GlobalVariables.accountBalance.value =
+            GlobalVariables.accountBalance.value -
+                int.parse(_amountController.text.replaceAll(',', ''));
+      } else {
+        // Get.back();
+        Navigator.of(Get.overlayContext!).pop();
+        // Get.back();
+        Get.snackbar(
+          'warning_tr'.translationWord(),
+          data.body['message'],
+          colorText: Colors.white,
+          backgroundColor: CoreColor().backgroundYellow.withOpacity(0.2),
+        );
+      }
+    });
   }
+//#endregion.....................
+
+//#endregion......................
+  @override
+  void initState() {
+    super.initState();
+
+    tabContCharge = TabController(
+      initialIndex: 0,
+      length: 2, //1,
+      vsync: this,
+    );
+    tabContCharge.addListener(() {
+      setState(() {
+        selectedIndexCharge.value = tabContCharge.index;
+      });
+    });
+
+    getAccountBalance();
+  }
+
+  @override
+  void dispose() {
+    tabContCharge.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppbarSquare(
+        height: GlobalVariables.gWidth * .4,
+        leadingIcon: const Icon(
+          FontAwesomeIcons.chevronLeft,
+          color: Colors.white,
+          size: 18,
+        ),
+        menuAction: () {
+          Get.back();
+        },
+        titleColor: Colors.white,
+        color: CoreColor.mainGreen,
+        title: 'Хэтэвч',
+      ),
+      body: Column(
+        children: [
+          SizedBox(
+            //gvilgee
+            height: GlobalVariables.gHeight * .3 + 15,
+            child: Stack(
+              children: [
+                Container(
+                  height: GlobalVariables.gHeight * .3,
+                  decoration: BoxDecoration(
+                    color: CoreColor().btnGrey,
+                  ),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      Container(
+                        // height: 30,
+                        padding: const EdgeInsets.only(left: 20, right: 20),
+                        decoration: const BoxDecoration(
+                          color: Colors.transparent,
+                        ),
+                        child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.0),
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Colors.grey.withOpacity(0.2),
+                                  width: 1,
+                                ),
+                              ),
+                            ),
+                            child: SizedBox(
+                              height: 200,
+                              child: ListView.builder(
+                                  //gvilgee list
+                                  padding: const EdgeInsets.all(0),
+                                  itemCount: transactionDocument.length,
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return transactionDocument.isEmpty
+                                        ? isEmptyData("doc_empty_tr")
+                                        : InkWell(
+                                            onTap: () {
+                                              setState(() {
+                                                // Get.to(
+                                                //   () => CallWebView(
+                                                //     title: "Баримт",
+                                                //     initialUrl:
+                                                //         "https://insurance.gerege.mn/barimt/?invoice_id=${transactionDocument[index]['invoice_id']}&type=1&request_user_id=${GlobalVariables.id}&app_id=6601",
+                                                //     exitButton: false,
+                                                //   ),
+                                                // );
+                                              });
+                                            },
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 10, right: 20, left: 20),
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    CoreColor().backgroundWhite,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(10.0),
+                                                ),
+                                                border: Border.all(
+                                                  width: 1,
+                                                  color: Colors.grey
+                                                      .withOpacity(0.1),
+                                                ),
+                                                // boxShadow: [
+                                                //   BoxShadow(
+                                                //     color: Colors.grey.withOpacity(0.1),
+                                                //     spreadRadius: 2,
+                                                //     blurRadius: 1,
+                                                //     offset:
+                                                //         const Offset(0, 1), // changes position of shadow
+                                                //   ),
+                                                // ],
+                                              ),
+                                              child: ListTile(
+                                                leading: Container(
+                                                  width: 40,
+                                                  height: 40,
+                                                  decoration: BoxDecoration(
+                                                    color: CoreColor()
+                                                        .backgroundBlue
+                                                        .withOpacity(0.5),
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(
+                                                                10.0)),
+                                                  ),
+                                                ),
+                                                trailing: Text(
+                                                  // "${moneyFormat(transactionDocument[index]['amount'].toString())}₮",
+                                                  // "${transactionDocument[index]['amount']}₮",
+                                                  "${_formatNumber(transactionDocument[index]['amount'] == null ? "0" : transactionDocument[index]['amount'].toString().replaceAll(',', ''))}₮",
+                                                  style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: "MBold",
+                                                  ),
+                                                ),
+                                                title: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      transactionDocument[index]
+                                                          ['service_name'],
+                                                      style: const TextStyle(
+                                                        // fontWeight: FontWeight.w500,
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(height: 5),
+                                                    Text(
+                                                      time(transactionDocument[
+                                                              index]
+                                                          ['created_date']),
+                                                      style: const TextStyle(
+                                                        fontSize: 10,
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                  }),
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: CoreColor.mainGreen,
+                    ),
+                    width: 30,
+                    height: 30,
+                    child: const Icon(
+                      FontAwesomeIcons.chevronDown,
+                      color: Colors.white,
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Align(
+            //wallet
+            alignment: Alignment.center,
+            child: Container(
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(15)),
+                  color: CoreColor.mainGreen.withOpacity(.2)),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const SizedBox(width: 10),
+                      Container(
+                        padding: const EdgeInsets.all(3),
+                        decoration: const BoxDecoration(
+                            color: Colors.white,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
+                        child: QrImage(
+                          data: GlobalVariables.civilId,
+                          version: QrVersions.auto,
+                          size: 90,
+                          errorCorrectionLevel: QrErrorCorrectLevel.Q,
+                          gapless: false,
+                        ),
+                      ),
+                      const SizedBox(width: 70),
+                      Column(
+                        children: [
+                          const Text(
+                            'Хэтэвч:',
+                            style: TextStyle(fontSize: 20),
+                          ),
+                          Obx(
+                            () => Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  _formatNumber(GlobalVariables
+                                      .accountBalance.value
+                                      .toString()
+                                      .replaceAll(',', '')),
+                                  style: const TextStyle(
+                                      fontSize: 35,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Container(
+                                  alignment: Alignment.bottomCenter,
+                                  child: const Text(
+                                    '₮',
+                                    textAlign: TextAlign.end,
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      whiteBtn('картууд', FontAwesomeIcons.creditCard, () {
+                        Get.to(() => const CartScreen());
+                      }),
+                      whiteBtn('Банкны данс', FontAwesomeIcons.buildingColumns,
+                          () {
+                        Get.to(() => const BankAccountsScreen());
+                      }),
+                      Column(
+                        children: [
+                          InkWell(
+                            onTap: () {},
+                            child: Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black),
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(5)),
+                                  color: Colors.white),
+                              child: const Icon(
+                                FontAwesomeIcons.qrcode,
+                                size: 20,
+                              ),
+                            ),
+                          ),
+                          const Text(
+                            'qr унших',
+                            style: TextStyle(
+                                fontSize: 8, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              actionBtn('цэнэглэх', CoreColor.mainGreen, () async {
+                setState(() {
+                  chargeModal();
+                });
+              }),
+              actionBtn('татах', CoreColor.hlprOrange, () async {
+                await getBankAccounts();
+                setState(() {
+                  withdrawModal();
+                });
+              }),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+  //#region.............WIDGETS...............
+
+  Widget whiteBtn(String title, IconData icon, Function func) {
+    return InkWell(
+      onTap: () => func(),
+      child: Container(
+          padding:
+              const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
+          margin: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.black),
+              borderRadius: const BorderRadius.all(Radius.circular(15))),
+          child: Row(children: [
+            Icon(
+              icon,
+              size: 15,
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Text(title)
+          ])),
+    );
+  }
+
+  Widget actionBtn(String title, Color clr, Function func) {
+    return InkWell(
+      onTap: () => func(),
+      child: Container(
+        padding:
+            const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
+        width: GlobalVariables.gWidth * .5,
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
+            color: clr),
+        child: Align(
+            alignment: Alignment.center,
+            child: Text(
+              title,
+              style: const TextStyle(
+                  color: Colors.white, fontWeight: FontWeight.bold),
+            )),
+      ),
+    );
+  }
+
+  //#endregion...............................
 }

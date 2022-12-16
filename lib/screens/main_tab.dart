@@ -134,74 +134,74 @@ class _MainTabState extends State<MainTab> {
                   _onItemTapped(4);
                 },
               ),
-              bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-                notchAndCornersAnimation: null,
-                splashSpeedInMilliseconds: 0,
-                shadow: const BoxShadow(
-                  offset: Offset(0, 1),
-                  blurRadius: 2,
-                  spreadRadius: 1,
-                  color: Colors.grey,
-                ),
-                itemCount: 4,
-                tabBuilder: (int index, bool isActive) {
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      index == 0
-                          ? Icon(
-                              Icons.account_circle_outlined,
-                              size: 21,
-                              color: isActive == true
-                                  ? Colors.white
-                                  : Colors.white.withOpacity(0.5),
-                            )
-                          : index == 1
-                              ? Icon(
-                                  Icons.newspaper,
-                                  size: 26,
-                                  color: isActive == true
-                                      ? Colors.white
-                                      : Colors.white.withOpacity(0.5),
-                                )
-                              : Icon(
-                                  Icons.wallet,
-                                  size: 26,
-                                  color: isActive == true
-                                      ? Colors.white
-                                      : Colors.white.withOpacity(0.5),
-                                ),
-                      const SizedBox(height: 4),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: Text(
-                          index == 0
-                              ? 'Би'
-                              : index == 1
-                                  ? 'Мэдээ'
-                                  : index == 2
-                                      ? 'Мэдээ'
-                                      : 'Хэтэвч',
-                          maxLines: 1,
-                          style: TextStyle(
-                            color: isActive == true
-                                ? Colors.white
-                                : Colors.white.withOpacity(0.5),
-                          ),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-                backgroundColor: CoreColor().backgroundBlue,
-                activeIndex: _selectedIndex,
-                notchSmoothness: NotchSmoothness.defaultEdge,
-                gapLocation: GapLocation.center,
-                leftCornerRadius: 20,
-                rightCornerRadius: 20,
-                onTap: _onItemTapped,
-              ),
+              // bottomNavigationBar: AnimatedBottomNavigationBar.builder(
+              //   notchAndCornersAnimation: null,
+              //   splashSpeedInMilliseconds: 0,
+              //   shadow: const BoxShadow(
+              //     offset: Offset(0, 1),
+              //     blurRadius: 2,
+              //     spreadRadius: 1,
+              //     color: Colors.grey,
+              //   ),
+              //   itemCount: 4,
+              //   tabBuilder: (int index, bool isActive) {
+              //     return Column(
+              //       mainAxisSize: MainAxisSize.min,
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         index == 0
+              //             ? Icon(
+              //                 Icons.account_circle_outlined,
+              //                 size: 21,
+              //                 color: isActive == true
+              //                     ? Colors.white
+              //                     : Colors.white.withOpacity(0.5),
+              //               )
+              //             : index == 1
+              //                 ? Icon(
+              //                     Icons.newspaper,
+              //                     size: 26,
+              //                     color: isActive == true
+              //                         ? Colors.white
+              //                         : Colors.white.withOpacity(0.5),
+              //                   )
+              //                 : Icon(
+              //                     Icons.wallet,
+              //                     size: 26,
+              //                     color: isActive == true
+              //                         ? Colors.white
+              //                         : Colors.white.withOpacity(0.5),
+              //                   ),
+              //         const SizedBox(height: 4),
+              //         Padding(
+              //           padding: const EdgeInsets.symmetric(horizontal: 8),
+              //           child: Text(
+              //             index == 0
+              //                 ? 'Би'
+              //                 : index == 1
+              //                     ? 'Мэдээ'
+              //                     : index == 2
+              //                         ? 'Мэдээ'
+              //                         : 'Хэтэвч',
+              //             maxLines: 1,
+              //             style: TextStyle(
+              //               color: isActive == true
+              //                   ? Colors.white
+              //                   : Colors.white.withOpacity(0.5),
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     );
+              //   },
+              //   backgroundColor: CoreColor().backgroundBlue,
+              //   activeIndex: _selectedIndex,
+              //   notchSmoothness: NotchSmoothness.defaultEdge,
+              //   gapLocation: GapLocation.center,
+              //   leftCornerRadius: 20,
+              //   rightCornerRadius: 20,
+              //   onTap: _onItemTapped,
+              // ),
               body: Container(
                 width: GlobalVariables.gWidth,
                 height: GlobalVariables.gHeight,

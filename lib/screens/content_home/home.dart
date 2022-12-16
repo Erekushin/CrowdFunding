@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,13 +41,13 @@ class _ContentHomeState extends State<ContentHome> {
 
   @override
   void initState() {
-    super.initState();
     getProjectList();
+    super.initState();
   }
 
   void getProjectList() async {
     await Services()
-        .getRequest('${CoreUrl.crowdfund}crowdfund', true, '')
+        .getRequest('${CoreUrl.crowdfund}crowdfund/confirmed', true, '')
         .then((data) {
       // Navigator.of(Get.overlayContext!).pop();
       var res = data.body;
@@ -80,7 +81,14 @@ class _ContentHomeState extends State<ContentHome> {
         },
       ),
       appBar: AppbarSquare(
+        height: GlobalVariables.gWidth * .2,
+        leadingIcon: const Icon(
+          FontAwesomeIcons.bars,
+          color: Colors.white,
+          size: 18,
+        ),
         title: 'CrowdfundingMN',
+        titleColor: Colors.white,
         menuAction: () {
           menuSidebarKey.currentState!.openDrawer();
           print(menuSidebarKey.currentState.toString());
@@ -90,34 +98,6 @@ class _ContentHomeState extends State<ContentHome> {
       ),
       body: Column(
         children: [
-          const SizedBox(
-            height: 30,
-          ),
-          Expanded(
-              flex: 1,
-              child: Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                      padding: const EdgeInsets.only(
-                          left: 10, right: 5, top: 2, bottom: 2),
-                      width: 150,
-                      margin: const EdgeInsets.only(left: 20),
-                      decoration: BoxDecoration(
-                          color: Colors.grey.withOpacity(0.2),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(15))),
-                      child: DropdownButton<String>(
-                          hint: Text('ds'),
-                          value: option,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              option = newValue.toString();
-                            });
-                          },
-                          underline: const SizedBox(),
-                          isExpanded: true,
-                          borderRadius: BorderRadius.circular(5),
-                          items: dropitems(['dsds', '1', 'sdd']))))),
           Expanded(
             flex: 1,
             child: Container(
@@ -125,10 +105,14 @@ class _ContentHomeState extends State<ContentHome> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  TextButton(onPressed: () {}, child: tabtext('All')),
-                  TextButton(onPressed: () {}, child: tabtext('Popular')),
-                  TextButton(onPressed: () {}, child: tabtext('Newest')),
-                  TextButton(onPressed: () {}, child: tabtext('Ending soon')),
+                  TextButton(
+                      onPressed: () {
+                        setState(() {});
+                      },
+                      child: tabtext('Бүгд')),
+                  TextButton(onPressed: () {}, child: tabtext('Эрэллтэй')),
+                  TextButton(onPressed: () {}, child: tabtext('Шинэ')),
+                  TextButton(onPressed: () {}, child: tabtext('Хүлээлттэй')),
                 ],
               ),
             ),
@@ -153,6 +137,7 @@ class _ContentHomeState extends State<ContentHome> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(15))),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Container(
                                 height: 150,
@@ -244,7 +229,7 @@ class _ContentHomeState extends State<ContentHome> {
     return Container(
       margin: EdgeInsets.only(left: 15, right: 15),
       height: 10,
-      width: 1,
+      width: 0.5,
       color: Colors.black,
     );
   }

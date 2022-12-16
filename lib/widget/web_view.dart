@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
-import 'package:gerege_app_v2/screens/home/wallet/cart_screen.dart';
+import 'package:gerege_app_v2/screens/wallet/cart_screen.dart';
 import 'package:gerege_app_v2/style/color.dart';
 
 import 'package:get/route_manager.dart';

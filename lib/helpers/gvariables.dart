@@ -115,7 +115,4 @@ class GlobalVariables {
     }
     return "";
   }
-
-  static double height = Get.height;
-  static double width = Get.width;
 }

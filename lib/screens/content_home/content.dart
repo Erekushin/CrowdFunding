@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gerege_app_v2/screens/content_home/pay_info.dart';
+import 'package:get/get.dart';
 
 import '../../helpers/gvariables.dart';
 
@@ -162,7 +164,7 @@ class _ContentState extends State<Content> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
-                  width: GlobalVariables.width,
+                  width: GlobalVariables.gWidth,
                   height: 80,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -184,17 +186,22 @@ class _ContentState extends State<Content> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  width: 220,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                      color: Color(0xFF00AB44),
-                      borderRadius: BorderRadius.all(Radius.circular(15))),
-                  child: const Center(
-                    child: Text(
-                      'Хөрөнгө оруулах',
-                      style: TextStyle(color: Colors.white),
+                InkWell(
+                  onTap: () {
+                    Get.to(() => const PayInfo());
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(10),
+                    width: 220,
+                    height: 50,
+                    decoration: const BoxDecoration(
+                        color: Color(0xFF00AB44),
+                        borderRadius: BorderRadius.all(Radius.circular(15))),
+                    child: const Center(
+                      child: Text(
+                        'Хөрөнгө оруулах',
+                        style: TextStyle(color: Colors.white),
+                      ),
                     ),
                   ),
                 )
@@ -206,11 +213,16 @@ class _ContentState extends State<Content> {
           child: Align(
             alignment: Alignment.topLeft,
             child: Container(
-                margin: EdgeInsets.all(10),
-                child: const Icon(
-                  FontAwesomeIcons.chevronLeft,
-                  color: Colors.white,
-                  size: 18,
+                margin: const EdgeInsets.all(10),
+                child: InkWell(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: const Icon(
+                    FontAwesomeIcons.chevronLeft,
+                    color: Colors.white,
+                    size: 18,
+                  ),
                 )),
           ),
         )

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
@@ -8,6 +9,8 @@ import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/back_bar.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:get/route_manager.dart';
+
+import '../../widget/appbar_squeare.dart';
 
 class BankAccountsScreen extends StatefulWidget {
   const BankAccountsScreen({Key? key}) : super(key: key);
@@ -154,13 +157,23 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CoreColor().backgroundBlue,
+      backgroundColor: CoreColor.hlprOrange,
       resizeToAvoidBottomInset: false,
       key: _scaffoldKey,
       drawerEdgeDragWidth: 0.0,
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(65), // Set this height
-        child: BackAppBar(titleText: 'bank_accounts_tr'),
+      appBar: AppbarSquare(
+        title: 'Банкны данснууд',
+        titleColor: Colors.white,
+        leadingIcon: const Icon(
+          FontAwesomeIcons.chevronLeft,
+          color: Colors.white,
+          size: 18,
+        ),
+        height: GlobalVariables.gWidth * .4,
+        menuAction: () {
+          Get.back();
+        },
+        color: CoreColor.hlprOrange,
       ),
       body: Container(
         padding: const EdgeInsets.only(top: 20),

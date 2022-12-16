@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/screens/home/wallet/bank_accounts_screen.dart';
+import 'package:gerege_app_v2/screens/wallet/bank_accounts_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/recieve_screen.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
