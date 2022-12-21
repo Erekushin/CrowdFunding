@@ -1,6 +1,7 @@
 class TranslationWords {
   Map<String, Map<String, String>> languageKeys = {
     'en_US': {
+      'continue_btn_tr': 'Continue',
       'login_name_tr': 'Name',
       'password_tr': 'Password',
       'rep_pass_tr': 'Repeat Password',
@@ -73,6 +74,7 @@ class TranslationWords {
       'allow_tr': 'Allow',
     },
     'mn_MN': {
+      'continue_btn_tr': 'Үргэлжлүүлэх',
       'login_name_tr': 'Нэвтрэх нэр',
       'password_tr': 'Нууц үг',
       'rep_pass_tr': 'Нууц үгээ давтана уу',

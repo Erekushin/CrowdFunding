@@ -9,6 +9,8 @@ import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:get/get.dart';
 
+import '../../content_home/home.dart';
+
 class DocumentScreen extends StatefulWidget {
   const DocumentScreen({Key? key}) : super(key: key);
 
@@ -45,7 +47,8 @@ class _DocumentScreenState extends State<DocumentScreen> {
   }
 
   back() {
-    Get.offAll(() => const MainTab(indexTab: 0));
+    // Get.offAll(() => const MainTab(indexTab: 0));
+    Get.to(() => const ContentHome());
   }
 
   deleteDocument(item) {
@@ -81,7 +84,8 @@ class _DocumentScreenState extends State<DocumentScreen> {
           leading: IconButton(
             onPressed: () {
               // Get.back();
-              Get.offAll(() => const MainTab(indexTab: 0));
+              // Get.offAll(() => const MainTab(indexTab: 0));
+              Get.to(() => const ContentHome());
             },
             icon: const Icon(
               Icons.arrow_back_ios_new,

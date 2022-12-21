@@ -1,13 +1,11 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
 import '../screens/home/wallet/wallet_screen.dart';
+import '../screens/login/main_login/login_screen.dart';
+import '../screens/profile/profile.dart';
 import '../screens/wallet/wallet_main.dart';
 
 class Sidebar extends StatefulWidget {
@@ -28,13 +26,50 @@ class _SidebarState extends State<Sidebar> {
             color: Colors.white,
             child: Column(
               children: [
+                Container(
+                  color: CoreColor.mainGreen,
+                  height: 50,
+                ),
                 Expanded(
                   flex: 3,
                   child: Container(
-                    color: const Color(0xFF00AB44),
+                    color: CoreColor.mainGreen,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        const SizedBox(
+                          width: 50,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Get.to(() => const Profile());
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: CoreColor.backlightGrey,
+                                backgroundImage: const NetworkImage(
+                                    'https://i.pinimg.com/564x/66/1e/3c/661e3c81c896137ea8b88f54dfebf55c.jpg'),
+                                radius: 40,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const Text(
+                              'Mandah',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            )
+                          ],
+                        ),
                         IconButton(
                           onPressed: () {
                             widget.menuAction();
@@ -44,9 +79,6 @@ class _SidebarState extends State<Sidebar> {
                             color: Colors.white,
                             size: 18,
                           ),
-                        ),
-                        const SizedBox(
-                          width: 20,
                         )
                       ],
                     ),
@@ -92,8 +124,10 @@ class _SidebarState extends State<Sidebar> {
                       InkWell(
                         borderRadius: BorderRadius.circular(15),
                         splashColor: Colors.grey.withOpacity(0.01),
-                        onTap: () {},
-                        child: Text('Гарах'),
+                        onTap: () {
+                          Get.off(() => const LoginScreen());
+                        },
+                        child: const Text('Гарах'),
                       ),
                       const SizedBox(
                         width: 20,

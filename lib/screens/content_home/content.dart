@@ -3,6 +3,7 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/screens/content_home/pay_info.dart';
+import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/gvariables.dart';
@@ -32,7 +33,7 @@ class _ContentState extends State<Content> {
             ),
             Container(
               height: 8,
-              color: const Color(0xFF00AB44),
+              color: CoreColor.mainGreen,
             ),
             Container(
               margin: const EdgeInsets.all(15),
@@ -88,9 +89,10 @@ class _ContentState extends State<Content> {
                       ),
                       const Spacer(),
                       Container(
-                        decoration: const BoxDecoration(
-                            color: Color(0xFF00AB44),
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
+                        decoration: BoxDecoration(
+                            color: CoreColor.mainGreen,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(5))),
                         width: 100,
                         height: 30,
                         child: const Center(
@@ -148,6 +150,9 @@ class _ContentState extends State<Content> {
                             'The Hicarix® badge is an LED badge that looks like an electric bulletin board that can display a custom image you created in the Hicarix® App, a dedicated smartphone application.The Hicarix Badge is special in that it does NOT wireless communication, such as Wi-Fi or Bluetooth. Changing the display of the badge uses technology that reads the blinks from your smartphone screen, similar to Morse code.Three brightness sensors on the back of the device read the black and white, or bright or dark, of the smartphones screen.This rewrite method is the result of my search for a small, more affordable, and easy method; it is not as fast as Wi-Fi or Bluetooth, and it is subject to rewrite errors. Perhaps it may seem old-fashioned. But those who have used it have found the rewriting experience very positive.However, due to the shortage of semiconductors, I have not been able to manufacture or sell this product for a long time.With your support I will make the Hicarix Badge new and improved. And I will redesign with an enclosed and functional backing."Hicarix" is a play on the Japanese word Hikari (meaning "light"), which is derived from the idea of communicating and displaying light with light.',
                             style: TextStyle(fontSize: 12),
                           ),
+                          SizedBox(
+                            height: 60,
+                          )
                         ],
                       ),
                     ),
@@ -194,9 +199,10 @@ class _ContentState extends State<Content> {
                     margin: const EdgeInsets.all(10),
                     width: 220,
                     height: 50,
-                    decoration: const BoxDecoration(
-                        color: Color(0xFF00AB44),
-                        borderRadius: BorderRadius.all(Radius.circular(15))),
+                    decoration: BoxDecoration(
+                        color: CoreColor.mainGreen,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15))),
                     child: const Center(
                       child: Text(
                         'Хөрөнгө оруулах',
@@ -239,7 +245,7 @@ class _ContentState extends State<Content> {
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: const Color(0xFF00AB44)),
+              color: CoreColor.mainGreen),
         ),
         infoTxtStyle(blackOne)
       ],

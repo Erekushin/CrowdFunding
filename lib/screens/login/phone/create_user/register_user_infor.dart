@@ -5,6 +5,7 @@ import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/controller/create_user_controller.dart';
 import 'package:get/get.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
+import '../../../content_home/home.dart';
 import '../../../main_tab.dart';
 
 class RegisterUserInfor extends StatefulWidget {
@@ -177,7 +178,8 @@ class _RegisterUserInfor extends State<RegisterUserInfor> {
                   .documentFind(context, selectionCountry, selectionGender)
                   .then((data) {
                 if (data.statusCode == 200) {
-                  Get.to(() => const MainTab(indexTab: 0));
+                  // Get.to(() => const MainTab(indexTab: 0));
+                  Get.to(() => const ContentHome());
                 } else {}
               });
             },

@@ -13,6 +13,8 @@ import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 
+import '../../content_home/home.dart';
+
 class WalletInfoScreen extends StatefulWidget {
   const WalletInfoScreen({Key? key}) : super(key: key);
 
@@ -55,7 +57,8 @@ class _WalletInfoScreenState extends State<WalletInfoScreen> {
         appBar: AppBar(
           leading: IconButton(
             onPressed: () {
-              Get.to(() => const MainTab(indexTab: 3));
+              // Get.to(() => const MainTab(indexTab: 3));
+              Get.to(() => const ContentHome());
             },
             icon: const Icon(
               Icons.arrow_back,

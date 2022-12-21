@@ -1,18 +1,17 @@
-import 'dart:convert';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
+import '../../helpers/indicators.dart';
 import '../../helpers/logging.dart';
 import '../../services/get_service.dart';
 import '../../widget/appbar_squeare.dart';
+import '../../widget/eachproject.dart';
 import '../../widget/sidebar.dart';
-import 'content.dart';
 
 class ContentHome extends StatefulWidget {
   const ContentHome({super.key});
@@ -23,9 +22,17 @@ class ContentHome extends StatefulWidget {
 
 class _ContentHomeState extends State<ContentHome> {
   final crowdlog = logger(_ContentHomeState);
+  var scrollController = ScrollController(initialScrollOffset: 55);
   GlobalKey<ScaffoldState> menuSidebarKey = GlobalKey<ScaffoldState>();
   RxList projectList = [].obs;
+  RxList typeList = [].obs;
+  RxBool noProject = false.obs;
+  RxBool loading = false.obs;
+  RxBool noInternet = false.obs;
+  RxBool error = false.obs;
+  int chosenTap = 0;
   String option = '1';
+  PageController pageCont = PageController();
   List<DropdownMenuItem<String>> dropitems(List<dynamic> optionList) {
     return optionList.map((item) {
       return DropdownMenuItem(
@@ -39,22 +46,51 @@ class _ContentHomeState extends State<ContentHome> {
     }).toList();
   }
 
-  @override
-  void initState() {
-    getProjectList();
-    super.initState();
+  visibilitySwitch(ScreenModes mode) {
+    switch (mode) {
+      case ScreenModes.data:
+        noProject.value = false;
+        loading.value = false;
+        noInternet.value = false;
+        error.value = false;
+        break;
+      case ScreenModes.noProject:
+        noProject.value = true;
+        loading.value = false;
+        noInternet.value = false;
+        error.value = false;
+        break;
+      case ScreenModes.loading:
+        noProject.value = false;
+        loading.value = true;
+        noInternet.value = false;
+        error.value = false;
+        break;
+      case ScreenModes.noInternet:
+        noProject.value = false;
+        loading.value = false;
+        noInternet.value = true;
+        error.value = false;
+        break;
+      case ScreenModes.error:
+        noProject.value = false;
+        loading.value = false;
+        noInternet.value = false;
+        error.value = true;
+        break;
+      default:
+    }
   }
 
-  void getProjectList() async {
+  void getTypeList() async {
     await Services()
-        .getRequest('${CoreUrl.crowdfund}crowdfund/confirmed', true, '')
+        .getRequest('${CoreUrl.crowdfund}category', true, '')
         .then((data) {
-      // Navigator.of(Get.overlayContext!).pop();
       var res = data.body;
       crowdlog.wtf(
-          '---GET PROJECT LIST---:TOKEN: ${GlobalVariables.gStorage.read("token")}.................returned data ${data.body.toString()}');
+          '---GET TYPE LIST---:TOKEN: ${GlobalVariables.gStorage.read("token")}.................returned data ${data.body.toString()}');
       if (data.statusCode == 200) {
-        projectList.value = data.body['result']['items'];
+        typeList.value = data.body['result']['items'];
       } else {
         print("wtf");
         print(res);
@@ -65,14 +101,80 @@ class _ContentHomeState extends State<ContentHome> {
           colorText: Colors.black,
         );
       }
-      // print(data.body['authorization']['token']);
-      // log(data.body);
     });
   }
 
+  void getProjectList() async {
+    loading.value = true;
+    try {
+      await Services()
+          .getRequest('${CoreUrl.crowdfund}crowdfund/confirmed', true, '')
+          .then((data) {
+        // Navigator.of(Get.overlayContext!).pop();
+        var res = data.body;
+        crowdlog.wtf(
+            '---GET PROJECT LIST---:TOKEN: ${GlobalVariables.gStorage.read("token")}.................returned data ${data.body.toString()}');
+        switch (data.statusCode) {
+          case 200:
+            projectList.value = data.body['result']['items'];
+            if (projectList.isEmpty) {
+              noProject.value = true;
+            }
+            break;
+          case 400:
+            visibilitySwitch(ScreenModes.noInternet);
+            break;
+          default:
+            Get.snackbar(
+              'warning_tr'.translationWord(),
+              res['message'].toString(),
+              backgroundColor: Colors.white60,
+              colorText: Colors.black,
+            );
+        }
+      });
+      loading.value = false;
+      setState(() {
+        scrollController.animateTo(55,
+            duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      });
+    } catch (e) {
+      crowdlog.wtf(
+          '---GET PROJECT LIST---:TOKEN: ${GlobalVariables.gStorage.read("token")}.................returned data ${e.toString()}');
+      setState(() {
+        scrollController.animateTo(55,
+            duration: const Duration(milliseconds: 500), curve: Curves.ease);
+      });
+      loading.value = false;
+    }
+  }
+
+  @override
+  void initState() {
+    getTypeList();
+    getProjectList();
+    scrollController.addListener(_scrollListener);
+    super.initState();
+  }
+
+  _scrollListener() async {
+    setState(() {
+      rotate = scrollController.offset;
+    });
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      //reach bottom
+    }
+    if (scrollController.offset <= scrollController.position.minScrollExtent &&
+        !scrollController.position.outOfRange) {
+      //reach the top
+      getProjectList();
+    }
+  }
+
+  double rotate = 0;
   @override
   Widget build(BuildContext context) {
-    print('project list item count ${projectList.length}');
     return Scaffold(
       key: menuSidebarKey,
       drawer: Sidebar(
@@ -81,7 +183,7 @@ class _ContentHomeState extends State<ContentHome> {
         },
       ),
       appBar: AppbarSquare(
-        height: GlobalVariables.gWidth * .2,
+        height: GlobalVariables.gWidth * .25,
         leadingIcon: const Icon(
           FontAwesomeIcons.bars,
           color: Colors.white,
@@ -91,111 +193,160 @@ class _ContentHomeState extends State<ContentHome> {
         titleColor: Colors.white,
         menuAction: () {
           menuSidebarKey.currentState!.openDrawer();
-          print(menuSidebarKey.currentState.toString());
-          print('object');
         },
-        color: const Color(0xFF00AB44),
+        color: CoreColor.mainGreen,
       ),
       body: Column(
         children: [
-          Expanded(
-            flex: 1,
-            child: Container(
-              margin: const EdgeInsets.only(left: 0, right: 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  TextButton(
-                      onPressed: () {
-                        setState(() {});
-                      },
-                      child: tabtext('Бүгд')),
-                  TextButton(onPressed: () {}, child: tabtext('Эрэллтэй')),
-                  TextButton(onPressed: () {}, child: tabtext('Шинэ')),
-                  TextButton(onPressed: () {}, child: tabtext('Хүлээлттэй')),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 15,
-            child: PageView(
-              children: [
-                ListView.builder(
-                    itemCount: projectList.length,
-                    itemBuilder: (c, i) {
-                      var item = projectList[i];
-                      return InkWell(
-                        onTap: () {
-                          Get.to(() => const Content());
+          SizedBox(
+              height: GlobalVariables.gHeight * .066,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          setState(() {
+                            chosenTap = 0;
+                            pageCont.jumpToPage(0);
+                          });
                         },
-                        child: Container(
-                          margin: const EdgeInsets.all(10),
-                          padding: const EdgeInsets.all(10),
-                          decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 150,
-                                decoration: const BoxDecoration(
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(15),
-                                        topRight: Radius.circular(15)),
-                                    image: DecorationImage(
-                                        image: NetworkImage(
-                                            'https://i.pinimg.com/564x/66/1e/3c/661e3c81c896137ea8b88f54dfebf55c.jpg'),
-                                        fit: BoxFit.cover)),
-                              ),
-                              Container(
-                                height: 8,
-                                color: const Color(0xFF00AB44),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                item['name'],
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold, fontSize: 16),
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                item['description'],
-                                maxLines: 2,
-                                softWrap: true,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            tabtext('Бүгд'),
+                            chosenTap == 0
+                                ? Container(
+                                    margin: const EdgeInsets.only(top: 4),
+                                    height: 4,
+                                    width: 100,
+                                    color: CoreColor.mainGreen,
+                                  )
+                                : const SizedBox(
+                                    width: 100,
+                                  )
+                          ],
+                        )),
+                    Obx(() => ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: typeList.length,
+                        itemBuilder: (c, i) {
+                          var item = typeList[i];
+                          return TextButton(
+                              onPressed: () {
+                                setState(() {
+                                  chosenTap = int.parse(item['id']);
+                                  pageCont.jumpToPage(int.parse(item['id']));
+                                });
+                              },
+                              child: Column(
                                 children: [
-                                  greenInfo(item['amount'].toString()),
-                                  littleSpacer(),
-                                  greenInfo('32 donations'),
-                                  littleSpacer(),
-                                  greenInfo('18 хоног үлдсэн'),
+                                  tabtext(item['name']),
+                                  chosenTap == int.parse(item['id'])
+                                      ? Container(
+                                          margin: const EdgeInsets.only(top: 4),
+                                          height: 4,
+                                          width: 100,
+                                          color: CoreColor.mainGreen,
+                                        )
+                                      : const SizedBox(
+                                          width: 100,
+                                        )
                                 ],
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-                Container(
-                  color: Colors.grey,
+                              ));
+                        }))
+                  ],
                 ),
-                Container(
-                  color: Colors.white,
-                )
-              ],
+              )),
+          SizedBox(
+            height: GlobalVariables.gHeight * .8,
+            child: PageView.builder(
+              onPageChanged: (currentpageIndex) {
+                setState(() {
+                  crowdlog.wtf(chosenTap);
+                  chosenTap = currentpageIndex;
+                  crowdlog.wtf(chosenTap);
+                });
+              },
+              controller: pageCont,
+              itemCount: typeList.length + 1,
+              itemBuilder: (c, pageIndex) {
+                RxList itemList = [].obs;
+                for (int a = 0; a < projectList.length; a++) {
+                  if (projectList[a]['category_id'] == pageIndex) {
+                    itemList.add(projectList[a]);
+                  }
+                }
+                return Obx(() => Stack(
+                      children: [
+                        SizedBox(
+                          height: GlobalVariables.gHeight * .8,
+                          child: SingleChildScrollView(
+                              physics: const BouncingScrollPhysics(
+                                  parent: AlwaysScrollableScrollPhysics()),
+                              controller:
+                                  pageIndex == 0 ? scrollController : null,
+                              child: Column(
+                                children: [
+                                  Transform.rotate(
+                                    angle: 3.14 / (rotate + 1) * 2,
+                                    child: Container(
+                                      decoration: const BoxDecoration(
+                                          color: Colors.grey,
+                                          shape: BoxShape.circle),
+                                      width: 50,
+                                      height: 50,
+                                      child: const Icon(
+                                        FontAwesomeIcons.rotateLeft,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                  ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemCount: pageIndex == 0
+                                          ? projectList.length
+                                          : itemList.length,
+                                      itemBuilder: (c, projectIndex) {
+                                        int progress;
+                                        var item = pageIndex == 0
+                                            ? projectList[projectIndex]
+                                            : itemList[projectIndex];
+                                        int amount = item['amount'];
+                                        int balance = item['balance'];
+                                        progress =
+                                            progressProcent(amount, balance)
+                                                .toInt();
+                                        return eachproject(item, progress);
+                                      }),
+                                ],
+                              )),
+                        ),
+                        Visibility(
+                            visible: noProject.value,
+                            child: Image.asset('assets/images/empty_box.jpg')),
+                        Visibility(
+                            visible: loading.value ? true : false,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Container(
+                                  margin: const EdgeInsets.only(bottom: 15),
+                                  child: const CircularProgressIndicator()),
+                            )),
+                        Visibility(
+                            visible: noInternet.value,
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              child:
+                                  Image.asset('assets/images/noInternet.png'),
+                            ))
+                      ],
+                    ));
+              },
             ),
           ),
         ],
@@ -214,23 +365,6 @@ class _ContentHomeState extends State<ContentHome> {
           fontWeight: FontWeight.w400,
           fontSize: 14,
           color: Colors.black54),
-    );
-  }
-
-  Widget greenInfo(String txt) {
-    return Text(
-      txt,
-      style: const TextStyle(
-          fontWeight: FontWeight.bold, color: Color(0xFF00AB44), fontSize: 11),
-    );
-  }
-
-  Widget littleSpacer() {
-    return Container(
-      margin: EdgeInsets.only(left: 15, right: 15),
-      height: 10,
-      width: 0.5,
-      color: Colors.black,
     );
   }
 }

@@ -32,15 +32,14 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      enableLog: true,
-      logWriterCallback: localLogWriter,
-      theme: ThemeData(),
-      darkTheme: ThemeData.light(),
-      debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.cupertino, //Transition.rightToLeft,
-      themeMode: ThemeMode.light,
-      home: const SplashScreen(),
-    );
+        enableLog: true,
+        logWriterCallback: localLogWriter,
+        theme: ThemeData(),
+        darkTheme: ThemeData.light(),
+        debugShowCheckedModeBanner: false,
+        defaultTransition: Transition.cupertino, //Transition.rightToLeft,
+        themeMode: ThemeMode.light,
+        home: const SplashScreen());
   }
 
   void localLogWriter(String text, {bool isError = false}) {}

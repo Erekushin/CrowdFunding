@@ -4,6 +4,8 @@ import 'package:gerege_app_v2/screens/main_tab.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
+import '../../content_home/home.dart';
+
 class ServiceScreen extends StatefulWidget {
   const ServiceScreen({Key? key}) : super(key: key);
 
@@ -33,7 +35,8 @@ class _ServiceScreenState extends State<ServiceScreen> {
           leading: IconButton(
             onPressed: () {
               // Get.back();
-              Get.offAll(() => const MainTab(indexTab: 0));
+              // Get.offAll(() => const MainTab(indexTab: 0));
+              Get.to(() => const ContentHome());
             },
             icon: const Icon(
               Icons.arrow_back_ios_new,

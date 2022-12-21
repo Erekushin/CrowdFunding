@@ -120,6 +120,19 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
     });
   }
 
+  /// [getWalletAccounts] wallet account list
+  getWalletAccounts() async {
+    Services()
+        .getRequest('${CoreUrl.crowdfund}wallet/account/balance', true, '')
+        .then((data) {
+      if (data.body['message'] == "success") {
+        setState(() {
+          GlobalVariables.accountNoList = data.body['result'];
+        });
+      }
+    });
+  }
+
   //#region..........ЦЭНЭГЛЭХ..................
   RxDouble chargeAmount = 0.0.obs;
   late TabController tabContCharge;
@@ -158,7 +171,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                               color: Colors.grey.withOpacity(0.5), width: 2)),
                     ),
                     child: TabBar(
-                      indicatorColor: CoreColor().backgroundButton,
+                      indicatorColor: CoreColor.mainGreen,
                       labelColor: Colors.black,
                       unselectedLabelColor: Colors.grey,
                       controller: tabContCharge,
@@ -379,7 +392,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
             radius: 10.0,
             elevation: 0.0,
             minWidth: GlobalVariables.gWidth / 1.6,
-            backgroundColor: CoreColor().btnBlue,
+            backgroundColor: CoreColor.mainGreen,
             borderColor: CoreColor().btnBlue,
             text: Text(
               'continue_btn_tr'.translationWord(),
@@ -892,8 +905,8 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                     radius: 10.0,
                     elevation: 0.0,
                     minWidth: GlobalVariables.gWidth / 1.6,
-                    backgroundColor: CoreColor().btnBlue,
-                    borderColor: CoreColor().btnBlue,
+                    backgroundColor: CoreColor.mainGreen,
+                    borderColor: CoreColor.mainGreen,
                     text: Text(
                       'withdraw_tr'.translationWord(),
                       style: const TextStyle(
@@ -1193,28 +1206,15 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      const SizedBox(width: 10),
-                      Container(
-                        padding: const EdgeInsets.all(3),
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
-                        child: QrImage(
-                          data: GlobalVariables.civilId,
-                          version: QrVersions.auto,
-                          size: 90,
-                          errorCorrectionLevel: QrErrorCorrectLevel.Q,
-                          gapless: false,
-                        ),
-                      ),
-                      const SizedBox(width: 70),
-                      Column(
+                      const SizedBox(width: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Text(
                             'Хэтэвч:',
                             style: TextStyle(fontSize: 20),
                           ),
+                          const SizedBox(width: 70),
                           Obx(
                             () => Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -1259,30 +1259,6 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                           () {
                         Get.to(() => const BankAccountsScreen());
                       }),
-                      Column(
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: Container(
-                              padding: const EdgeInsets.all(2),
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(5)),
-                                  color: Colors.white),
-                              child: const Icon(
-                                FontAwesomeIcons.qrcode,
-                                size: 20,
-                              ),
-                            ),
-                          ),
-                          const Text(
-                            'qr унших',
-                            style: TextStyle(
-                                fontSize: 8, fontWeight: FontWeight.bold),
-                          )
-                        ],
-                      )
                     ],
                   )
                 ],
@@ -1297,6 +1273,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               actionBtn('цэнэглэх', CoreColor.mainGreen, () async {
+                await getWalletAccounts();
                 setState(() {
                   chargeModal();
                 });

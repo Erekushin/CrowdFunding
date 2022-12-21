@@ -52,20 +52,25 @@ class LoginController extends GetxController {
       crowdlog.wtf(
           '---LOGIN---: sent data $bodyData:.................returned data ${data.body.toString()}');
       try {
-        if (data.statusCode == 200) {
-          GlobalVariables.gStorage
-              .write("token", res['authorization']['token']);
-          GlobalVariables.gStorage.write('userInformation', res['user']);
-          GlobalVariables.storageToVar();
-          // Get.to(() => const MainTab(indexTab: 0));
-          Get.to(() => const ContentHome());
-        } else {
-          Get.snackbar(
-            'warning_tr'.translationWord(),
-            res['message'].toString(),
-            backgroundColor: Colors.white60,
-            colorText: Colors.black,
-          );
+        switch (data.statusCode) {
+          case 200:
+            GlobalVariables.gStorage
+                .write("token", res['authorization']['token']);
+            GlobalVariables.gStorage.write('userInformation', res['user']);
+            GlobalVariables.storageToVar();
+            // Get.to(() => const MainTab(indexTab: 0));
+            searchText?.clear();
+            passwordTextController?.clear();
+            Get.to(() => const ContentHome());
+            break;
+          default:
+            Get.snackbar(
+              'warning_tr'.translationWord(),
+              res['message'].toString(),
+              backgroundColor: Colors.white60,
+              colorText: Colors.black,
+            );
+            break;
         }
       } catch (e) {
         Get.snackbar(
