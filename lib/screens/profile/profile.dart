@@ -11,6 +11,7 @@ import '../../helpers/logging.dart';
 import '../../services/get_service.dart';
 import '../../widget/appbar_squeare.dart';
 import '../../widget/eachproject.dart';
+import '../../widget/helper_widgets.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -24,13 +25,9 @@ class _ProfileState extends State<Profile> {
   var scrollController = ScrollController(initialScrollOffset: 55);
   RxList myFundedProjects = [].obs;
 
-  @override
-  void initState() {
-    getMyProjects();
-    scrollController.addListener(_scrollListener);
-    super.initState();
-  }
+  //#region........helper functions.....
 
+  double rotate = 0;
   _scrollListener() async {
     setState(() {
       rotate = scrollController.offset;
@@ -46,7 +43,6 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  //#region........ screenModes
   RxBool noProject = false.obs;
   RxBool loading = false.obs;
   RxBool noInternet = false.obs;
@@ -87,7 +83,6 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  //#endregion
   getMyProjects() async {
     visibilitySwitch(ScreenModes.loading);
     try {
@@ -143,7 +138,15 @@ class _ProfileState extends State<Profile> {
     }
   }
 
-  double rotate = 0;
+  //#endregion......
+
+  @override
+  void initState() {
+    getMyProjects();
+    scrollController.addListener(_scrollListener);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -259,32 +262,14 @@ class _ProfileState extends State<Profile> {
                                       progress =
                                           progressProcent(amount, balance)
                                               .toInt();
-                                      return eachproject(item, progress);
+                                      return eachproject(
+                                          item, progress, item['img_base64']);
                                     }),
-                                Visibility(
-                                    visible: noProject.value,
-                                    child: Align(
-                                      alignment: Alignment.topCenter,
-                                      child: Image.asset(
-                                          'assets/images/empty_box.jpg'),
-                                    )),
-                                Visibility(
-                                    visible: loading.value,
-                                    child: Align(
-                                      alignment: Alignment.topCenter,
-                                      child: Container(
-                                          margin:
-                                              const EdgeInsets.only(bottom: 15),
-                                          child:
-                                              const CircularProgressIndicator()),
-                                    )),
-                                Visibility(
-                                    visible: noInternet.value,
-                                    child: Align(
-                                      alignment: Alignment.topCenter,
-                                      child: Image.asset(
-                                          'assets/images/noInternet.png'),
-                                    ))
+                                screenModes(ScreenModes.noProject, noProject,
+                                    'assets/images/empty_box.jpg'),
+                                screenModes(ScreenModes.loading, loading, ''),
+                                screenModes(ScreenModes.noInternet, noInternet,
+                                    'assets/images/noInternet.png')
                               ],
                             ),
                           )

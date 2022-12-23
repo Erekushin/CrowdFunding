@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../screens/home/wallet/wallet_screen.dart';
 import '../screens/login/main_login/login_screen.dart';
 import '../screens/profile/profile.dart';
+import '../screens/setting/settings.dart';
 import '../screens/wallet/wallet_main.dart';
 
 class Sidebar extends StatefulWidget {
@@ -102,8 +103,11 @@ class _SidebarState extends State<Sidebar> {
                       }),
                       menuComponent(context, FontAwesomeIcons.solidBell,
                           'Хөрөнгө оруулалт', () {}),
-                      menuComponent(context, FontAwesomeIcons.peopleGroup,
-                          'Тохиргоо', () {}),
+                      menuComponent(
+                          context, FontAwesomeIcons.peopleGroup, 'Тохиргоо',
+                          () {
+                        Get.to(() => const Settings());
+                      }),
                     ],
                   ),
                 ),
@@ -125,7 +129,7 @@ class _SidebarState extends State<Sidebar> {
                         borderRadius: BorderRadius.circular(15),
                         splashColor: Colors.grey.withOpacity(0.01),
                         onTap: () {
-                          Get.off(() => const LoginScreen());
+                          Get.offAll(() => const LoginScreen());
                         },
                         child: const Text('Гарах'),
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:gerege_app_v2/style/color.dart';
@@ -11,6 +12,7 @@ import '../../helpers/logging.dart';
 import '../../services/get_service.dart';
 import '../../widget/appbar_squeare.dart';
 import '../../widget/eachproject.dart';
+import '../../widget/helper_widgets.dart';
 import '../../widget/sidebar.dart';
 
 class ContentHome extends StatefulWidget {
@@ -172,184 +174,196 @@ class _ContentHomeState extends State<ContentHome> {
     }
   }
 
+  Future<bool> cloaseTheApp(BuildContext context) async {
+    return await Get.defaultDialog(
+        title: 'Crowdfund app ыг хаахуу?',
+        content: Image.asset('assets/images/ger.png'),
+        actions: <Widget>[
+          TextButton(
+              onPressed: () {
+                SystemNavigator.pop();
+              },
+              child: const Text(
+                "exit",
+                style: TextStyle(fontSize: 20),
+              )),
+        ]);
+  }
+
   double rotate = 0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: menuSidebarKey,
-      drawer: Sidebar(
-        menuAction: () {
-          menuSidebarKey.currentState?.closeDrawer();
-        },
-      ),
-      appBar: AppbarSquare(
-        height: GlobalVariables.gWidth * .25,
-        leadingIcon: const Icon(
-          FontAwesomeIcons.bars,
-          color: Colors.white,
-          size: 18,
+    return WillPopScope(
+      onWillPop: () async {
+        return cloaseTheApp(context);
+      },
+      child: Scaffold(
+        key: menuSidebarKey,
+        drawer: Sidebar(
+          menuAction: () {
+            menuSidebarKey.currentState?.closeDrawer();
+          },
         ),
-        title: 'CrowdfundingMN',
-        titleColor: Colors.white,
-        menuAction: () {
-          menuSidebarKey.currentState!.openDrawer();
-        },
-        color: CoreColor.mainGreen,
-      ),
-      body: Column(
-        children: [
-          SizedBox(
-              height: GlobalVariables.gHeight * .066,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    TextButton(
-                        onPressed: () {
-                          setState(() {
-                            chosenTap = 0;
-                            pageCont.jumpToPage(0);
-                          });
-                        },
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            tabtext('Бүгд'),
-                            chosenTap == 0
-                                ? Container(
-                                    margin: const EdgeInsets.only(top: 4),
-                                    height: 4,
-                                    width: 100,
-                                    color: CoreColor.mainGreen,
-                                  )
-                                : const SizedBox(
-                                    width: 100,
-                                  )
-                          ],
-                        )),
-                    Obx(() => ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: typeList.length,
-                        itemBuilder: (c, i) {
-                          var item = typeList[i];
-                          return TextButton(
-                              onPressed: () {
-                                setState(() {
-                                  chosenTap = int.parse(item['id']);
-                                  pageCont.jumpToPage(int.parse(item['id']));
-                                });
-                              },
-                              child: Column(
-                                children: [
-                                  tabtext(item['name']),
-                                  chosenTap == int.parse(item['id'])
-                                      ? Container(
-                                          margin: const EdgeInsets.only(top: 4),
-                                          height: 4,
-                                          width: 100,
-                                          color: CoreColor.mainGreen,
-                                        )
-                                      : const SizedBox(
-                                          width: 100,
-                                        )
-                                ],
-                              ));
-                        }))
-                  ],
-                ),
-              )),
-          SizedBox(
-            height: GlobalVariables.gHeight * .8,
-            child: PageView.builder(
-              onPageChanged: (currentpageIndex) {
-                setState(() {
-                  crowdlog.wtf(chosenTap);
-                  chosenTap = currentpageIndex;
-                  crowdlog.wtf(chosenTap);
-                });
-              },
-              controller: pageCont,
-              itemCount: typeList.length + 1,
-              itemBuilder: (c, pageIndex) {
-                RxList itemList = [].obs;
-                for (int a = 0; a < projectList.length; a++) {
-                  if (projectList[a]['category_id'] == pageIndex) {
-                    itemList.add(projectList[a]);
-                  }
-                }
-                return Obx(() => Stack(
-                      children: [
-                        SizedBox(
-                          height: GlobalVariables.gHeight * .8,
-                          child: SingleChildScrollView(
-                              physics: const BouncingScrollPhysics(
-                                  parent: AlwaysScrollableScrollPhysics()),
-                              controller:
-                                  pageIndex == 0 ? scrollController : null,
-                              child: Column(
-                                children: [
-                                  Transform.rotate(
-                                    angle: 3.14 / (rotate + 1) * 2,
-                                    child: Container(
-                                      decoration: const BoxDecoration(
-                                          color: Colors.grey,
-                                          shape: BoxShape.circle),
-                                      width: 50,
-                                      height: 50,
-                                      child: const Icon(
-                                        FontAwesomeIcons.rotateLeft,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                  ),
-                                  ListView.builder(
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      itemCount: pageIndex == 0
-                                          ? projectList.length
-                                          : itemList.length,
-                                      itemBuilder: (c, projectIndex) {
-                                        int progress;
-                                        var item = pageIndex == 0
-                                            ? projectList[projectIndex]
-                                            : itemList[projectIndex];
-                                        int amount = item['amount'];
-                                        int balance = item['balance'];
-                                        progress =
-                                            progressProcent(amount, balance)
-                                                .toInt();
-                                        return eachproject(item, progress);
-                                      }),
-                                ],
-                              )),
-                        ),
-                        Visibility(
-                            visible: noProject.value,
-                            child: Image.asset('assets/images/empty_box.jpg')),
-                        Visibility(
-                            visible: loading.value ? true : false,
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Container(
-                                  margin: const EdgeInsets.only(bottom: 15),
-                                  child: const CircularProgressIndicator()),
-                            )),
-                        Visibility(
-                            visible: noInternet.value,
-                            child: Align(
-                              alignment: Alignment.topCenter,
-                              child:
-                                  Image.asset('assets/images/noInternet.png'),
-                            ))
-                      ],
-                    ));
-              },
-            ),
+        appBar: AppbarSquare(
+          height: GlobalVariables.gWidth * .25,
+          leadingIcon: const Icon(
+            FontAwesomeIcons.bars,
+            color: Colors.white,
+            size: 18,
           ),
-        ],
+          title: 'CrowdfundingMN',
+          titleColor: Colors.white,
+          menuAction: () {
+            menuSidebarKey.currentState!.openDrawer();
+          },
+          color: CoreColor.mainGreen,
+        ),
+        body: Column(
+          children: [
+            SizedBox(
+                height: GlobalVariables.gHeight * .066,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            setState(() {
+                              chosenTap = 0;
+                              pageCont.jumpToPage(0);
+                            });
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              tabtext('Бүгд'),
+                              chosenTap == 0
+                                  ? Container(
+                                      margin: const EdgeInsets.only(top: 4),
+                                      height: 4,
+                                      width: 100,
+                                      color: CoreColor.mainGreen,
+                                    )
+                                  : const SizedBox(
+                                      width: 100,
+                                    )
+                            ],
+                          )),
+                      Obx(() => ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: typeList.length,
+                          itemBuilder: (c, i) {
+                            var item = typeList[i];
+                            return TextButton(
+                                onPressed: () {
+                                  setState(() {
+                                    chosenTap = int.parse(item['id']);
+                                    pageCont.jumpToPage(int.parse(item['id']));
+                                  });
+                                },
+                                child: Column(
+                                  children: [
+                                    tabtext(item['name']),
+                                    chosenTap == int.parse(item['id'])
+                                        ? Container(
+                                            margin:
+                                                const EdgeInsets.only(top: 4),
+                                            height: 4,
+                                            width: 100,
+                                            color: CoreColor.mainGreen,
+                                          )
+                                        : const SizedBox(
+                                            width: 100,
+                                          )
+                                  ],
+                                ));
+                          }))
+                    ],
+                  ),
+                )),
+            SizedBox(
+              height: GlobalVariables.gHeight * .8,
+              child: PageView.builder(
+                onPageChanged: (currentpageIndex) {
+                  setState(() {
+                    crowdlog.wtf(chosenTap);
+                    chosenTap = currentpageIndex;
+                    crowdlog.wtf(chosenTap);
+                  });
+                },
+                controller: pageCont,
+                itemCount: typeList.length + 1,
+                itemBuilder: (c, pageIndex) {
+                  RxList itemList = [].obs;
+                  for (int a = 0; a < projectList.length; a++) {
+                    if (projectList[a]['category_id'] == pageIndex) {
+                      itemList.add(projectList[a]);
+                    }
+                  }
+                  return Obx(() => Stack(
+                        children: [
+                          SizedBox(
+                            height: GlobalVariables.gHeight * .8,
+                            child: SingleChildScrollView(
+                                physics: const BouncingScrollPhysics(
+                                    parent: AlwaysScrollableScrollPhysics()),
+                                controller:
+                                    pageIndex == 0 ? scrollController : null,
+                                child: Column(
+                                  children: [
+                                    pageIndex == 0
+                                        ? Transform.rotate(
+                                            angle: 3.14 / (rotate + 1) * 2,
+                                            child: Container(
+                                              decoration: const BoxDecoration(
+                                                  color: Colors.grey,
+                                                  shape: BoxShape.circle),
+                                              width: 50,
+                                              height: 50,
+                                              child: const Icon(
+                                                FontAwesomeIcons.rotateLeft,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          )
+                                        : const SizedBox(),
+                                    ListView.builder(
+                                        shrinkWrap: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        itemCount: pageIndex == 0
+                                            ? projectList.length
+                                            : itemList.length,
+                                        itemBuilder: (c, projectIndex) {
+                                          int progress;
+                                          var item = pageIndex == 0
+                                              ? projectList[projectIndex]
+                                              : itemList[projectIndex];
+                                          int amount = item['amount'];
+                                          int balance = item['balance'];
+                                          progress =
+                                              progressProcent(amount, balance)
+                                                  .toInt();
+                                          return eachproject(item, progress,
+                                              item['img_base64']);
+                                        }),
+                                  ],
+                                )),
+                          ),
+                          screenModes(ScreenModes.noProject, noProject,
+                              'assets/images/empty_box.jpg'),
+                          screenModes(ScreenModes.loading, loading, ''),
+                          screenModes(ScreenModes.noInternet, noInternet,
+                              'assets/images/noInternet.png')
+                        ],
+                      ));
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

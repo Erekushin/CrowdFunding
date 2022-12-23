@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:get/get.dart';
 
 import '../screens/content_home/content.dart';
 import '../style/color.dart';
 
-Widget eachproject(var item, int progress) {
+Widget eachproject(var item, int progress, String imageUrl) {
   return InkWell(
     onTap: () {
-      Get.to(() => const Content());
+      Get.to(() => Content(
+            proProgress: progress,
+            imgUrl: imageUrl,
+          ));
     },
     child: Container(
       margin: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
@@ -20,13 +24,12 @@ Widget eachproject(var item, int progress) {
         children: [
           Container(
             height: 180,
-            decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(15),
                     topRight: Radius.circular(15)),
                 image: DecorationImage(
-                    image: NetworkImage(
-                        'https://i.pinimg.com/564x/66/1e/3c/661e3c81c896137ea8b88f54dfebf55c.jpg'),
+                    image: NetworkImage('${CoreUrl.fileServer}$imageUrl'),
                     fit: BoxFit.cover)),
           ),
           Row(

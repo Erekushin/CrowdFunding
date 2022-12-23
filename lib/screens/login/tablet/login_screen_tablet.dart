@@ -169,7 +169,7 @@ class _LoginScreenTabletState extends State<LoginScreenTablet> {
                   onPressed: () {
                     if (_loginController.searchText?.text != "" &&
                         _loginController.passwordTextController?.text != '') {
-                      _loginController.loginUser(context, 1);
+                      _loginController.loginUser();
                     } else {
                       Get.snackbar(
                         'warning_tr'.translationWord(),

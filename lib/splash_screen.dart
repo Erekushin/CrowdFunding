@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'global_players.dart';
 import 'helpers/gvariables.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -69,7 +70,8 @@ class _MyHomePageState extends State<SplashScreen>
         _containerOpacity = 1;
       });
     });
-    Timer(const Duration(seconds: 4), () {
+    Timer(const Duration(seconds: 4), () async {
+      await GlobalPlayers.workingWithFile.readAll();
       Get.to(() => const LoginScreen());
     });
   }

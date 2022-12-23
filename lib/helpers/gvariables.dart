@@ -8,6 +8,25 @@ import 'package:get_storage/get_storage.dart';
 enum ScreenModes { loading, noProject, noInternet, error, data }
 
 class GlobalVariables {
+  static bool ifFingering = false;
+  static String pass = '';
+  static String name = '';
+  GlobalVariables.fingerLoginfo(Map<String, dynamic> json) {
+    if (json['isFingering'] == null) {
+      ifFingering = false;
+    } else {
+      if (json['isFingering'] == 'true') {
+        ifFingering = true;
+      } else if (json['isFingering'] == 'false') {
+        ifFingering = false;
+      } else {
+        ifFingering = false;
+      }
+    }
+    pass = json['pass'] ?? '';
+    name = json['name'] ?? '';
+  }
+
   static bool useTablet = false;
   static String usePos = "";
   static RxBool isTabletSidebar = true.obs;

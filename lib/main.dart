@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter/services.dart';
 
+import 'controller/login_controller.dart';
+
 void main() async {
   //erek changes
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,6 +34,7 @@ class Main extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+        initialBinding: BindingsBuilder(() => bindInitialControllers()),
         enableLog: true,
         logWriterCallback: localLogWriter,
         theme: ThemeData(),
@@ -43,4 +46,7 @@ class Main extends StatelessWidget {
   }
 
   void localLogWriter(String text, {bool isError = false}) {}
+  bindInitialControllers() {
+    Get.put(LoginController(), permanent: true);
+  }
 }

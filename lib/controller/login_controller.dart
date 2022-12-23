@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/screens/main_tab.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:get/get.dart';
 import 'package:crypto/crypto.dart';
 
+import '../global_players.dart';
 import '../helpers/logging.dart';
 import '../screens/content_home/home.dart';
 
@@ -28,7 +28,7 @@ class LoginController extends GetxController {
     super.onInit();
   }
 
-  void loginUser(BuildContext context, type) async {
+  void loginUser() async {
     Get.dialog(
       const Center(
         child: CircularProgressIndicator(),
@@ -54,6 +54,14 @@ class LoginController extends GetxController {
       try {
         switch (data.statusCode) {
           case 200:
+            if (GlobalVariables.ifFingering == true &&
+                GlobalVariables.pass == '') {
+              GlobalPlayers.workingWithFile.addNewItem('isFingering', 'true');
+              GlobalPlayers.workingWithFile
+                  .addNewItem('pass', passwordTextController!.text);
+              GlobalPlayers.workingWithFile
+                  .addNewItem('name', searchText!.text);
+            }
             GlobalVariables.gStorage
                 .write("token", res['authorization']['token']);
             GlobalVariables.gStorage.write('userInformation', res['user']);

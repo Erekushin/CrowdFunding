@@ -19,7 +19,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool hidePassword = true;
-  static final LoginController _loginController = Get.put(LoginController());
+  final _loginController = Get.find<LoginController>();
   String langName = "Мон";
 
   List langList = [
@@ -105,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
           onPressed: () {
             if (_loginController.searchText?.text != "" &&
                 _loginController.passwordTextController?.text != '') {
-              _loginController.loginUser(context, 1);
+              _loginController.loginUser();
             } else {
               Get.snackbar(
                 'warning_tr'.translationWord(),
