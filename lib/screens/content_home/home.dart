@@ -23,7 +23,7 @@ class ContentHome extends StatefulWidget {
 }
 
 class _ContentHomeState extends State<ContentHome> {
-  final crowdlog = logger(_ContentHomeState);
+  final crowdlog = logger(ContentHome);
   var scrollController = ScrollController(initialScrollOffset: 55);
   GlobalKey<ScaffoldState> menuSidebarKey = GlobalKey<ScaffoldState>();
   RxList projectList = [].obs;

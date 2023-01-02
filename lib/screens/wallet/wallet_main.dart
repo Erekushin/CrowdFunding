@@ -1207,42 +1207,45 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const SizedBox(width: 20),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Хэтэвч:',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                          const SizedBox(width: 70),
-                          Obx(
-                            () => Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
+                      const Text(
+                        'Хэтэвч:',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      Obx(
+                        () => Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              margin: const EdgeInsets.only(left: 10),
+                              width: 200,
+                              child: Align(
+                                alignment: Alignment.centerRight,
+                                child: Text(
                                   _formatNumber(GlobalVariables
                                       .accountBalance.value
                                       .toString()
                                       .replaceAll(',', '')),
                                   style: const TextStyle(
-                                      fontSize: 35,
-                                      fontWeight: FontWeight.bold),
+                                      fontSize: 30,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                Container(
-                                  alignment: Alignment.bottomCenter,
-                                  child: const Text(
-                                    '₮',
-                                    textAlign: TextAlign.end,
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                )
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
+                            Container(
+                              alignment: Alignment.bottomCenter,
+                              child: const Text(
+                                '₮',
+                                textAlign: TextAlign.end,
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       )
                     ],
                   ),

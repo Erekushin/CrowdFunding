@@ -15,8 +15,8 @@ import '../../../helpers/logging.dart';
 import '../../../style/color.dart';
 import '../../../widget/gerege_button.dart';
 import '../../../widget/gerege_textfield.dart';
-import '../create_user.dart';
-import '../forget_password.dart';
+import '../login/forget_password.dart';
+import 'register_recover.dart';
 
 /// [LoginScreen] login user screen
 
@@ -217,133 +217,152 @@ class _LoginScreenState extends State<LoginScreen> {
               },
             ),
             const SizedBox(height: 10),
-            InkWell(
-                //finger print tap
-                //nogoo file maani bgaa esehiig shalgah
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                const Text(
+                  'Хурууны хээн нэвтрэлт',
+                  style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                const SizedBox(
+                  width: 20,
+                ),
+                InkWell(
+                    //finger print tap
+                    //nogoo file maani bgaa esehiig shalgah
 
-                onTap: () async {
-                  if (GlobalVariables.pass != '') {
-                    _checkBiometrics();
-                  } else {
-                    showDialog(
-                        context: context,
-                        builder: (context) => SimpleDialog(
-                              title: const Text(
-                                  'Хурууны хээн нэвтрэлтийг идвэхжүүлхүү?'),
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    if (bioSupportState ==
-                                        BioSupportState.unknown) {
-                                      Get.snackbar('Уучлаарай',
-                                          "Хурууны хээ уншигчийн төрөл таарахгүй байна!",
-                                          snackPosition: SnackPosition.BOTTOM,
-                                          colorText: Colors.white,
-                                          backgroundColor: Colors.grey[900],
-                                          margin: const EdgeInsets.all(5));
-                                    } else if (bioSupportState ==
-                                        BioSupportState.supported) {
-                                      GlobalPlayers.workingWithFile
-                                          .addNewItem('isFingering', 'true');
-
-                                      Get.snackbar('Боломжтой',
-                                          "Та эхний удаа нэр, нууц үгээ хийж нэвтэрнэ үү!",
-                                          snackPosition: SnackPosition.BOTTOM,
-                                          colorText: Colors.white,
-                                          backgroundColor: Colors.grey[900],
-                                          margin: const EdgeInsets.all(5));
-                                    } else {
-                                      Get.snackbar('Уучлаарай',
-                                          "Хурууны хээ уншигчийг ачааллахад алдаа гарлаа!",
-                                          snackPosition: SnackPosition.BOTTOM,
-                                          colorText: Colors.white,
-                                          backgroundColor: Colors.grey[900],
-                                          margin: const EdgeInsets.all(5));
-                                    }
-                                    Navigator.pop(context);
-                                  },
-                                  child: Container(
-                                    width: GlobalVariables.gWidth * .4,
-                                    margin: const EdgeInsets.all(10),
-                                    padding: const EdgeInsets.all(10),
-                                    color: Colors.grey.shade300,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text('идвэхжүүлэх'),
-                                        Icon(
-                                          FontAwesomeIcons.check,
-                                          color: Colors.amber,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                    onTap: () async {
+                      if (GlobalVariables.pass != '') {
+                        _checkBiometrics();
+                      } else {
+                        showDialog(
+                            context: context,
+                            builder: (context) => SimpleDialog(
+                                  title: const Text(
+                                      'Хурууны хээн нэвтрэлтийг идвэхжүүлхүү?'),
                                   children: [
                                     InkWell(
                                       onTap: () {
+                                        if (bioSupportState ==
+                                            BioSupportState.unknown) {
+                                          Get.snackbar('Уучлаарай',
+                                              "Хурууны хээ уншигчийн төрөл таарахгүй байна!",
+                                              snackPosition:
+                                                  SnackPosition.BOTTOM,
+                                              colorText: Colors.white,
+                                              backgroundColor: Colors.grey[900],
+                                              margin: const EdgeInsets.all(5));
+                                        } else if (bioSupportState ==
+                                            BioSupportState.supported) {
+                                          GlobalPlayers.workingWithFile
+                                              .addNewItem(
+                                                  'isFingering', 'true');
+
+                                          Get.snackbar('Боломжтой',
+                                              "Та эхний удаа нэр, нууц үгээ хийж нэвтэрнэ үү!",
+                                              snackPosition:
+                                                  SnackPosition.BOTTOM,
+                                              colorText: Colors.white,
+                                              backgroundColor: Colors.grey[900],
+                                              margin: const EdgeInsets.all(5));
+                                        } else {
+                                          Get.snackbar('Уучлаарай',
+                                              "Хурууны хээ уншигчийг ачааллахад алдаа гарлаа!",
+                                              snackPosition:
+                                                  SnackPosition.BOTTOM,
+                                              colorText: Colors.white,
+                                              backgroundColor: Colors.grey[900],
+                                              margin: const EdgeInsets.all(5));
+                                        }
                                         Navigator.pop(context);
                                       },
                                       child: Container(
-                                        margin: const EdgeInsets.all(5),
-                                        padding: const EdgeInsets.only(
-                                            left: 10,
-                                            right: 10,
-                                            top: 5,
-                                            bottom: 5),
-                                        decoration: BoxDecoration(
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                                    Radius.circular(5)),
-                                            color: Colors.amber),
-                                        child: Center(
-                                          child: Text('хаах'),
+                                        width: GlobalVariables.gWidth * .4,
+                                        margin: const EdgeInsets.all(10),
+                                        padding: const EdgeInsets.all(10),
+                                        color: Colors.grey.shade300,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('идвэхжүүлэх'),
+                                            Icon(
+                                              FontAwesomeIcons.check,
+                                              color: Colors.amber,
+                                            )
+                                          ],
                                         ),
                                       ),
+                                    ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        InkWell(
+                                          onTap: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Container(
+                                            margin: const EdgeInsets.all(5),
+                                            padding: const EdgeInsets.only(
+                                                left: 10,
+                                                right: 10,
+                                                top: 5,
+                                                bottom: 5),
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(5)),
+                                                color: Colors.amber),
+                                            child: Center(
+                                              child: Text('хаах'),
+                                            ),
+                                          ),
+                                        )
+                                      ],
                                     )
                                   ],
-                                )
-                              ],
-                            ));
-                  }
-                },
-                child: Container(
-                  margin: const EdgeInsets.all(5),
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(15)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(.2),
-                          blurRadius: 4,
-                          offset: const Offset(0, 0),
-                          blurStyle: BlurStyle.outer,
-                        )
-                      ]),
-                  width: 50,
-                  height: 50,
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(15)),
-                    child: BackdropFilter(
-                      filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          margin: const EdgeInsets.only(left: 0),
-                          child: const Icon(
-                            FontAwesomeIcons.fingerprint,
-                            color: Colors.grey,
+                                ));
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(right: 35),
+                      decoration: BoxDecoration(
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(15)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(.2),
+                              blurRadius: 4,
+                              offset: const Offset(0, 0),
+                              blurStyle: BlurStyle.outer,
+                            )
+                          ]),
+                      width: 50,
+                      height: 50,
+                      child: ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
+                        child: BackdropFilter(
+                          filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              margin: const EdgeInsets.only(left: 0),
+                              child: const Icon(
+                                FontAwesomeIcons.fingerprint,
+                                color: Colors.grey,
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                )),
+                    )),
+              ],
+            ),
             const Spacer(),
             Container(
               margin: const EdgeInsets.only(left: 50, right: 50),
@@ -352,7 +371,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Get.to(() => const CreateUserScreen());
+                      print('dfdf');
+                      Get.to(() => const Register_Recover(
+                            route: 'login',
+                          ));
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

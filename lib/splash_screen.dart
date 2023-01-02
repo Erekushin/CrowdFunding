@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/screens/login/main_login/login_screen.dart';
+import 'package:gerege_app_v2/screens/entrance/login.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 // import 'dart:math' as math;

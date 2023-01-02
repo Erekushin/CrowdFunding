@@ -113,18 +113,18 @@ class Registeruser extends StatelessWidget {
               if (_createUserController.searchController!.text != "" &&
                   _createUserController.otpCodeController!.text != "" &&
                   _createUserController.passwordController!.text != "") {
-                await _createUserController.register(context).then((data) {
-                  if (data.statusCode == 200) {
-                    click('as');
-                  } else {
-                    Get.snackbar(
-                      'warning_tr'.translationWord(),
-                      data.body['message'],
-                      colorText: Colors.white,
-                      backgroundColor: Colors.grey.withOpacity(0.2),
-                    );
-                  }
-                });
+                // await _createUserController.register(context).then((data) {
+                //   if (data.statusCode == 200) {
+                //     click('as');
+                //   } else {
+                //     Get.snackbar(
+                //       'warning_tr'.translationWord(),
+                //       data.body['message'],
+                //       colorText: Colors.white,
+                //       backgroundColor: Colors.grey.withOpacity(0.2),
+                //     );
+                //   }
+                // });
               } else {
                 Get.snackbar(
                   'warning_tr'.translationWord(),

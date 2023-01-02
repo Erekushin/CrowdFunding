@@ -52,25 +52,25 @@ class CreateUserController extends GetxController {
     return response;
   }
 
-  Future<Response> register(BuildContext context) async {
-    var bytes = utf8.encode(passwordController!.text);
-    var digest = md5.convert(bytes);
-    var bodyData = {
-      "identity": searchController!.text,
-      "password": digest.toString(),
-      "otp": otpCodeController!.text
-    };
-    final response = await Services()
-        .postRequest(bodyData, '${CoreUrl.crowdfund}auth/register', false, '');
-    if (response.statusCode == 200) {
-      var res = response.body;
-      GlobalVariables.gStorage
-          .write("token", res['result']['authorization']['token']);
-      GlobalVariables.gStorage.write('userInformation', res['result']['user']);
-      GlobalVariables.storageToVar();
-    }
-    return response;
-  }
+  // Future<Response> register(BuildContext context) async {
+  //   var bytes = utf8.encode(passwordController!.text);
+  //   var digest = md5.convert(bytes);
+  //   var bodyData = {
+  //     "identity": searchController!.text,
+  //     "password": digest.toString(),
+  //     "otp": otpCodeController!.text
+  //   };
+  //   final response = await Services()
+  //       .postRequest(bodyData, '${CoreUrl.crowdfund}auth/register', false, '');
+  //   if (response.statusCode == 200) {
+  //     var res = response.body;
+  //     GlobalVariables.gStorage
+  //         .write("token", res['result']['authorization']['token']);
+  //     GlobalVariables.gStorage.write('userInformation', res['result']['user']);
+  //     GlobalVariables.storageToVar();
+  //   }
+  //   return response;
+  // }
 
   Future<Response> documentFind(BuildContext context, String selectionCountry,
       String selectionGender) async {

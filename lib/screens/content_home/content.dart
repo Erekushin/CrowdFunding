@@ -9,8 +9,14 @@ import 'package:get/get.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 
+// ignore: must_be_immutable
 class Content extends StatefulWidget {
-  Content({super.key, required this.proProgress, required this.imgUrl});
+  Content(
+      {super.key,
+      required this.projectID,
+      required this.proProgress,
+      required this.imgUrl});
+  int projectID;
   int proProgress;
   String imgUrl;
   @override
@@ -210,7 +216,9 @@ class _ContentState extends State<Content> {
               children: [
                 InkWell(
                   onTap: () {
-                    Get.to(() => const PayInfo());
+                    Get.to(() => PayInfo(
+                          projectID: widget.projectID,
+                        ));
                   },
                   child: Container(
                     margin: const EdgeInsets.all(10),

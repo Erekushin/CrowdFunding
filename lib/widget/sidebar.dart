@@ -3,8 +3,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
+import '../screens/entrance/login.dart';
 import '../screens/home/wallet/wallet_screen.dart';
-import '../screens/login/main_login/login_screen.dart';
 import '../screens/profile/profile.dart';
 import '../screens/setting/settings.dart';
 import '../screens/wallet/wallet_main.dart';

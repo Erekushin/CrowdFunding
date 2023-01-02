@@ -258,7 +258,7 @@ class _ProfileState extends State<Profile> {
                                       int progress;
                                       var item = myFundedProjects[projectIndex];
                                       int amount = item['amount'];
-                                      int balance = item['balance'];
+                                      int balance = item['invested_amount'];
                                       progress =
                                           progressProcent(amount, balance)
                                               .toInt();

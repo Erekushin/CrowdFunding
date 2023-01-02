@@ -9,6 +9,7 @@ Widget eachproject(var item, int progress, String imageUrl) {
   return InkWell(
     onTap: () {
       Get.to(() => Content(
+            projectID: int.parse(item['id']),
             proProgress: progress,
             imgUrl: imageUrl,
           ));

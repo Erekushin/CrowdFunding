@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/gextensions.dart';
-import 'package:gerege_app_v2/screens/main_tab.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/screens/login/phone/create_user/send_otp.dart';
