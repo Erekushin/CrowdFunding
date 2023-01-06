@@ -8,14 +8,13 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
 
-import '../../../controller/login_controller.dart';
 import '../../../global_players.dart';
 import '../../../helpers/gvariables.dart';
 import '../../../style/color.dart';
 import '../../../widget/gerege_button.dart';
 import '../../../widget/gerege_textfield.dart';
+import '../../controller/entrance.dart';
 import '../../helpers/backHelper.dart';
-import '../login/forget_password.dart';
 import 'register_recover.dart';
 
 /// [LoginScreen] login user screen
@@ -75,9 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
               localizedReason: 'Please authenticate to show account balance');
 
           if (didAuthenticate) {
-            _loginController.passwordTextController!.text =
-                GlobalVariables.pass;
-            _loginController.searchText!.text = GlobalVariables.name;
+            _loginController.passwordTextController.text = GlobalVariables.pass;
+            _loginController.searchText.text = GlobalVariables.name;
             _loginController.loginUser();
           }
         } on PlatformException catch (e) {
@@ -94,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   bool hidePassword = true;
-  static final LoginController _loginController = Get.put(LoginController());
+  static final EntranceCont _loginController = Get.put(EntranceCont());
   String langName = "Мон";
 
   List langList = [
@@ -152,7 +150,7 @@ class _LoginScreenState extends State<LoginScreen> {
               margin: const EdgeInsets.only(
                   left: 35, right: 35, top: 50, bottom: 15),
               child: GeregeTextField(
-                controller: _loginController.searchText!,
+                controller: _loginController.searchText,
                 label: 'login_name_tr',
                 keyboardType: TextInputType.emailAddress,
               ),
@@ -165,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   fit: StackFit.expand,
                   children: [
                     GeregeTextField(
-                      controller: _loginController.passwordTextController!,
+                      controller: _loginController.passwordTextController,
                       label: 'password_tr',
                       obscureText: hidePassword,
                     ),
@@ -224,8 +222,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 style: const TextStyle(color: Colors.white),
               ),
               onPressed: () {
-                if (_loginController.searchText?.text != "" &&
-                    _loginController.passwordTextController?.text != '') {
+                if (_loginController.searchText.text != "" &&
+                    _loginController.passwordTextController.text != '') {
                   _loginController.loginUser();
                 } else {
                   Get.snackbar(

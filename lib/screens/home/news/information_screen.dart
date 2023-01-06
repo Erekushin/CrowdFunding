@@ -2,8 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
+
+import '../../../helpers/services.dart';
 
 class InfoScreen extends StatefulWidget {
   const InfoScreen({Key? key}) : super(key: key);

@@ -25,7 +25,7 @@ class Register_Recover extends StatefulWidget {
 // ignore: camel_case_types
 class _Register_RecoverState extends State<Register_Recover> {
   final crowdlog = logger(Register_Recover);
-  final cont = Get.put(Entrance());
+  final cont = Get.put(EntranceCont());
   var nullTxt = TextEditingController();
   var scrollCont = ScrollController();
 
@@ -74,7 +74,7 @@ class _Register_RecoverState extends State<Register_Recover> {
         color: Colors.white,
         title: widget.title,
       ),
-      body: GetX<Entrance>(
+      body: GetX<EntranceCont>(
         builder: (littleCont) {
           return SingleChildScrollView(
             controller: scrollCont,
@@ -167,11 +167,8 @@ class _Register_RecoverState extends State<Register_Recover> {
                             Colors.grey.withOpacity(.7),
                             'илгээх',
                             'алгасах', () {
-                          print('objectfdfdfdfdf');
-                          if (formKey.currentState?.validate() ?? false) {
-                            cont.documentFind(
-                                context, selectionCountry, selectionGender);
-                          }
+                          cont.documentFind(
+                              context, selectionCountry, selectionGender);
                         }, () {
                           Get.to(() => const ContentHome());
                         }),
@@ -332,7 +329,7 @@ class _Register_RecoverState extends State<Register_Recover> {
         return Column(
           children: [
             Container(
-              child: txtField2(txtCont1, lbl1, () {}),
+              child: txtField2(txtCont1, lbl1),
             ),
             const SizedBox(
               height: 15,
@@ -343,9 +340,9 @@ class _Register_RecoverState extends State<Register_Recover> {
       case 3:
         return Column(
           children: [
-            txtField2(txtCont1, lbl1, () {}),
-            txtField2(txtCont2, lbl2, () {}),
-            txtField2(txtCont3, lbl3, () {}),
+            txtField2(txtCont1, lbl1),
+            txtField2(txtCont2, lbl2),
+            txtField2(txtCont3, lbl3),
             const SizedBox(
               height: 15,
             ),
@@ -406,15 +403,13 @@ class _Register_RecoverState extends State<Register_Recover> {
           //#endregion
 
           selectionCountry == "MNG"
-              ? txtFormField2(txtCont1, lbl1, (val) {
-                  return GlobalValidator().rdValid(val);
-                })
+              ? txtField2(txtCont1, lbl1)
               : const SizedBox(),
 
           const SizedBox(
             height: 15,
           ),
-          generalBtn(btnClr1, btnTitle1, func1()),
+          generalBtn(btnClr1, btnTitle1, func1),
           const SizedBox(
             height: 15,
           ),
@@ -431,8 +426,8 @@ class _Register_RecoverState extends State<Register_Recover> {
           'Үндсэн мэдээлэл',
         ),
         spacerLine(),
-        txtField2(cont.lastNameController, 'Нэр', () {}),
-        txtField2(cont.firstNameController, 'Овог', () {}),
+        txtField2(cont.lastNameController, 'Нэр'),
+        txtField2(cont.firstNameController, 'Овог'),
         const SizedBox(height: 10),
         DropdownButton(
           iconEnabledColor: CoreColor.mainGreen,
@@ -462,7 +457,7 @@ class _Register_RecoverState extends State<Register_Recover> {
           'Паспортын мэдээлэл',
         ),
         spacerLine(),
-        txtField2(cont.docNoController, 'Паспортын дугаар', () {}),
+        txtField2(cont.docNoController, 'Паспортын дугаар'),
         datePicker('Паспорт олгосон огноо', cont.givenDay),
         datePicker('Паспорт дуусах огноо', cont.expiredDay),
       ],

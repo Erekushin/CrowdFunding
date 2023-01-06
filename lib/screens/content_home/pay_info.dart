@@ -11,7 +11,7 @@ import 'package:get/get.dart';
 import '../../helpers/backHelper.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
-import '../../services/get_service.dart';
+import '../../helpers/services.dart';
 import '../../widget/appbar_squeare.dart';
 
 // ignore: must_be_immutable

@@ -4,12 +4,13 @@ import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/home/me/document_screen.dart';
-import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
+
+import '../../../helpers/services.dart';
 
 class ForeignPassScreen extends StatefulWidget {
   const ForeignPassScreen({

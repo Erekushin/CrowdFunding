@@ -57,7 +57,7 @@ Widget eachproject(var item, int progress, String imageUrl, Function func) {
             height: 10,
           ),
           Text(
-            item['introduction_text'],
+            item['introduction_text'] ?? '',
             maxLines: 2,
             softWrap: true,
             overflow: TextOverflow.ellipsis,

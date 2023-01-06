@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter/services.dart';
 
-import 'controller/login_controller.dart';
+import 'controller/entrance.dart';
 
 void main() async {
   //erek changes
@@ -47,6 +47,6 @@ class Main extends StatelessWidget {
 
   void localLogWriter(String text, {bool isError = false}) {}
   bindInitialControllers() {
-    Get.put(LoginController(), permanent: true);
+    Get.put(EntranceCont(), permanent: true);
   }
 }

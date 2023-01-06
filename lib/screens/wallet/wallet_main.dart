@@ -14,7 +14,7 @@ import '../../helpers/backHelper.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/helperfuncs.dart';
-import '../../services/get_service.dart';
+import '../../helpers/services.dart';
 import '../../style/color.dart';
 import '../../widget/appbar_squeare.dart';
 import '../../widget/empty.dart';

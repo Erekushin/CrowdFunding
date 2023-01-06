@@ -10,7 +10,7 @@ import '../../helpers/backHelper.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/indicators.dart';
-import '../../services/get_service.dart';
+import '../../helpers/services.dart';
 import '../../widget/appbar_squeare.dart';
 import '../../widget/eachproject.dart';
 import '../../widget/helper_widgets.dart';

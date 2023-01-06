@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/back_bar.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
@@ -14,6 +13,8 @@ import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+
+import '../../../helpers/services.dart';
 
 class InvoiceScreen extends StatefulWidget {
   const InvoiceScreen({Key? key}) : super(key: key);

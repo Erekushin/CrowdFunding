@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import '../../helpers/backHelper.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/indicators.dart';
-import '../../services/get_service.dart';
+import '../../helpers/services.dart';
 import '../../widget/appbar_squeare.dart';
 import '../../widget/eachproject.dart';
 import '../../widget/helper_widgets.dart';
@@ -230,11 +230,18 @@ class _ProfileState extends State<Profile> {
                       height: GlobalVariables.gHeight * .5,
                     ),
                     Container(
-                      color: Colors.white,
                       height: GlobalVariables.gHeight * .6,
                       margin: const EdgeInsets.all(10),
+                      decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              topRight: Radius.circular(15))),
                       child: Column(
                         children: [
+                          const SizedBox(
+                            height: 10,
+                          ),
                           const Text(
                             'хөрөнгө оруулсан төслүүд',
                             style: TextStyle(

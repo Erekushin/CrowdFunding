@@ -6,12 +6,12 @@ import 'package:gerege_app_v2/screens/wallet/cart_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/pay_config_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/transaction.dart';
 import 'package:gerege_app_v2/screens/home/wallet/wallet_accounts_screen.dart';
-import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 
+import '../../../helpers/services.dart';
 import '../../content_home/home.dart';
 
 class WalletInfoScreen extends StatefulWidget {

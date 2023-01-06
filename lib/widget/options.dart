@@ -17,9 +17,9 @@ class OptionsHorizontal extends StatefulWidget {
 }
 
 class _OptionsHorizontalState extends State<OptionsHorizontal> {
+  String a = '44';
   @override
   Widget build(BuildContext context) {
-    String a = widget.selected;
     return Wrap(
       children: widget.valueList.map<Widget>((value) {
         final selected = a == value;
@@ -29,8 +29,8 @@ class _OptionsHorizontalState extends State<OptionsHorizontal> {
           height: 50,
           child: InkWell(
             onTap: () {
-              widget.selected = value;
               widget.func(value);
+              a = value;
               setState(() {});
             },
             child: Row(

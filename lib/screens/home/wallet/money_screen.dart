@@ -5,12 +5,13 @@ import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/wallet/bank_accounts_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/recieve_screen.dart';
-import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+
+import '../../../helpers/services.dart';
 
 class MoneyScreen extends StatefulWidget {
   const MoneyScreen({Key? key}) : super(key: key);

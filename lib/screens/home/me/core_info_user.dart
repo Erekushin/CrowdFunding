@@ -4,12 +4,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
-import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:get/get.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:image_picker/image_picker.dart';
+
+import '../../../helpers/services.dart';
 
 class CoreInfoScreen extends StatefulWidget {
   const CoreInfoScreen({Key? key}) : super(key: key);

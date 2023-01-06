@@ -14,34 +14,37 @@ class Services extends GetConnect {
 
   Future<Response> postRequest(
       Object bodyData, String url, bool token, String msgcode) async {
-    var response = await post(
-      url,
-      bodyData,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': token == true
-            ? "Bearer ${GlobalVariables.gStorage.read("token")}"
-            : "",
-        'code': msgcode
-      },
-    );
-    crowdlog.wtf(
-        "status: ${response.status}  statusText: ${response.statusText}, response.statusCode ${response.statusCode} ");
-    if (response.hasError) {
-      switch (response.statusCode) {
-        case null:
-          response = const Response(
-              statusCode: 444, body: {'message': "Интэрнэт ээ шалгана уу!"});
-          break;
-        case 401:
-          Get.to(() => const LoginScreen());
-          break;
-        case 500:
-          response = const Response(statusCode: 500, body: {
-            'message': "Ямар нэгэн алдаа гарлаа түр хүлээгээд дахин оролднуу!"
-          });
-          break;
+    var response;
+    try {
+      response = await post(
+        url,
+        bodyData,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'authorization': token == true
+              ? "Bearer ${GlobalVariables.gStorage.read("token")}"
+              : "",
+          'code': msgcode
+        },
+      );
+      crowdlog.wtf(
+          "status: ${response.status}  statusText: ${response.statusText}, response.statusCode ${response.statusCode} ");
+      if (response.hasError) {
+        switch (response.statusCode) {
+          case null:
+            response = const Response(
+                statusCode: 444, body: {'message': "Интэрнэт ээ шалгана уу!"});
+            break;
+          case 401:
+            Get.to(() => const LoginScreen());
+            break;
+        }
       }
+    } catch (e) {
+      //garsan aldaag tsugluuldag base heregtei bna
+      response = const Response(statusCode: 500, body: {
+        'message': "Ямар нэгэн алдаа гарлаа түр хүлээгээд дахин оролднуу!"
+      });
     }
     return response;
   }

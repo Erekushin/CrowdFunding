@@ -1,9 +1,15 @@
 class TranslationWords {
   Map<String, Map<String, String>> languageKeys = {
     'en_US': {
+      //#region error messages
+      'record not found': 'record not found',
+      'wrong user information': 'user information is incorrect',
+      'user phone_no already exists': 'user phone number already exists',
       'reg_no is not valid': 'text is not valid',
       'user email already exists':
           'user has already registered on this account',
+
+      //#endregion
       'continue_btn_tr': 'Continue',
       'login_name_tr': 'Name',
       'password_tr': 'Password',
@@ -78,9 +84,16 @@ class TranslationWords {
       'allow_tr': 'Allow',
     },
     'mn_MN': {
+      //#region error messages
+      'record not found': 'Бүртгэл олдсонгүй',
+      'wrong user information': 'Нэвтрэх нэр эсвэл нууц дугаар алдаатай байна.',
+      'user phone_no already exists':
+          'хэрэглэгчийн утасны дугаар бүртгэлтэй байна',
       'reg_no is not valid': 'регистрийн дугаарын бүтэц буруу байна.',
       'user email already exists':
           'Энэ хаяган дээр хэрэглэгч аль хэдийн бүртгэл үүсгэсэн байна.',
+
+      //#endregion
       'continue_btn_tr': 'Үргэлжлүүлэх',
       'login_name_tr': 'Нэвтрэх нэр',
       'password_tr': 'Нууц үг',

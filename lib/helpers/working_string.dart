@@ -61,7 +61,7 @@ class GlobalValidator {
     String p = r'[а-яА-Я]{2}\d{8}$';
     RegExp regExp = RegExp(p);
     if (regExp.hasMatch(value!) == true) {
-      return '';
+      return null;
     } else {
       Get.snackbar(
         'Болохгүй',

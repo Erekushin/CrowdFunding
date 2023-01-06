@@ -93,7 +93,7 @@ class _MyHomePageState extends State<SplashScreen>
 
   @override
   void dispose() {
-    // _controller.dispose();
+    _controller.dispose();
     super.dispose();
   }
 

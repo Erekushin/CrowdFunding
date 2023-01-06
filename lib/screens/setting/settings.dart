@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-import '../../controller/login_controller.dart';
+import '../../controller/entrance.dart';
 import '../../global_players.dart';
 import '../../helpers/gvariables.dart';
 import '../../style/color.dart';
@@ -17,7 +17,7 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  var auth = Get.find<LoginController>();
+  var auth = Get.find<EntranceCont>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,9 +45,9 @@ class _SettingsState extends State<Settings> {
                   GlobalPlayers.workingWithFile
                       .addNewItem('isFingering', 'true');
                   GlobalPlayers.workingWithFile
-                      .addNewItem('name', auth.searchText!.text);
+                      .addNewItem('name', auth.searchText.text);
                   GlobalPlayers.workingWithFile
-                      .addNewItem('pass', auth.passwordTextController!.text);
+                      .addNewItem('pass', auth.passwordTextController.text);
                 } else if (GlobalVariables.pass != '') {
                   GlobalPlayers.workingWithFile.deleteAll();
                 }
