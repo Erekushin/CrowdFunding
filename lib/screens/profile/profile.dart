@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
+import '../../helpers/backHelper.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/indicators.dart';
-import '../../helpers/logging.dart';
 import '../../services/get_service.dart';
 import '../../widget/appbar_squeare.dart';
 import '../../widget/eachproject.dart';
 import '../../widget/helper_widgets.dart';
+import '../content_home/content.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
@@ -21,9 +22,14 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  final crowdlog = logger(_ProfileState);
-  var scrollController = ScrollController(initialScrollOffset: 55);
-  RxList myFundedProjects = [].obs;
+  final crowdlog = logger(Profile);
+
+  @override
+  void initState() {
+    getMyProjects();
+    scrollController.addListener(_scrollListener);
+    super.initState();
+  }
 
   //#region........helper functions.....
 
@@ -83,6 +89,7 @@ class _ProfileState extends State<Profile> {
     }
   }
 
+  RxList myFundedProjects = [].obs;
   getMyProjects() async {
     visibilitySwitch(ScreenModes.loading);
     try {
@@ -140,18 +147,12 @@ class _ProfileState extends State<Profile> {
 
   //#endregion......
 
-  @override
-  void initState() {
-    getMyProjects();
-    scrollController.addListener(_scrollListener);
-    super.initState();
-  }
-
+  var scrollController = ScrollController(initialScrollOffset: 55);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppbarSquare(
-          height: GlobalVariables.gWidth * .4,
+          height: GlobalVariables.gHeight * .12,
           leadingIcon: const Icon(
             FontAwesomeIcons.chevronLeft,
             color: Colors.white,
@@ -263,7 +264,14 @@ class _ProfileState extends State<Profile> {
                                           progressProcent(amount, balance)
                                               .toInt();
                                       return eachproject(
-                                          item, progress, item['img_base64']);
+                                          item, progress, item['img_base64'],
+                                          () {
+                                        Get.to(() => Content(
+                                              item: item,
+                                              proProgress: progress,
+                                              imgUrl: item['img_base64'],
+                                            ));
+                                      });
                                     }),
                                 screenModes(ScreenModes.noProject, noProject,
                                     'assets/images/empty_box.jpg'),

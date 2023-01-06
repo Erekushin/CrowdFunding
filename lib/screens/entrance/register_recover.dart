@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../controller/entrance.dart';
-import '../../helpers/core_url.dart';
+import '../../helpers/backHelper.dart';
 import '../../helpers/gvariables.dart';
-import '../../helpers/logging.dart';
-import '../../services/get_service.dart';
 import '../../style/color.dart';
 import '../../widget/appbar_squeare.dart';
 import '../../widget/btn.dart';
-import '../../widget/gerege_button.dart';
 import '../../widget/options.dart';
 import '../../widget/txt_field.dart';
 import '../content_home/home.dart';
 
 // ignore: camel_case_types
 class Register_Recover extends StatefulWidget {
-  const Register_Recover({super.key, required this.route});
-  final String route;
+  const Register_Recover({super.key, required this.title});
+  final String title;
   @override
   State<Register_Recover> createState() => _Register_RecoverState();
 }
@@ -35,9 +32,20 @@ class _Register_RecoverState extends State<Register_Recover> {
   String selectionCountry = "MNG";
   String selectionGender = "Эр";
   @override
+  String title = '';
+  String caseEmail = '';
+  String casePhone = '';
   void initState() {
-    if (widget.route == 'login') {
+    if (widget.title == 'Бүртгүүлэх') {
       cont.recieverTypeVis.value = true;
+      title = 'Нууц үг үүсгэх аргаа сонгоно уу';
+      caseEmail = 'Өөрийн ашигладаг е-мэйл хаягаа оруулна уу';
+      casePhone = 'Өөрийн ашигладаг утасны дугаараа оруулна уу';
+    } else if (widget.title == 'Нууц үг сэргээх') {
+      cont.recieverTypeVis.value = true;
+      title = 'Нууц үг сэргээх аргаа сонгоно уу';
+      caseEmail = 'Өөрийн бүртгэлтэй е-мэйл хаягаа оруулна уу';
+      casePhone = 'Өөрийн бүртгэлтэй утасны дугаараа оруулна уу';
     }
     super.initState();
   }
@@ -53,7 +61,7 @@ class _Register_RecoverState extends State<Register_Recover> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppbarSquare(
-        height: GlobalVariables.gWidth * .4,
+        height: GlobalVariables.gHeight * .12,
         leadingIcon: const Icon(
           FontAwesomeIcons.chevronLeft,
           color: Colors.black,
@@ -64,7 +72,7 @@ class _Register_RecoverState extends State<Register_Recover> {
         },
         titleColor: Colors.black,
         color: Colors.white,
-        title: 'Бүртгүүлэх',
+        title: widget.title,
       ),
       body: GetX<Entrance>(
         builder: (littleCont) {
@@ -75,10 +83,9 @@ class _Register_RecoverState extends State<Register_Recover> {
                 margin: const EdgeInsets.only(top: 20, bottom: 20),
                 child: Column(
                   children: [
-                    box('Нууц үг үүсгэх аргаа сонгоно уу', registerSeq1(),
-                        cont.recieverTypeVis.value),
+                    box(title, registerSeq1(), cont.recieverTypeVis.value),
                     box(
-                        'Өөрийн ашигладаг утасны дугаараа оруулна уу',
+                        casePhone,
                         registerSeq2(
                             1,
                             cont.phoneTxt,
@@ -90,11 +97,16 @@ class _Register_RecoverState extends State<Register_Recover> {
                             CoreColor.mainGreen,
                             'Нууц дугаар авах', () {
                           jumptobottom();
-                          cont.otpSend('Утас');
+                          cont.otpSend(
+                              widget.title,
+                              'Утас',
+                              widget.title == 'Бүртгүүлэх'
+                                  ? 'auth/identify?text='
+                                  : 'auth/password?identity=');
                         }),
                         cont.phoneVis.value),
                     box(
-                        'Өөрийн ашигладаг е-мэйл хаягаа оруулна уу',
+                        caseEmail,
                         registerSeq2(
                             1,
                             cont.emailTxt,
@@ -105,7 +117,12 @@ class _Register_RecoverState extends State<Register_Recover> {
                             '',
                             CoreColor.mainGreen,
                             'Нууц дугаар авах', () async {
-                          await cont.otpSend('Е-Мэйл');
+                          await cont.otpSend(
+                              widget.title,
+                              'Е-Мэйл',
+                              widget.title == 'Бүртгүүлэх'
+                                  ? 'auth/identify?text='
+                                  : 'auth/password?identity=');
                           jumptobottom();
                         }),
                         cont.emailVis.value),
@@ -126,6 +143,22 @@ class _Register_RecoverState extends State<Register_Recover> {
                         }),
                         cont.otpVis.value),
                     box(
+                        'Хүлээн авсан нууц дугаарыг, өөрийн цаашид ашиглах нууц дугаарын хамтаар оруулна уу!',
+                        registerSeq2(
+                            3,
+                            cont.otpTxt,
+                            cont.passTxt,
+                            cont.passVerifyTxt,
+                            'otp код',
+                            'нууц дугаар',
+                            'нууц дугаар давтах',
+                            CoreColor.mainGreen,
+                            'Нууц үг сэргээх', () async {
+                          await cont.resetPassword();
+                          jumptobottom();
+                        }),
+                        cont.otpVisRecover.value),
+                    box(
                         'Иргэний мэдээлэл',
                         registerSeq3(
                             cont.rdtxt,
@@ -133,20 +166,25 @@ class _Register_RecoverState extends State<Register_Recover> {
                             CoreColor.mainGreen,
                             Colors.grey.withOpacity(.7),
                             'илгээх',
-                            'алгасах', () async {
-                          await cont
-                              .documentFind(
-                                  context, selectionCountry, selectionGender)
-                              .then((data) {
-                            if (data.statusCode == 200) {
-                              // Get.to(() => const MainTab(indexTab: 0));
-                              Get.to(() => const ContentHome());
-                            } else {}
-                          });
+                            'алгасах', () {
+                          print('objectfdfdfdfdf');
+                          if (formKey.currentState?.validate() ?? false) {
+                            cont.documentFind(
+                                context, selectionCountry, selectionGender);
+                          }
                         }, () {
                           Get.to(() => const ContentHome());
                         }),
                         cont.citizenInfoVis.value),
+                    Visibility(
+                      visible: cont.loading.value,
+                      child: Container(
+                        padding: const EdgeInsets.all(20),
+                        child: const Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                    )
                   ],
                 )),
           );
@@ -305,15 +343,9 @@ class _Register_RecoverState extends State<Register_Recover> {
       case 3:
         return Column(
           children: [
-            Container(
-              child: txtField2(txtCont1, lbl1, () {}),
-            ),
-            Container(
-              child: txtField2(txtCont2, lbl2, () {}),
-            ),
-            Container(
-              child: txtField2(txtCont3, lbl3, () {}),
-            ),
+            txtField2(txtCont1, lbl1, () {}),
+            txtField2(txtCont2, lbl2, () {}),
+            txtField2(txtCont3, lbl3, () {}),
             const SizedBox(
               height: 15,
             ),
@@ -325,6 +357,7 @@ class _Register_RecoverState extends State<Register_Recover> {
     }
   }
 
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
   Widget registerSeq3(
       TextEditingController txtCont1,
       String lbl1,
@@ -334,56 +367,60 @@ class _Register_RecoverState extends State<Register_Recover> {
       String btnTitle2,
       Function func1,
       Function func2) {
-    return Column(
-      children: [
-        //#region drop resource
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Obx(
-              () => DropdownButton(
-                iconEnabledColor: CoreColor.mainGreen,
-                iconDisabledColor: CoreColor.mainGreen,
-                value: selectionCountry,
-                isExpanded: true,
-                hint: Text(
-                  'pass_type_tr'.translationWord(),
+    return Form(
+      key: formKey,
+      child: Column(
+        children: [
+          //#region drop resource
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Obx(
+                () => DropdownButton(
+                  iconEnabledColor: CoreColor.mainGreen,
+                  iconDisabledColor: CoreColor.mainGreen,
+                  value: selectionCountry,
+                  isExpanded: true,
+                  hint: Text(
+                    'pass_type_tr'.translationWord(),
+                  ),
+                  items: cont.countryList.map((value) {
+                    return DropdownMenuItem(
+                      value: value['iso_alpha_code_3'],
+                      child: Text(
+                        value['full_name'],
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectionCountry = value.toString();
+                    });
+                  },
                 ),
-                items: cont.countryList.map((value) {
-                  return DropdownMenuItem(
-                    value: value['iso_alpha_code_3'],
-                    child: Text(
-                      value['full_name'],
-                    ),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectionCountry = value.toString();
-                  });
-                },
               ),
-            ),
-            const SizedBox(height: 20),
-            selectionCountry != "MNG" ? foriegnUser() : const SizedBox(),
-          ],
-        ),
-        //#endregion
+              const SizedBox(height: 20),
+              selectionCountry != "MNG" ? foriegnUser() : const SizedBox(),
+            ],
+          ),
+          //#endregion
 
-        selectionCountry == "MNG"
-            ? Container(
-                child: txtField2(txtCont1, lbl1, () {}),
-              )
-            : const SizedBox(),
-        const SizedBox(
-          height: 15,
-        ),
-        generalBtn(btnClr1, btnTitle1, func1),
-        const SizedBox(
-          height: 15,
-        ),
-        generalBtn(btnClr2, btnTitle2, func2)
-      ],
+          selectionCountry == "MNG"
+              ? txtFormField2(txtCont1, lbl1, (val) {
+                  return GlobalValidator().rdValid(val);
+                })
+              : const SizedBox(),
+
+          const SizedBox(
+            height: 15,
+          ),
+          generalBtn(btnClr1, btnTitle1, func1()),
+          const SizedBox(
+            height: 15,
+          ),
+          generalBtn(btnClr2, btnTitle2, func2)
+        ],
+      ),
     );
   }
 

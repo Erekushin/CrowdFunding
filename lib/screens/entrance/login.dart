@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
@@ -11,10 +11,10 @@ import 'package:local_auth/local_auth.dart';
 import '../../../controller/login_controller.dart';
 import '../../../global_players.dart';
 import '../../../helpers/gvariables.dart';
-import '../../../helpers/logging.dart';
 import '../../../style/color.dart';
 import '../../../widget/gerege_button.dart';
 import '../../../widget/gerege_textfield.dart';
+import '../../helpers/backHelper.dart';
 import '../login/forget_password.dart';
 import 'register_recover.dart';
 
@@ -174,7 +174,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       top: 20,
                       child: InkWell(
                         onTap: () {
-                          Get.to(() => const ForgetPasswordScreen());
+                          Get.to(() => const Register_Recover(
+                                title: 'Нууц үг сэргээх',
+                              ));
                         },
                         child: Text(
                           'Мартсан?',
@@ -188,6 +190,25 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
+                    // Positioned(
+                    //   right: 100,
+                    //   top: 20,
+                    //   child: InkWell(
+                    //     onTap: () {
+                    //       Get.to(() => const ForgetPasswordScreen());
+                    //     },
+                    //     child: Text(
+                    //       'huuchin?',
+                    //       style: GoogleFonts.ubuntu(
+                    //         textStyle: TextStyle(
+                    //           color: CoreColor().backgroundGreen,
+                    //           fontWeight: FontWeight.w700,
+                    //           fontSize: 14,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -371,9 +392,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   TextButton(
                     onPressed: () {
-                      print('dfdf');
                       Get.to(() => const Register_Recover(
-                            route: 'login',
+                            title: 'Бүртгүүлэх',
                           ));
                     },
                     child: Row(
@@ -405,7 +425,6 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 30),
           ],
         ),
-        // GlobalVariables.useTablet == false ? phoneLogin() : tabletLogin(),
       ),
     );
   }

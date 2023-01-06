@@ -1,7 +1,7 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
-import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/wallet/bank_accounts_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/recieve_screen.dart';

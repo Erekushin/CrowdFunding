@@ -1,6 +1,9 @@
 class TranslationWords {
   Map<String, Map<String, String>> languageKeys = {
     'en_US': {
+      'reg_no is not valid': 'text is not valid',
+      'user email already exists':
+          'user has already registered on this account',
       'continue_btn_tr': 'Continue',
       'login_name_tr': 'Name',
       'password_tr': 'Password',
@@ -18,6 +21,7 @@ class TranslationWords {
       'email_tr': 'Email',
       'otp_send_tr': 'OTP send',
       'email_regex_tr': 'Please enter the correct email address',
+      'rd_regex_tr': 'Please enter the correct text',
       'phone_regex_tr': 'Please enter the correct phone number',
       "otp_tr": "OTP code",
       "pass_type_tr": "Passport type",
@@ -74,6 +78,9 @@ class TranslationWords {
       'allow_tr': 'Allow',
     },
     'mn_MN': {
+      'reg_no is not valid': 'регистрийн дугаарын бүтэц буруу байна.',
+      'user email already exists':
+          'Энэ хаяган дээр хэрэглэгч аль хэдийн бүртгэл үүсгэсэн байна.',
       'continue_btn_tr': 'Үргэлжлүүлэх',
       'login_name_tr': 'Нэвтрэх нэр',
       'password_tr': 'Нууц үг',
@@ -91,6 +98,7 @@ class TranslationWords {
       'email_tr': 'И-мейл',
       'otp_send_tr': 'OTP илгээх',
       'email_regex_tr': 'Имэйл зөв оруулна уу',
+      'rd_regex_tr': 'Регистрийн дугаараа зөв оруулна уу',
       'phone_regex_tr': 'Утасны дугаараа зөв оруулна уу',
       "otp_tr": "OTP код",
       "pass_type_tr": "Пасспорт төрөл",

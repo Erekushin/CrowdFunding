@@ -22,7 +22,7 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppbarSquare(
-        height: GlobalVariables.gWidth * .4,
+        height: GlobalVariables.gHeight * .12,
         leadingIcon: const Icon(
           FontAwesomeIcons.chevronLeft,
           color: Colors.white,

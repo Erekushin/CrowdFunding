@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/screens/wallet/cart_screen.dart';
 import 'package:gerege_app_v2/style/color.dart';
 

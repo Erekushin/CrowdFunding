@@ -6,8 +6,6 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 import '../../helpers/gvariables.dart';
-import '../screens/login/phone/login_screen.dart';
-import '../screens/login/tablet/login_screen_tablet.dart';
 import 'gerege_button.dart';
 
 class DrawerTabletWidget extends StatefulWidget {
@@ -58,11 +56,11 @@ class _DrawerTabletWidgetState extends State<DrawerTabletWidget> {
                   onPressed: () {
                     setState(() {
                       GlobalVariables.gStorage.erase();
-                      if (GlobalVariables.useTablet) {
-                        Get.offAll(() => const LoginScreenTablet());
-                      } else {
-                        Get.offAll(() => const LoginScreen());
-                      }
+                      // if (GlobalVariables.useTablet) {
+                      //   Get.offAll(() => const LoginScreenTablet());
+                      // } else {
+                      //   Get.offAll(() => const LoginScreen());
+                      // }
                     });
                   },
                 ),

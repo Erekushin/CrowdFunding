@@ -1,8 +1,4 @@
-import 'dart:async';
-
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
+import 'helpers/frontHelper.dart';
 import 'helpers/working_file.dart';
 
 enum BioSupportState {
@@ -13,4 +9,9 @@ enum BioSupportState {
 
 class GlobalPlayers {
   static WorkingFiles workingWithFile = WorkingFiles();
+  static FrontHelper frontHelper = FrontHelper();
+}
+
+class Sizes {
+  static double iconSize = 22;
 }

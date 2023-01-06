@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
-import 'package:get/get.dart';
-
-import '../screens/content_home/content.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
+import '../helpers/working_dates.dart';
 import '../style/color.dart';
 
-Widget eachproject(var item, int progress, String imageUrl) {
+Widget eachproject(var item, int progress, String imageUrl, Function func) {
   return InkWell(
     onTap: () {
-      Get.to(() => Content(
-            projectID: int.parse(item['id']),
-            proProgress: progress,
-            imgUrl: imageUrl,
-          ));
+      func();
     },
     child: Container(
       margin: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
@@ -62,7 +57,7 @@ Widget eachproject(var item, int progress, String imageUrl) {
             height: 10,
           ),
           Text(
-            item['description'],
+            item['introduction_text'],
             maxLines: 2,
             softWrap: true,
             overflow: TextOverflow.ellipsis,
@@ -73,11 +68,12 @@ Widget eachproject(var item, int progress, String imageUrl) {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              greenInfo(item['amount'].toString()),
+              greenInfo(item['amount'].toString().ammountCorrection()),
               littleSpacer(),
-              greenInfo('32 donations'),
+              greenInfo('${item['user_cnt']} donations'),
               littleSpacer(),
-              greenInfo('18 хоног үлдсэн'),
+              greenInfo(
+                  '${countRemainingDays(item['end_date'].toString())} хоног үлдсэн'),
             ],
           )
         ],

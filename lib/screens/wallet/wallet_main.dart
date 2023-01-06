@@ -1,28 +1,24 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../global_players.dart';
+import '../../helpers/backHelper.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/helperfuncs.dart';
-import '../../helpers/logging.dart';
 import '../../services/get_service.dart';
 import '../../style/color.dart';
 import '../../widget/appbar_squeare.dart';
 import '../../widget/empty.dart';
 import '../../widget/gerege_button.dart';
-import '../home/wallet/invoice_screen.dart';
 import 'bank_accounts_screen.dart';
 import 'cart_screen.dart';
 
@@ -1025,11 +1021,11 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppbarSquare(
-        height: GlobalVariables.gWidth * .4,
-        leadingIcon: const Icon(
+        height: GlobalVariables.gHeight * .12,
+        leadingIcon: Icon(
           FontAwesomeIcons.chevronLeft,
           color: Colors.white,
-          size: 18,
+          size: Sizes.iconSize,
         ),
         menuAction: () {
           Get.back();

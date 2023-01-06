@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
-import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/wallet/cart_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/pay_config_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/transaction.dart';
 import 'package:gerege_app_v2/screens/home/wallet/wallet_accounts_screen.dart';
-import 'package:gerege_app_v2/screens/main_tab.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/route_manager.dart';

@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
-import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/screens/login/phone/login_screen.dart';
-import 'package:gerege_app_v2/screens/login/tablet/login_screen_tablet.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
@@ -58,58 +56,6 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
   void dispose() {
     tabController.dispose();
     super.dispose();
-  }
-
-  otpSend() {
-    // screenChange.value = true;
-    String url =
-        '${CoreUrl.crowdfund}auth/password?identity=${searchController.text}';
-    Services().getRequest(url, false, '').then((data) {
-      if (data.statusCode == 200) {
-        screenChange.value = true;
-      } else {
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.white,
-          backgroundColor: Colors.red.withOpacity(0.2),
-        );
-      }
-    });
-  }
-
-  resetPassword() {
-    var bodyData = {
-      // "identity": searchController.text,
-      // "password": passwordController.text,
-      // "otp": otpCodeController.text
-    };
-    var bytes = utf8.encode(passwordController.text);
-    var digest = md5.convert(bytes);
-    String url =
-        '${CoreUrl.crowdfund}auth/password?identity=${searchController.text}&password=$digest}&otp${otpCodeController.text}';
-    Services().putRequest(json.encode(bodyData), url, false, '').then((data) {
-      if (data.statusCode == 200) {
-        Get.snackbar(
-          'success_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.white,
-          backgroundColor: Colors.red.withOpacity(0.2),
-        );
-        if (GlobalVariables.useTablet) {
-          Get.to(() => const LoginScreenTablet());
-        } else {
-          Get.to(() => const LoginScreen());
-        }
-      } else {
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.white,
-          backgroundColor: Colors.red.withOpacity(0.2),
-        );
-      }
-    });
   }
 
   timeoutCall() async {
@@ -256,7 +202,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
                 if (searchController.text != "" &&
                     otpCodeController.text != "" &&
                     passwordController.text != "") {
-                  resetPassword();
+                  // resetPassword();
                 } else {
                   Get.snackbar(
                     'warning_tr'.translationWord(),
@@ -406,7 +352,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen>
               onPressed: () {
                 setState(() {
                   if (formKey.currentState!.validate()) {
-                    otpSend();
+                    // otpSend();
                   }
                 });
               },

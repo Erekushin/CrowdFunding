@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
+import '../global_players.dart';
 import '../screens/entrance/login.dart';
-import '../screens/home/wallet/wallet_screen.dart';
 import '../screens/profile/profile.dart';
 import '../screens/setting/settings.dart';
 import '../screens/wallet/wallet_main.dart';
@@ -59,12 +60,23 @@ class _SidebarState extends State<Sidebar> {
                             const SizedBox(
                               height: 10,
                             ),
-                            const Text(
-                              'Mandah',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold),
+                            SizedBox(
+                              width: 140,
+                              height: 20,
+                              child: Center(
+                                child: Text(
+                                  GlobalVariables.firstName,
+                                  softWrap: true,
+                                  maxLines: 3,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize:
+                                          GlobalVariables.firstName.length > 9
+                                              ? 18
+                                              : 25,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
                             ),
                             const SizedBox(
                               height: 20,
@@ -75,10 +87,16 @@ class _SidebarState extends State<Sidebar> {
                           onPressed: () {
                             widget.menuAction();
                           },
-                          icon: const Icon(
-                            FontAwesomeIcons.bars,
-                            color: Colors.white,
-                            size: 18,
+                          icon: Container(
+                            padding: const EdgeInsets.all(7),
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(.2),
+                                shape: BoxShape.circle),
+                            child: Icon(
+                              FontAwesomeIcons.bars,
+                              color: Colors.white,
+                              size: Sizes.iconSize,
+                            ),
                           ),
                         )
                       ],
@@ -97,12 +115,6 @@ class _SidebarState extends State<Sidebar> {
                         // Get.to(() => const WalletScreen());
                         Get.to(() => const WalletMain());
                       }),
-                      menuComponent(context, FontAwesomeIcons.magnifyingGlass,
-                          'Хэтэвч huuchin', () {
-                        Get.to(() => const WalletScreen());
-                      }),
-                      menuComponent(context, FontAwesomeIcons.solidBell,
-                          'Хөрөнгө оруулалт', () {}),
                       menuComponent(
                           context, FontAwesomeIcons.peopleGroup, 'Тохиргоо',
                           () {

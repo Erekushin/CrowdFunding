@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/route_manager.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';

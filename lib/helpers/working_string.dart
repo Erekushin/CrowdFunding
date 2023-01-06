@@ -1,10 +1,7 @@
-import 'package:flutter/services.dart';
-import 'package:gerege_app_v2/controller/sumni_scanner.dart';
+import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/helpers/language_translation.dart';
-import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
-import 'package:sunmi_barcode_scanner/sunmi_barcode_scanner.dart';
 
 /// string extension capitalize
 extension StringExtension on String {
@@ -29,6 +26,23 @@ extension StringExtension on String {
     return TranslationWords().languageKeys[GlobalVariables.localeLong]?[this] ??
         this;
   }
+
+  ammountCorrection() {
+    String added = '';
+    added = split('')
+        .reversed
+        .join()
+        .replaceAllMapped(RegExp(r".{3}"), (match) => "${match.group(0)} ")
+        .replaceAll(RegExp(' '), ',')
+        .split('')
+        .reversed
+        .join();
+
+    if (length % 3 == 0) {
+      added = added.substring(1);
+    }
+    return added;
+  }
 }
 
 class GlobalValidator {
@@ -43,6 +57,22 @@ class GlobalValidator {
     }
   }
 
+  rdValid(String? value) {
+    String p = r'[а-яА-Я]{2}\d{8}$';
+    RegExp regExp = RegExp(p);
+    if (regExp.hasMatch(value!) == true) {
+      return '';
+    } else {
+      Get.snackbar(
+        'Болохгүй',
+        "rd_regex_tr".translationWord(),
+        colorText: Colors.black,
+        backgroundColor: Colors.grey.withOpacity(0.2),
+      );
+      return "rd_regex_tr".translationWord();
+    }
+  }
+
   String? phoneValid(String? value) {
     String p = r'^(([0-9]{8}))$';
     RegExp regExp = RegExp(p);
@@ -51,31 +81,5 @@ class GlobalValidator {
     } else {
       return "phone_regex_tr".translationWord();
     }
-  }
-}
-
-class Reader {
-  var sunmiBarcodeScanner = SunmiBarcodeScanner();
-
-  scannerQrBarCode() async {
-    String scanData;
-    try {
-      scanData = await FlutterBarcodeScanner.scanBarcode(
-        '#ff6666',
-        'Буцах',
-        true,
-        ScanMode.DEFAULT,
-      );
-      return scanData;
-    } on PlatformException {
-      return null;
-    }
-  }
-
-  sunmiScanner() {
-    final SunmiController sunmiController = Get.put(SunmiController());
-    sunmiBarcodeScanner.onBarcodeScanned().listen((event) {
-      sunmiController.codeVal.value = event;
-    });
   }
 }

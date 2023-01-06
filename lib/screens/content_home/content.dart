@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/screens/content_home/pay_info.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
+import '../../global_players.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
+import '../../helpers/working_dates.dart';
 
 // ignore: must_be_immutable
 class Content extends StatefulWidget {
   Content(
       {super.key,
-      required this.projectID,
+      required this.item,
       required this.proProgress,
       required this.imgUrl});
-  int projectID;
+  var item;
   int proProgress;
   String imgUrl;
   @override
@@ -63,15 +64,21 @@ class _ContentState extends State<Content> {
                 children: [
                   Row(
                     children: [
-                      contentInfo('150,450₮', 'pledged of 1,000,000₮ goal'),
+                      contentInfo(
+                          widget.item['balance'].toString().ammountCorrection(),
+                          'pledged of ${widget.item['amount'].toString().ammountCorrection()} goal'),
                       const SizedBox(
                         width: 30,
                       ),
-                      contentInfo('17', 'backers'),
+                      contentInfo(
+                          widget.item['user_cnt'].toString(), 'backers'),
                       const SizedBox(
                         width: 30,
                       ),
-                      contentInfo('27', 'days to go'),
+                      contentInfo(
+                          countRemainingDays(
+                              widget.item['end_date'].toString()),
+                          'days to go'),
                     ],
                   ),
                   spacerBig(),
@@ -93,12 +100,21 @@ class _ContentState extends State<Content> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'OKAMOTO Tomohiro',
-                            style: TextStyle(
+                          Text(
+                            widget.item['org_name'].toString(),
+                            style: const TextStyle(
                                 fontSize: 10, fontWeight: FontWeight.bold),
                           ),
-                          infoTxtStyle('First created'),
+                          Row(
+                            children: [
+                              infoTxtStyle('First created'),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              infoTxtStyle(
+                                  widget.item['start_date'].toString()),
+                            ],
+                          ),
                           Row(
                             children: [
                               infoTxtStyle('An engineer.'),
@@ -136,21 +152,22 @@ class _ContentState extends State<Content> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text(
-                            'Hicarix Badge : LED Bulletin Board using B&W technology',
-                            style: TextStyle(
+                          Text(
+                            widget.item['name'].toString(),
+                            style: const TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text(
-                            'An elegant LED badge that draws images using B&W technology from a phone screen. Express your creativity with this badge, made in Japan',
-                            style: TextStyle(
+                          Text(
+                            widget.item['introduction_text'].toString(),
+                            style: const TextStyle(
                                 fontStyle: FontStyle.italic,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 10),
@@ -169,9 +186,9 @@ class _ContentState extends State<Content> {
                           const SizedBox(
                             height: 10,
                           ),
-                          const Text(
-                            'The Hicarix® badge is an LED badge that looks like an electric bulletin board that can display a custom image you created in the Hicarix® App, a dedicated smartphone application.The Hicarix Badge is special in that it does NOT wireless communication, such as Wi-Fi or Bluetooth. Changing the display of the badge uses technology that reads the blinks from your smartphone screen, similar to Morse code.Three brightness sensors on the back of the device read the black and white, or bright or dark, of the smartphones screen.This rewrite method is the result of my search for a small, more affordable, and easy method; it is not as fast as Wi-Fi or Bluetooth, and it is subject to rewrite errors. Perhaps it may seem old-fashioned. But those who have used it have found the rewriting experience very positive.However, due to the shortage of semiconductors, I have not been able to manufacture or sell this product for a long time.With your support I will make the Hicarix Badge new and improved. And I will redesign with an enclosed and functional backing."Hicarix" is a play on the Japanese word Hikari (meaning "light"), which is derived from the idea of communicating and displaying light with light.',
-                            style: TextStyle(fontSize: 12),
+                          Text(
+                            widget.item['description'].toString(),
+                            style: const TextStyle(fontSize: 12),
                           ),
                           const SizedBox(
                             height: 60,
@@ -217,7 +234,7 @@ class _ContentState extends State<Content> {
                 InkWell(
                   onTap: () {
                     Get.to(() => PayInfo(
-                          projectID: widget.projectID,
+                          item: widget.item,
                         ));
                   },
                   child: Container(
@@ -249,10 +266,16 @@ class _ContentState extends State<Content> {
                   onTap: () {
                     Get.back();
                   },
-                  child: const Icon(
-                    FontAwesomeIcons.chevronLeft,
-                    color: Colors.white,
-                    size: 18,
+                  child: Container(
+                    padding: const EdgeInsets.all(7),
+                    decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(.2),
+                        shape: BoxShape.circle),
+                    child: Icon(
+                      FontAwesomeIcons.chevronLeft,
+                      color: Colors.white,
+                      size: Sizes.iconSize,
+                    ),
                   ),
                 )),
           ),
@@ -280,7 +303,7 @@ class _ContentState extends State<Content> {
   Widget infoTxtStyle(String txt) {
     return Text(
       txt,
-      style: TextStyle(fontSize: 8),
+      style: const TextStyle(fontSize: 8),
     );
   }
 

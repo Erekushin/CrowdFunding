@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../global_players.dart';
+import '../../helpers/backHelper.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/indicators.dart';
-import '../../helpers/logging.dart';
 import '../../services/get_service.dart';
 import '../../widget/appbar_squeare.dart';
 import '../../widget/eachproject.dart';
 import '../../widget/helper_widgets.dart';
 import '../../widget/sidebar.dart';
+import 'content.dart';
 
 class ContentHome extends StatefulWidget {
   const ContentHome({super.key});
@@ -24,30 +26,21 @@ class ContentHome extends StatefulWidget {
 
 class _ContentHomeState extends State<ContentHome> {
   final crowdlog = logger(ContentHome);
-  var scrollController = ScrollController(initialScrollOffset: 55);
-  GlobalKey<ScaffoldState> menuSidebarKey = GlobalKey<ScaffoldState>();
-  RxList projectList = [].obs;
-  RxList typeList = [].obs;
+
+  @override
+  void initState() {
+    getTypeList();
+    getProjectList();
+    scrollController.addListener(_scrollListener);
+    super.initState();
+  }
+
+  //#region helper funcs
+
   RxBool noProject = false.obs;
   RxBool loading = false.obs;
   RxBool noInternet = false.obs;
   RxBool error = false.obs;
-  int chosenTap = 0;
-  String option = '1';
-  PageController pageCont = PageController();
-  List<DropdownMenuItem<String>> dropitems(List<dynamic> optionList) {
-    return optionList.map((item) {
-      return DropdownMenuItem(
-        value: item.toString(),
-        child: Text(
-          item.toString(),
-          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-        ),
-        onTap: () {},
-      );
-    }).toList();
-  }
-
   visibilitySwitch(ScreenModes mode) {
     switch (mode) {
       case ScreenModes.data:
@@ -84,6 +77,7 @@ class _ContentHomeState extends State<ContentHome> {
     }
   }
 
+  RxList typeList = [].obs;
   void getTypeList() async {
     await Services()
         .getRequest('${CoreUrl.crowdfund}category', true, '')
@@ -106,6 +100,7 @@ class _ContentHomeState extends State<ContentHome> {
     });
   }
 
+  RxList projectList = [].obs;
   void getProjectList() async {
     loading.value = true;
     try {
@@ -151,14 +146,7 @@ class _ContentHomeState extends State<ContentHome> {
     }
   }
 
-  @override
-  void initState() {
-    getTypeList();
-    getProjectList();
-    scrollController.addListener(_scrollListener);
-    super.initState();
-  }
-
+  double rotate = 0;
   _scrollListener() async {
     setState(() {
       rotate = scrollController.offset;
@@ -190,7 +178,12 @@ class _ContentHomeState extends State<ContentHome> {
         ]);
   }
 
-  double rotate = 0;
+  //#endregion
+
+  var scrollController = ScrollController(initialScrollOffset: 55);
+  GlobalKey<ScaffoldState> menuSidebarKey = GlobalKey<ScaffoldState>();
+  PageController pageCont = PageController();
+  int chosenTap = 0;
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -205,11 +198,11 @@ class _ContentHomeState extends State<ContentHome> {
           },
         ),
         appBar: AppbarSquare(
-          height: GlobalVariables.gWidth * .25,
-          leadingIcon: const Icon(
+          height: GlobalVariables.gWidth * .26,
+          leadingIcon: Icon(
             FontAwesomeIcons.bars,
             color: Colors.white,
-            size: 18,
+            size: Sizes.iconSize,
           ),
           title: 'CrowdfundingMN',
           titleColor: Colors.white,
@@ -288,9 +281,7 @@ class _ContentHomeState extends State<ContentHome> {
               child: PageView.builder(
                 onPageChanged: (currentpageIndex) {
                   setState(() {
-                    crowdlog.wtf(chosenTap);
                     chosenTap = currentpageIndex;
-                    crowdlog.wtf(chosenTap);
                   });
                 },
                 controller: pageCont,
@@ -347,7 +338,13 @@ class _ContentHomeState extends State<ContentHome> {
                                               progressProcent(amount, balance)
                                                   .toInt();
                                           return eachproject(item, progress,
-                                              item['img_base64']);
+                                              item['img_base64'], () {
+                                            Get.to(() => Content(
+                                                  item: item,
+                                                  proProgress: progress,
+                                                  imgUrl: item['img_base64'],
+                                                ));
+                                          });
                                         }),
                                   ],
                                 )),

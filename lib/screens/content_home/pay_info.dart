@@ -4,20 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
+import '../../helpers/backHelper.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
-import '../../helpers/logging.dart';
 import '../../services/get_service.dart';
 import '../../widget/appbar_squeare.dart';
 
 // ignore: must_be_immutable
 class PayInfo extends StatefulWidget {
-  PayInfo({super.key, required this.projectID});
-  int projectID;
+  PayInfo({super.key, required this.item});
+  var item;
   @override
   State<PayInfo> createState() => _PayInfoState();
 }
@@ -31,7 +31,7 @@ class _PayInfoState extends State<PayInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppbarSquare(
-        height: GlobalVariables.gWidth * .4,
+        height: GlobalVariables.gHeight * .12,
         leadingIcon: const Icon(
           FontAwesomeIcons.leftLong,
           color: Colors.black,
@@ -65,7 +65,8 @@ class _PayInfoState extends State<PayInfo> {
                 SizedBox(
                   height: 30,
                 ),
-                rowofinfo('Үлдэгдэл', '1 Сая₮'),
+                rowofinfo(
+                    'Үлдэгдэл', '${GlobalVariables.accountBalance.value}₮'),
                 rowofinfo('Хөрөнгө оруулалт', '1 Сая₮'),
                 rowofinfo('Боломжит үлдэгдэл', '1 Сая₮'),
                 SizedBox(
@@ -76,7 +77,7 @@ class _PayInfoState extends State<PayInfo> {
           ),
           Column(
             children: [
-              Text('Хөрөнгө оруулалтын хэмжээ (100000 төг)'),
+              Text('Хөрөнгө оруулалтын хэмжээ (10,0000 төг)'),
               SizedBox(
                 height: 50,
               ),
@@ -201,7 +202,7 @@ class _PayInfoState extends State<PayInfo> {
 
   void fundToProject() async {
     var bodyData = {
-      "fund_id": widget.projectID,
+      "fund_id": int.parse(widget.item['id']),
       "user_id": int.parse(GlobalVariables.id),
       "amount": fundingValue * 1000,
     };

@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/controller/sumni_scanner.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
-import 'package:gerege_app_v2/helpers/gextensions.dart';
+import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/services/get_service.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:get/get.dart';
+
+import '../../helpers/helperfuncs.dart';
 
 // import 'package:sunmi_barcode_scanner/sunmi_barcode_scanner.dart';
 
