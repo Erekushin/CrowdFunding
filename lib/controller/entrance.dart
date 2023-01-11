@@ -22,7 +22,6 @@ class EntranceCont extends GetxController {
   var emailVis = false.obs;
   var otpVis = false.obs;
   var otpVisRecover = false.obs;
-  var citizenInfoVis = false.obs;
   var loading = false.obs;
 
   var phoneTxt = TextEditingController();
@@ -32,10 +31,7 @@ class EntranceCont extends GetxController {
   var passVerifyTxt = TextEditingController();
   String registerText = '';
 
-  register() async {
-    getCountryList();
-    loading.value = true;
-    citizenInfoVis.value = true;
+  register(Function countrySuccess, Function countryFailed) async {
     var bytes = utf8.encode(passTxt.text);
     var digest = md5.convert(bytes);
     var bodyData = {
@@ -43,23 +39,46 @@ class EntranceCont extends GetxController {
       "password": digest.toString(),
       "otp": otpTxt.text
     };
-    await Services()
-        .postRequest(bodyData, '${CoreUrl.crowdfund}auth/register', true, '')
-        .then((data) {
-      crowdlog.wtf(
-          '---register---:body $bodyData........ data ${data.body.toString()}');
-      GlobalPlayers.frontHelper.requestErrorSnackbar(data, () {
-        var res = data.body;
-        GlobalVariables.gStorage
-            .write("token", res['result']['authorization']['token']);
-        GlobalVariables.gStorage
-            .write('userInformation', res['result']['user']);
-        GlobalVariables.storageToVar();
-        getCountryList();
-        citizenInfoVis.value = true;
-        loading.value = false;
-      });
-    });
+    try {
+      if (passTxt.text != passVerifyTxt.text) {
+        throw Exception('нууц үг таарахгүй байна..');
+      }
+      if (GlobalValidator().passValid(passTxt.text) != null) {
+        throw Exception('нууц үг шаардлага хангахгүй байна.');
+      }
+      if (GlobalValidator().otptext(otpTxt.text) != null) {
+        throw Exception(
+            'OTP дугаарыг зөв оруулна уу! OTP нь 6 оронтой тоо байна гэдгийг анхаараарай!');
+      } else {
+        loading.value = true;
+        await Services()
+            .postRequest(
+                bodyData, '${CoreUrl.crowdfund}auth/register', true, '')
+            .then((data) {
+          crowdlog.wtf(
+              '---register---:body $bodyData........ data ${data.body.toString()}');
+          GlobalPlayers.frontHelper.requestErrorSnackbar(data, 2, () {
+            var res = data.body;
+            GlobalVariables.gStorage
+                .write("token", res['result']['authorization']['token']);
+            GlobalVariables.gStorage
+                .write('userInformation', res['result']['user']);
+            GlobalVariables.storageToVar();
+            getCountryList(countrySuccess, countryFailed);
+            loading.value = false;
+          }, () {
+            loading.value = false;
+          });
+        });
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Боломжгүй',
+        e.toString(),
+        colorText: Colors.black,
+        backgroundColor: Colors.grey.withOpacity(0.2),
+      );
+    }
   }
 
   otpSend(String route, String value, String incomingurl) async {
@@ -103,40 +122,63 @@ class EntranceCont extends GetxController {
       await Services().getRequest(url, false, '').then(
         (data) {
           crowdlog.wtf('---OTP REQ---:returned data ${data.body.toString()}');
-          GlobalPlayers.frontHelper.requestErrorSnackbar(data, () {
+          GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
             if (route == "Бүртгүүлэх") {
               otpVis.value = true;
             } else {
               otpVisRecover.value = true;
             }
-          });
+          }, () {});
           loading.value = false;
         },
       );
     }
   }
 
-  resetPassword() {
+  resetPassword() async {
     loading.value = true;
     var bytes = utf8.encode(passTxt.text);
     var digest = md5.convert(bytes);
     String url =
         '${CoreUrl.crowdfund}auth/password?identity=$registerText&password=$digest&otp=${otpTxt.text}';
-    Services().putRequest(json.encode({}), url, false, '').then((data) {
-      crowdlog.wtf(
-          '---resetPassword---:text $registerText...passOrigin: ${passTxt.text} pass: $digest....otp: ${otpTxt.text}......... data ${data.body.toString()}.....url: $url');
 
-      GlobalPlayers.frontHelper.requestErrorSnackbar(data, () {
-        Get.snackbar(
-          'Амжилттай',
-          'Нууц үг амжилттай шинэчлэгдлээ',
-          colorText: Colors.black,
-          backgroundColor: Colors.grey.withOpacity(0.2),
-        );
-        Get.to(() => const ContentHome());
-        loading.value = false;
-      });
-    });
+    try {
+      if (passTxt.text != passVerifyTxt.text) {
+        throw Exception('нууц үг таарахгүй байна..');
+      }
+      if (GlobalValidator().passValid(passTxt.text) != null) {
+        throw Exception('нууц үг шаардлага хангахгүй байна.');
+      }
+      if (GlobalValidator().otptext(otpTxt.text) != null) {
+        throw Exception(
+            'OTP дугаарыг зөв оруулна уу! OTP нь 6 оронтой тоо байна гэдгийг анхаараарай!');
+      } else {
+        await Services()
+            .putRequest(json.encode({}), url, false, '')
+            .then((data) {
+          crowdlog.wtf(
+              '---resetPassword---:text $registerText...passOrigin: ${passTxt.text} pass: $digest....otp: ${otpTxt.text}......... data ${data.body.toString()}.....url: $url');
+
+          GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
+            Get.snackbar(
+              'Амжилттай',
+              'Нууц үг амжилттай шинэчлэгдлээ',
+              colorText: Colors.black,
+              backgroundColor: Colors.grey.withOpacity(0.2),
+            );
+            Get.to(() => const ContentHome());
+            loading.value = false;
+          }, () {});
+        });
+      }
+    } catch (e) {
+      Get.snackbar(
+        'Боломжгүй',
+        e.toString(),
+        colorText: Colors.black,
+        backgroundColor: Colors.grey.withOpacity(0.2),
+      );
+    }
   }
 
   //#endregion
@@ -155,7 +197,7 @@ class EntranceCont extends GetxController {
       "device_token": GlobalVariables.deviceToken,
     };
 
-    if (GlobalValidator().emailValid(searchText.text) == null &&
+    if (GlobalValidator().emailValid(searchText.text) == null ||
         GlobalValidator().phoneValid(searchText.text) == null) {
       Services()
           .postRequest(json.encode(bodyData), '${CoreUrl.crowdfund}auth/login',
@@ -164,7 +206,7 @@ class EntranceCont extends GetxController {
         var res = data.body;
         crowdlog.wtf(
             '---LOGIN---: sent data $bodyData:.................returned data ${data.body.toString()}');
-        GlobalPlayers.frontHelper.requestErrorSnackbar(data, () {
+        GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
           if (GlobalVariables.ifFingering == true &&
               GlobalVariables.pass == '') {
             GlobalPlayers.workingWithFile.addNewItem('isFingering', 'true');
@@ -179,7 +221,7 @@ class EntranceCont extends GetxController {
           searchText.clear();
           passwordTextController.clear();
           Get.to(() => const ContentHome());
-        });
+        }, () {});
       });
     } else {
       Get.snackbar(
@@ -234,36 +276,50 @@ class EntranceCont extends GetxController {
           .then((data) {
         crowdlog.wtf(
             '---findDocument---:selectedCountry: $selectionCountry.... body: $bodyMNG....returned data ${data.body.toString()}');
-        GlobalPlayers.frontHelper.requestErrorSnackbar(data, () {
+        GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
           Get.snackbar(
             'Амжилттай',
             'Мэдээллийг амжилттай хавсрагалаа',
             colorText: Colors.black,
             backgroundColor: Colors.grey.withOpacity(0.2),
           );
+          cleanRegisterInfo();
           Get.to(() => const ContentHome());
-        });
+        }, () {});
       });
-    } else {
-      Get.snackbar(
-        'Боломжгүй',
-        'Регистрийн дугаар алдаатай байна!',
-        colorText: Colors.black,
-        backgroundColor: Colors.grey.withOpacity(0.2),
-      );
     }
   }
 
   RxList countryList = [].obs;
-  getCountryList() {
+  getCountryList(Function success, Function failed) async {
     loading.value = true;
     String url = '${CoreUrl.crowdfund}countries?page_size=500&page_number=1';
-    Services().getRequest(url, true, '').then((data) {
-      GlobalPlayers.frontHelper.requestErrorSnackbar(data, () {
+    await Services().getRequest(url, true, '').then((data) {
+      crowdlog.wtf('---country list---:returned data ${data.body.toString()}');
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         countryList.value = data.body['result']['items'];
+        success();
+      }, () {
+        failed();
       });
       loading.value = false;
     });
+  }
+
+  cleanRegisterInfo() {
+    recieverTypeVis = false.obs;
+    phoneVis = false.obs;
+    emailVis = false.obs;
+    otpVis = false.obs;
+    otpVisRecover = false.obs;
+    loading = false.obs;
+
+    phoneTxt.clear();
+    emailTxt.clear();
+    otpTxt.clear();
+    passTxt.clear();
+    passVerifyTxt.clear();
+    registerText = '';
   }
 
   //#endregion

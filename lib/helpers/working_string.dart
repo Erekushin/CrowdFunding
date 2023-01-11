@@ -57,6 +57,26 @@ class GlobalValidator {
     }
   }
 
+  String? otptext(String? value) {
+    String p = r'^(([0-9]{6}))$';
+    RegExp regExp = RegExp(p);
+    if (regExp.hasMatch(value!) == true) {
+      return null;
+    } else {
+      return "otp_regex_tr".translationWord();
+    }
+  }
+
+  String? passValid(String? value) {
+    String p = r'^(([0-9]{4}))$';
+    RegExp regExp = RegExp(p);
+    if (regExp.hasMatch(value!) == true) {
+      return null;
+    } else {
+      return "otp_regex_tr".translationWord();
+    }
+  }
+
   rdValid(String? value) {
     String p = r'[а-яА-Я]{2}\d{8}$';
     RegExp regExp = RegExp(p);

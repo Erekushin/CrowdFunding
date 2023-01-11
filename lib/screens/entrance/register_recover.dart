@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../controller/entrance.dart';
+import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
 import '../../helpers/gvariables.dart';
 import '../../style/color.dart';
@@ -26,15 +27,11 @@ class Register_Recover extends StatefulWidget {
 class _Register_RecoverState extends State<Register_Recover> {
   final crowdlog = logger(Register_Recover);
   final cont = Get.put(EntranceCont());
-  var nullTxt = TextEditingController();
-  var scrollCont = ScrollController();
 
-  String selectionCountry = "MNG";
-  String selectionGender = "Эр";
-  @override
   String title = '';
   String caseEmail = '';
   String casePhone = '';
+  @override
   void initState() {
     if (widget.title == 'Бүртгүүлэх') {
       cont.recieverTypeVis.value = true;
@@ -50,6 +47,8 @@ class _Register_RecoverState extends State<Register_Recover> {
     super.initState();
   }
 
+//#region helper funcs
+  var scrollCont = ScrollController();
   jumptobottom() async {
     Future.delayed(const Duration(milliseconds: 300), () {
       scrollCont.animateTo(scrollCont.position.maxScrollExtent,
@@ -57,135 +56,138 @@ class _Register_RecoverState extends State<Register_Recover> {
     });
   }
 
+//#endregion
+
+  var nullTxt = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppbarSquare(
-        height: GlobalVariables.gHeight * .12,
-        leadingIcon: const Icon(
-          FontAwesomeIcons.chevronLeft,
-          color: Colors.black,
-          size: 18,
+    return WillPopScope(
+      onWillPop: () async {
+        cont.cleanRegisterInfo();
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppbarSquare(
+          height: GlobalVariables.gHeight * .12,
+          leadingIcon: const Icon(
+            FontAwesomeIcons.chevronLeft,
+            color: Colors.black,
+            size: 18,
+          ),
+          menuAction: () {
+            cont.cleanRegisterInfo();
+            Get.back();
+          },
+          titleColor: Colors.black,
+          color: Colors.white,
+          title: widget.title,
         ),
-        menuAction: () {
-          Get.back();
-        },
-        titleColor: Colors.black,
-        color: Colors.white,
-        title: widget.title,
-      ),
-      body: GetX<EntranceCont>(
-        builder: (littleCont) {
-          return SingleChildScrollView(
-            controller: scrollCont,
-            child: Container(
-                alignment: Alignment.center,
-                margin: const EdgeInsets.only(top: 20, bottom: 20),
-                child: Column(
-                  children: [
-                    box(title, registerSeq1(), cont.recieverTypeVis.value),
-                    box(
-                        casePhone,
-                        registerSeq2(
-                            1,
-                            cont.phoneTxt,
-                            nullTxt,
-                            nullTxt,
-                            '99999999',
-                            '',
-                            '',
-                            CoreColor.mainGreen,
-                            'Нууц дугаар авах', () {
-                          jumptobottom();
-                          cont.otpSend(
-                              widget.title,
-                              'Утас',
-                              widget.title == 'Бүртгүүлэх'
-                                  ? 'auth/identify?text='
-                                  : 'auth/password?identity=');
-                        }),
-                        cont.phoneVis.value),
-                    box(
-                        caseEmail,
-                        registerSeq2(
-                            1,
-                            cont.emailTxt,
-                            nullTxt,
-                            nullTxt,
-                            'hello@exaple.com',
-                            '',
-                            '',
-                            CoreColor.mainGreen,
-                            'Нууц дугаар авах', () async {
-                          await cont.otpSend(
-                              widget.title,
-                              'Е-Мэйл',
-                              widget.title == 'Бүртгүүлэх'
-                                  ? 'auth/identify?text='
-                                  : 'auth/password?identity=');
-                          jumptobottom();
-                        }),
-                        cont.emailVis.value),
-                    box(
-                        'Хүлээн авсан нууц дугаарыг, өөрийн цаашид ашиглах нууц дугаарын хамтаар оруулна уу',
-                        registerSeq2(
-                            3,
-                            cont.otpTxt,
-                            cont.passTxt,
-                            cont.passVerifyTxt,
-                            'otp код',
-                            'нууц дугаар',
-                            'нууц дугаар давтах',
-                            CoreColor.mainGreen,
-                            'Бүртгэл үүсгэх', () async {
-                          await cont.register();
-                          jumptobottom();
-                        }),
-                        cont.otpVis.value),
-                    box(
-                        'Хүлээн авсан нууц дугаарыг, өөрийн цаашид ашиглах нууц дугаарын хамтаар оруулна уу!',
-                        registerSeq2(
-                            3,
-                            cont.otpTxt,
-                            cont.passTxt,
-                            cont.passVerifyTxt,
-                            'otp код',
-                            'нууц дугаар',
-                            'нууц дугаар давтах',
-                            CoreColor.mainGreen,
-                            'Нууц үг сэргээх', () async {
-                          await cont.resetPassword();
-                          jumptobottom();
-                        }),
-                        cont.otpVisRecover.value),
-                    box(
-                        'Иргэний мэдээлэл',
-                        registerSeq3(
-                            cont.rdtxt,
-                            'Регистрийн дугаараа оруулна уу',
-                            CoreColor.mainGreen,
-                            Colors.grey.withOpacity(.7),
-                            'илгээх',
-                            'алгасах', () {
-                          cont.documentFind(
-                              context, selectionCountry, selectionGender);
-                        }, () {
-                          Get.to(() => const ContentHome());
-                        }),
-                        cont.citizenInfoVis.value),
-                    Visibility(
-                      visible: cont.loading.value,
-                      child: Container(
-                        padding: const EdgeInsets.all(20),
-                        child: const Center(
-                          child: CircularProgressIndicator(),
+        body: GetX<EntranceCont>(
+          builder: (littleCont) {
+            return SingleChildScrollView(
+              controller: scrollCont,
+              child: Container(
+                  alignment: Alignment.center,
+                  margin: const EdgeInsets.only(top: 20, bottom: 20),
+                  child: Column(
+                    children: [
+                      box(title, registerSeq1(), cont.recieverTypeVis.value),
+                      box(
+                          casePhone,
+                          registerSeq2(
+                              1,
+                              cont.phoneTxt,
+                              nullTxt,
+                              nullTxt,
+                              '99999999',
+                              '',
+                              '',
+                              CoreColor.mainGreen,
+                              'Нууц дугаар авах', () {
+                            jumptobottom();
+                            cont.otpSend(
+                                widget.title,
+                                'Утас',
+                                widget.title == 'Бүртгүүлэх'
+                                    ? 'auth/identify?text='
+                                    : 'auth/password?identity=');
+                          }),
+                          cont.phoneVis.value),
+                      box(
+                          caseEmail,
+                          registerSeq2(
+                              1,
+                              cont.emailTxt,
+                              nullTxt,
+                              nullTxt,
+                              'hello@exaple.com',
+                              '',
+                              '',
+                              CoreColor.mainGreen,
+                              'Нууц дугаар авах', () async {
+                            await cont.otpSend(
+                                widget.title,
+                                'Е-Мэйл',
+                                widget.title == 'Бүртгүүлэх'
+                                    ? 'auth/identify?text='
+                                    : 'auth/password?identity=');
+                            cont.otpTxt.clear();
+                            cont.passTxt.clear();
+                            cont.passVerifyTxt.clear();
+                            jumptobottom();
+                          }),
+                          cont.emailVis.value),
+                      box(
+                          'Хүлээн авсан нууц дугаарыг, өөрийн цаашид ашиглах нууц кодын хамтаар оруулна уу!',
+                          registerSeq2(
+                              3,
+                              cont.otpTxt,
+                              cont.passTxt,
+                              cont.passVerifyTxt,
+                              'otp код',
+                              'нууц дугаар',
+                              'нууц дугаар давтах',
+                              CoreColor.mainGreen,
+                              'Бүртгүүлэх', () async {
+                            await cont.register(() {
+                              return dialogy();
+                            }, () {
+                              return failedDialogy();
+                            });
+                          }),
+                          cont.otpVis.value),
+                      box(
+                          'Хүлээн авсан нууц дугаарыг, өөрийн цаашид ашиглах нууц кодын хамтаар оруулна уу!',
+                          registerSeq2(
+                              3,
+                              cont.otpTxt,
+                              cont.passTxt,
+                              cont.passVerifyTxt,
+                              'otp код',
+                              'нууц дугаар',
+                              'нууц дугаар давтах',
+                              CoreColor.mainGreen,
+                              'Нууц үг сэргээх', () async {
+                            await cont.resetPassword();
+                          }),
+                          cont.otpVisRecover.value),
+                      Visibility(
+                        visible: cont.loading.value,
+                        child: Container(
+                          padding: const EdgeInsets.all(20),
+                          child: const Center(
+                            child: CircularProgressIndicator(),
+                          ),
                         ),
                       ),
-                    )
-                  ],
-                )),
-          );
-        },
+                      const SizedBox(
+                        height: 40,
+                      )
+                    ],
+                  )),
+            );
+          },
+        ),
       ),
     );
   }
@@ -196,6 +198,448 @@ class _Register_RecoverState extends State<Register_Recover> {
       width: GlobalVariables.gWidth * .8,
       height: 1,
       color: Colors.black45,
+    );
+  }
+
+  Widget box(String title, Widget chilaka, bool visibility) {
+    return Visibility(
+      visible: visibility,
+      child: Container(
+        margin: const EdgeInsets.only(top: 40),
+        padding: const EdgeInsets.all(25),
+        width: GlobalVariables.gWidth * .9,
+        decoration: BoxDecoration(
+            color: const Color(0XFFF8F8F8),
+            borderRadius: const BorderRadius.all(Radius.circular(15)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(.4),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+                blurStyle: BlurStyle.outer,
+              )
+            ]),
+        child: Column(
+          children: [
+            Text(title),
+            spacerLine(),
+            const SizedBox(
+              height: 15,
+            ),
+            chilaka
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget registerSeq1() {
+    var listdata = <String>['Утас', 'Е-Мэйл'];
+    return SizedBox(
+        child: OptionsHorizontal(
+            valueList: listdata,
+            selected: '',
+            func: (value) {
+              if (value == "Утас") {
+                cont.phoneVis.value = true;
+                cont.emailVis.value = false;
+
+                cont.otpVis = false.obs;
+                cont.otpVisRecover = false.obs;
+                cont.loading = false.obs;
+                cont.phoneTxt.clear();
+                cont.emailTxt.clear();
+                cont.otpTxt.clear();
+                cont.passTxt.clear();
+                cont.passVerifyTxt.clear();
+                cont.registerText = '';
+              } else if (value == "Е-Мэйл") {
+                cont.emailVis.value = true;
+                cont.phoneVis.value = false;
+                cont.otpVis = false.obs;
+                cont.otpVisRecover = false.obs;
+                cont.loading = false.obs;
+                cont.phoneTxt.clear();
+                cont.emailTxt.clear();
+                cont.otpTxt.clear();
+                cont.passTxt.clear();
+                cont.passVerifyTxt.clear();
+                cont.registerText = '';
+              }
+            }));
+  }
+
+  Widget registerSeq2(
+      int type,
+      TextEditingController txtCont1,
+      TextEditingController txtCont2,
+      TextEditingController txtCont3,
+      String lbl1,
+      String lbl2,
+      String lbl3,
+      btnClr,
+      btnTitle,
+      Function func) {
+    switch (type) {
+      case 1:
+        return Column(
+          children: [
+            Container(
+              child: txtField2(txtCont1, lbl1),
+            ),
+            const SizedBox(
+              height: 15,
+            ),
+            generalBtn(btnClr, btnTitle, func)
+          ],
+        );
+      case 3:
+        return Column(
+          children: [
+            txtField2(txtCont1, lbl1),
+            TxtFieldPass(txtCont: txtCont2, hinttxt: lbl2),
+            TxtFieldPass(txtCont: txtCont3, hinttxt: lbl3),
+            const SizedBox(
+              height: 15,
+            ),
+            generalBtn(btnClr, btnTitle, func)
+          ],
+        );
+      default:
+        return const SizedBox();
+    }
+  }
+
+  String selectionCountry = "MNG";
+  Object dialogy() {
+    return showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: Colors.black54,
+      pageBuilder: (context, anim1, anim2) {
+        return StatefulBuilder(builder: (context, setState) {
+          return Center(
+            child: SizedBox(
+              width: GlobalVariables.gWidth * .9,
+              height: GlobalVariables.gHeight * .9,
+              child: StatefulBuilder(
+                builder: (context, snapshot) {
+                  return Card(
+                    color: Colors.white,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              SizedBox(
+                                  width: 200,
+                                  child:
+                                      Image.asset('assets/images/success.png')),
+                              InkWell(
+                                onTap: () {
+                                  Get.offAll(() => const ContentHome());
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.all(10),
+                                  child: Icon(
+                                    FontAwesomeIcons.x,
+                                    color: Colors.black,
+                                    size: Sizes.iconSize,
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                          Container(
+                            color: Colors.grey.withOpacity(.3),
+                            padding: const EdgeInsets.all(10),
+                            margin: const EdgeInsets.only(
+                                bottom: 10, top: 10, left: 30, right: 30),
+                            child: const Text(
+                              'Бүртгэл амжилттай үүслээ та өөрийн иргэний мэдээллийг профайлын setting хэсэг рүү орон холбох боломжтой',
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.lightbulb,
+                                color: Colors.yellow,
+                                size: Sizes.iconSize,
+                              ),
+                              const SizedBox(width: 10),
+                              const SizedBox(
+                                width: 200,
+                                child: Text(
+                                  'Таний иргэний мэдээлэл хамгаалагдсан болно.',
+                                  style: TextStyle(
+                                      fontStyle: FontStyle.italic,
+                                      fontSize: 14),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              cont.cleanRegisterInfo();
+                              Get.offAll(() => const ContentHome());
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.only(
+                                  top: 10, bottom: 10, left: 40, right: 40),
+                              decoration: BoxDecoration(
+                                  color: Colors.grey.shade200,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(15))),
+                              child: const Text(
+                                "алгасах",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(left: 30, right: 30),
+                            child: Obx(
+                              () => DropdownButton(
+                                iconEnabledColor: CoreColor.mainGreen,
+                                iconDisabledColor: CoreColor.mainGreen,
+                                value: selectionCountry,
+                                isExpanded: true,
+                                hint: Text(
+                                  'pass_type_tr'.translationWord(),
+                                ),
+                                items: cont.countryList.map((value) {
+                                  return DropdownMenuItem(
+                                    value: value['iso_alpha_code_3'],
+                                    child: Text(
+                                      value['full_name'],
+                                    ),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {
+                                  setState(() {
+                                    selectionCountry = value.toString();
+                                  });
+                                },
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          selectionCountry != "MNG"
+                              ? Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20),
+                                  child: foriegnUser())
+                              : const SizedBox(),
+                          //#endregion
+
+                          selectionCountry == "MNG"
+                              ? Container(
+                                  padding: const EdgeInsets.only(
+                                      left: 20, right: 20),
+                                  child: txtField2(cont.rdtxt,
+                                      'Регистрийн дугаараа оруулна уу'),
+                                )
+                              : const SizedBox(),
+
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(left: 25, right: 25),
+                            child:
+                                generalBtn(CoreColor.mainGreen, 'илгээх', () {
+                              cont.documentFind(
+                                  context, selectionCountry, selectionGender);
+                            }),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                  ;
+                },
+              ),
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  Object failedDialogy() {
+    return showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
+      barrierColor: Colors.black54,
+      pageBuilder: (context, anim1, anim2) {
+        return StatefulBuilder(builder: (context, setState) {
+          return Center(
+            child: SizedBox(
+              width: GlobalVariables.gWidth * .9,
+              height: GlobalVariables.gHeight * .5,
+              child: StatefulBuilder(
+                builder: (context, snapshot) {
+                  return Card(
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            SizedBox(
+                                width: 200,
+                                child:
+                                    Image.asset('assets/images/success.png')),
+                            InkWell(
+                              onTap: () {
+                                Get.offAll(() => const ContentHome());
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.all(10),
+                                child: Icon(
+                                  FontAwesomeIcons.x,
+                                  color: Colors.black,
+                                  size: Sizes.iconSize,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                        Container(
+                          color: Colors.grey.withOpacity(.3),
+                          padding: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.only(
+                              bottom: 10, top: 10, left: 30, right: 30),
+                          child: const Text(
+                            'Бүртгэл амжилттай үүслээ та өөрийн иргэний мэдээллийг профайлын setting хэсэг рүү орон холбох боломжтой',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.lightbulb,
+                              color: Colors.yellow,
+                              size: Sizes.iconSize,
+                            ),
+                            const SizedBox(width: 10),
+                            const SizedBox(
+                              width: 200,
+                              child: Text(
+                                'Таний иргэний мэдээлэл хамгаалагдсан болно.',
+                                style: TextStyle(
+                                    fontStyle: FontStyle.italic, fontSize: 14),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Get.offAll(() => const ContentHome());
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.only(
+                                top: 10, bottom: 10, left: 40, right: 40),
+                            decoration: BoxDecoration(
+                                color: CoreColor.mainGreen,
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(15))),
+                            child: const Text(
+                              "Нэвтрэх",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        )
+                      ],
+                    ),
+                  );
+                  ;
+                },
+              ),
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  String selectionGender = "Эр";
+  Widget foriegnUser() {
+    return Column(
+      children: [
+        const Text(
+          'Үндсэн мэдээлэл',
+        ),
+        spacerLine(),
+        txtField2(cont.lastNameController, 'Нэр'),
+        txtField2(cont.firstNameController, 'Овог'),
+        const SizedBox(height: 10),
+        Container(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: DropdownButton(
+            iconEnabledColor: CoreColor.mainGreen,
+            iconDisabledColor: CoreColor.mainGreen,
+            isExpanded: true,
+            hint: const Text(
+              'Хүйс',
+            ),
+            items: ['Эр', 'Эм'].map((value) {
+              return DropdownMenuItem(
+                value: value,
+                child: Text(
+                  value,
+                ),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                selectionGender = value.toString();
+              });
+            },
+          ),
+        ),
+        datePicker('Төрсөн огноо', cont.birthday),
+        const SizedBox(height: 10),
+        const SizedBox(height: 10),
+        const Text(
+          'Паспортын мэдээлэл',
+        ),
+        spacerLine(),
+        txtField2(cont.docNoController, 'Паспортын дугаар'),
+        datePicker('Паспорт олгосон огноо', cont.givenDay),
+        datePicker('Паспорт дуусах огноо', cont.expiredDay),
+      ],
     );
   }
 
@@ -261,206 +705,6 @@ class _Register_RecoverState extends State<Register_Recover> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget box(String title, Widget chilaka, bool visibility) {
-    return Visibility(
-      visible: visibility,
-      child: Container(
-        margin: const EdgeInsets.only(top: 40),
-        padding: const EdgeInsets.all(25),
-        width: GlobalVariables.gWidth * .9,
-        decoration: BoxDecoration(
-            color: const Color(0XFFF8F8F8),
-            borderRadius: const BorderRadius.all(Radius.circular(15)),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(.4),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-                blurStyle: BlurStyle.outer,
-              )
-            ]),
-        child: Column(
-          children: [
-            Text(title),
-            spacerLine(),
-            const SizedBox(
-              height: 15,
-            ),
-            chilaka
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget registerSeq1() {
-    var listdata = <String>['Утас', 'Е-Мэйл'];
-    return SizedBox(
-        child: OptionsHorizontal(
-            valueList: listdata,
-            selected: '',
-            func: (value) {
-              if (value == "Утас") {
-                cont.phoneVis.value = true;
-                cont.emailVis.value = false;
-              } else if (value == "Е-Мэйл") {
-                cont.emailVis.value = true;
-                cont.phoneVis.value = false;
-              }
-            }));
-  }
-
-  Widget registerSeq2(
-      int type,
-      TextEditingController txtCont1,
-      TextEditingController txtCont2,
-      TextEditingController txtCont3,
-      String lbl1,
-      String lbl2,
-      String lbl3,
-      btnClr,
-      btnTitle,
-      Function func) {
-    switch (type) {
-      case 1:
-        return Column(
-          children: [
-            Container(
-              child: txtField2(txtCont1, lbl1),
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            generalBtn(btnClr, btnTitle, func)
-          ],
-        );
-      case 3:
-        return Column(
-          children: [
-            txtField2(txtCont1, lbl1),
-            txtField2(txtCont2, lbl2),
-            txtField2(txtCont3, lbl3),
-            const SizedBox(
-              height: 15,
-            ),
-            generalBtn(btnClr, btnTitle, func)
-          ],
-        );
-      default:
-        return const SizedBox();
-    }
-  }
-
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  Widget registerSeq3(
-      TextEditingController txtCont1,
-      String lbl1,
-      Color btnClr1,
-      Color btnClr2,
-      String btnTitle1,
-      String btnTitle2,
-      Function func1,
-      Function func2) {
-    return Form(
-      key: formKey,
-      child: Column(
-        children: [
-          //#region drop resource
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Obx(
-                () => DropdownButton(
-                  iconEnabledColor: CoreColor.mainGreen,
-                  iconDisabledColor: CoreColor.mainGreen,
-                  value: selectionCountry,
-                  isExpanded: true,
-                  hint: Text(
-                    'pass_type_tr'.translationWord(),
-                  ),
-                  items: cont.countryList.map((value) {
-                    return DropdownMenuItem(
-                      value: value['iso_alpha_code_3'],
-                      child: Text(
-                        value['full_name'],
-                      ),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectionCountry = value.toString();
-                    });
-                  },
-                ),
-              ),
-              const SizedBox(height: 20),
-              selectionCountry != "MNG" ? foriegnUser() : const SizedBox(),
-            ],
-          ),
-          //#endregion
-
-          selectionCountry == "MNG"
-              ? txtField2(txtCont1, lbl1)
-              : const SizedBox(),
-
-          const SizedBox(
-            height: 15,
-          ),
-          generalBtn(btnClr1, btnTitle1, func1),
-          const SizedBox(
-            height: 15,
-          ),
-          generalBtn(btnClr2, btnTitle2, func2)
-        ],
-      ),
-    );
-  }
-
-  Widget foriegnUser() {
-    return Column(
-      children: [
-        const Text(
-          'Үндсэн мэдээлэл',
-        ),
-        spacerLine(),
-        txtField2(cont.lastNameController, 'Нэр'),
-        txtField2(cont.firstNameController, 'Овог'),
-        const SizedBox(height: 10),
-        DropdownButton(
-          iconEnabledColor: CoreColor.mainGreen,
-          iconDisabledColor: CoreColor.mainGreen,
-          isExpanded: true,
-          hint: const Text(
-            'Хүйс',
-          ),
-          items: ['Эр', 'Эм'].map((value) {
-            return DropdownMenuItem(
-              value: value,
-              child: Text(
-                value,
-              ),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() {
-              selectionGender = value.toString();
-            });
-          },
-        ),
-        datePicker('Төрсөн огноо', cont.birthday),
-        const SizedBox(height: 10),
-        const SizedBox(height: 10),
-        const Text(
-          'Паспортын мэдээлэл',
-        ),
-        spacerLine(),
-        txtField2(cont.docNoController, 'Паспортын дугаар'),
-        datePicker('Паспорт олгосон огноо', cont.givenDay),
-        datePicker('Паспорт дуусах огноо', cont.expiredDay),
-      ],
     );
   }
 }

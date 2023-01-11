@@ -167,49 +167,49 @@ class _LoginScreenState extends State<LoginScreen> {
                       label: 'password_tr',
                       obscureText: hidePassword,
                     ),
-                    Positioned(
-                      right: 9,
-                      top: 20,
+                    Align(
+                      alignment: Alignment.centerRight,
                       child: InkWell(
                         onTap: () {
-                          Get.to(() => const Register_Recover(
-                                title: 'Нууц үг сэргээх',
-                              ));
+                          setState(() {
+                            hidePassword = !hidePassword;
+                          });
                         },
-                        child: Text(
-                          'Мартсан?',
-                          style: GoogleFonts.ubuntu(
-                            textStyle: TextStyle(
-                              color: CoreColor().backgroundGreen,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
+                        child: Container(
+                          margin: const EdgeInsets.only(right: 10),
+                          child: const Icon(
+                            FontAwesomeIcons.eye,
+                            size: 20,
                           ),
                         ),
                       ),
                     ),
-                    // Positioned(
-                    //   right: 100,
-                    //   top: 20,
-                    //   child: InkWell(
-                    //     onTap: () {
-                    //       Get.to(() => const ForgetPasswordScreen());
-                    //     },
-                    //     child: Text(
-                    //       'huuchin?',
-                    //       style: GoogleFonts.ubuntu(
-                    //         textStyle: TextStyle(
-                    //           color: CoreColor().backgroundGreen,
-                    //           fontWeight: FontWeight.w700,
-                    //           fontSize: 14,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
                   ],
                 ),
               ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Get.to(() => const Register_Recover(
+                          title: 'Нууц үг сэргээх',
+                        ));
+                  },
+                  child: Text(
+                    'Мартсан?',
+                    style: GoogleFonts.ubuntu(
+                      textStyle: TextStyle(
+                        color: CoreColor().backgroundGreen,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 50)
+              ],
             ),
             const SizedBox(height: 30),
             GeregeButtonWidget(

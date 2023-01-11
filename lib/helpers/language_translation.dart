@@ -27,6 +27,7 @@ class TranslationWords {
       'email_tr': 'Email',
       'otp_send_tr': 'OTP send',
       'email_regex_tr': 'Please enter the correct email address',
+      'otp_regex_tr': 'Please enter valid otp, it should contain 6 digit',
       'rd_regex_tr': 'Please enter the correct text',
       'phone_regex_tr': 'Please enter the correct phone number',
       "otp_tr": "OTP code",
@@ -111,6 +112,8 @@ class TranslationWords {
       'email_tr': 'И-мейл',
       'otp_send_tr': 'OTP илгээх',
       'email_regex_tr': 'Имэйл зөв оруулна уу',
+      'otp_regex_tr':
+          'OTP дугаарыг зөв оруулна уу! OTP нь 6 оронтой тоо байна гэдгийг анхаараарай',
       'rd_regex_tr': 'Регистрийн дугаараа зөв оруулна уу',
       'phone_regex_tr': 'Утасны дугаараа зөв оруулна уу',
       "otp_tr": "OTP код",

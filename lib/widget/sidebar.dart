@@ -71,7 +71,7 @@ class _SidebarState extends State<Sidebar> {
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize:
-                                          GlobalVariables.firstName.length > 9
+                                          GlobalVariables.firstName.length > 8
                                               ? 18
                                               : 25,
                                       fontWeight: FontWeight.bold),

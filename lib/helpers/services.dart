@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:get/get_connect/connect.dart';
 import 'package:get/route_manager.dart';
@@ -28,19 +29,11 @@ class Services extends GetConnect {
         },
       );
       crowdlog.wtf(
-          "status: ${response.status}  statusText: ${response.statusText}, response.statusCode ${response.statusCode} ");
-      if (response.hasError) {
-        switch (response.statusCode) {
-          case null:
-            response = const Response(
-                statusCode: 444, body: {'message': "Интэрнэт ээ шалгана уу!"});
-            break;
-          case 401:
-            Get.to(() => const LoginScreen());
-            break;
-        }
-      }
+          "postreq info: $url  bodyData: $bodyData, msgcode $msgcode, token: ${GlobalVariables.gStorage.read("token")}");
+      crowdlog.wtf(
+          "postreq status: ${response.status}  statusText: ${response.statusText}, response.statusCode ${response.statusCode}, response: $response ");
     } catch (e) {
+      crowdlog.wtf(e);
       //garsan aldaag tsugluuldag base heregtei bna
       response = const Response(statusCode: 500, body: {
         'message': "Ямар нэгэн алдаа гарлаа түр хүлээгээд дахин оролднуу!"
@@ -53,27 +46,31 @@ class Services extends GetConnect {
   /// [bodyData] request body data
   /// [token] check for token usage
   Future<Response> getRequest(String url, bool token, String msgcode) async {
-    var response = await get(url, headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'authorization': token == true
-          ? "Bearer ${GlobalVariables.gStorage.read("token")}"
-          : "",
-      'code': msgcode
-    }, decoder: (data) {
-      return data;
-    });
-    crowdlog
-        .wtf("status: ${response.status}  statusText: ${response.statusText} ");
-    if (response.hasError) {
-      switch (response.statusCode) {
-        case null:
-          response = const Response(
-              statusCode: 444, body: {'message': "Интэрнэт ээ шалгана уу!"});
-          break;
-        case 401:
-          Get.to(() => const LoginScreen());
-          break;
-      }
+    var response;
+    try {
+      response = await get(url, headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        'authorization': token == true
+            ? "Bearer ${GlobalVariables.gStorage.read("token")}"
+            : "",
+        'code': msgcode
+      }, decoder: (data) {
+        return data;
+      });
+      crowdlog.wtf(
+          "getreq info: $url , msgcode $msgcode, token:  ${GlobalVariables.gStorage.read("token")} ");
+      crowdlog.wtf(
+          "getreq status: ${response.status}  statusText: ${response.statusText} ");
+    } catch (e) {
+      crowdlog.wtf(e);
+      Get.snackbar(
+        '',
+        e.toString(),
+        colorText: Colors.black,
+        backgroundColor: Colors.grey.withOpacity(0.2),
+      );
+      //garsan aldaag tsugluuldag base heregtei bna
+
     }
     return response;
   }

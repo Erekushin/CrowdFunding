@@ -179,7 +179,6 @@ class _ContentHomeState extends State<ContentHome> {
   }
 
   //#endregion
-
   var scrollController = ScrollController(initialScrollOffset: 55);
   GlobalKey<ScaffoldState> menuSidebarKey = GlobalKey<ScaffoldState>();
   PageController pageCont = PageController();
@@ -277,7 +276,7 @@ class _ContentHomeState extends State<ContentHome> {
                   ),
                 )),
             SizedBox(
-              height: GlobalVariables.gHeight * .8,
+              height: GlobalVariables.gHeight * .78,
               child: PageView.builder(
                 onPageChanged: (currentpageIndex) {
                   setState(() {
