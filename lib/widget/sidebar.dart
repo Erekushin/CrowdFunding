@@ -29,13 +29,13 @@ class _SidebarState extends State<Sidebar> {
             child: Column(
               children: [
                 Container(
-                  color: CoreColor.mainGreen,
+                  color: CoreColor.mainPurple,
                   height: 50,
                 ),
                 Expanded(
                   flex: 3,
                   child: Container(
-                    color: CoreColor.mainGreen,
+                    color: CoreColor.mainPurple,
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -199,7 +199,7 @@ class _SidebarState extends State<Sidebar> {
             children: [
               Icon(
                 icon,
-                color: CoreColor.mainGreen,
+                color: CoreColor.mainPurple,
                 size: 18,
               ),
               const SizedBox(

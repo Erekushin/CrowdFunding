@@ -208,7 +208,7 @@ class _ContentHomeState extends State<ContentHome> {
           menuAction: () {
             menuSidebarKey.currentState!.openDrawer();
           },
-          color: CoreColor.mainGreen,
+          color: CoreColor.mainPurple,
         ),
         body: Column(
           children: [
@@ -234,7 +234,7 @@ class _ContentHomeState extends State<ContentHome> {
                                       margin: const EdgeInsets.only(top: 4),
                                       height: 4,
                                       width: 100,
-                                      color: CoreColor.mainGreen,
+                                      color: CoreColor.mainPurple,
                                     )
                                   : const SizedBox(
                                       width: 100,
@@ -264,7 +264,7 @@ class _ContentHomeState extends State<ContentHome> {
                                                 const EdgeInsets.only(top: 4),
                                             height: 4,
                                             width: 100,
-                                            color: CoreColor.mainGreen,
+                                            color: CoreColor.mainPurple,
                                           )
                                         : const SizedBox(
                                             width: 100,

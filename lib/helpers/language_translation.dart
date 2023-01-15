@@ -2,6 +2,8 @@ class TranslationWords {
   Map<String, Map<String, String>> languageKeys = {
     'en_US': {
       //#region error messages
+
+      'balance not enough.': 'Your wallet balance is insufficient',
       'record not found': 'record not found',
       'wrong user information': 'user information is incorrect',
       'user phone_no already exists': 'user phone number already exists',
@@ -86,6 +88,8 @@ class TranslationWords {
     },
     'mn_MN': {
       //#region error messages
+
+      'balance not enough.': 'таний хэтэвчний үлдэгдэл хүрэлцэхгүй байна',
       'record not found': 'Бүртгэл олдсонгүй',
       'wrong user information': 'Нэвтрэх нэр эсвэл нууц дугаар алдаатай байна.',
       'user phone_no already exists':

@@ -156,36 +156,31 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             const SizedBox(height: 20),
-            Expanded(
-              child: Container(
-                margin: const EdgeInsets.only(left: 35, right: 35, bottom: 15),
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    GeregeTextField(
+            Container(
+              margin: const EdgeInsets.only(
+                left: 35,
+                right: 35,
+                bottom: 15,
+              ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: GlobalVariables.gWidth * .8,
+                    child: GeregeTextField(
                       controller: _loginController.passwordTextController,
                       label: 'password_tr',
                       obscureText: hidePassword,
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: InkWell(
-                        onTap: () {
-                          setState(() {
-                            hidePassword = !hidePassword;
-                          });
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(right: 10),
-                          child: const Icon(
+                      suffinIcon: IconButton(
+                          onPressed: () => setState(() {
+                                hidePassword = !hidePassword;
+                              }),
+                          icon: const Icon(
                             FontAwesomeIcons.eye,
                             size: 20,
-                          ),
-                        ),
-                      ),
+                          )),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             Row(

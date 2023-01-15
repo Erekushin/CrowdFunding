@@ -15,6 +15,6 @@ class CoreColor {
   Color backgroundBtnBlue = const Color.fromRGBO(0, 114, 254, 1);
 
   static Color backlightGrey = const Color(0xFFF3F3F3);
-  static Color mainGreen = const Color.fromARGB(255, 10, 122, 55);
+  static Color mainPurple = const Color.fromARGB(255, 156, 109, 243);
   static Color hlprOrange = const Color(0xFFE77A3D);
 }

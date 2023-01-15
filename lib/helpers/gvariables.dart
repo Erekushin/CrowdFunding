@@ -39,7 +39,7 @@ class GlobalVariables {
   /// user information data start
   static String id = "";
   static String civilId = '';
-  static String regNo = '';
+  static String regNo = 'Регистрийн дугаар';
   static String familyName = '';
   static String lastName = '';
   static String firstName = '';

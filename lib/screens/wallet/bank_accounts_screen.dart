@@ -164,11 +164,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
       appBar: AppbarSquare(
         title: 'Банкны данснууд',
         titleColor: Colors.white,
-        leadingIcon: const Icon(
-          FontAwesomeIcons.chevronLeft,
-          color: Colors.white,
-          size: 18,
-        ),
+        leadingIcon: const SizedBox(),
         height: GlobalVariables.gWidth * .4,
         menuAction: () {
           Get.back();

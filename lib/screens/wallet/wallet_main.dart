@@ -167,7 +167,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                               color: Colors.grey.withOpacity(0.5), width: 2)),
                     ),
                     child: TabBar(
-                      indicatorColor: CoreColor.mainGreen,
+                      indicatorColor: CoreColor.mainPurple,
                       labelColor: Colors.black,
                       unselectedLabelColor: Colors.grey,
                       controller: tabContCharge,
@@ -388,7 +388,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
             radius: 10.0,
             elevation: 0.0,
             minWidth: GlobalVariables.gWidth / 1.6,
-            backgroundColor: CoreColor.mainGreen,
+            backgroundColor: CoreColor.mainPurple,
             borderColor: CoreColor().btnBlue,
             text: Text(
               'continue_btn_tr'.translationWord(),
@@ -901,8 +901,8 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                     radius: 10.0,
                     elevation: 0.0,
                     minWidth: GlobalVariables.gWidth / 1.6,
-                    backgroundColor: CoreColor.mainGreen,
-                    borderColor: CoreColor.mainGreen,
+                    backgroundColor: CoreColor.mainPurple,
+                    borderColor: CoreColor.mainPurple,
                     text: Text(
                       'withdraw_tr'.translationWord(),
                       style: const TextStyle(
@@ -1022,16 +1022,12 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
     return Scaffold(
       appBar: AppbarSquare(
         height: GlobalVariables.gHeight * .12,
-        leadingIcon: Icon(
-          FontAwesomeIcons.chevronLeft,
-          color: Colors.white,
-          size: Sizes.iconSize,
-        ),
+        leadingIcon: const SizedBox(),
         menuAction: () {
           Get.back();
         },
         titleColor: Colors.white,
-        color: CoreColor.mainGreen,
+        color: CoreColor.mainPurple,
         title: 'Хэтэвч',
       ),
       body: Column(
@@ -1175,7 +1171,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: CoreColor.mainGreen,
+                      color: CoreColor.mainPurple,
                     ),
                     width: 30,
                     height: 30,
@@ -1196,7 +1192,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(15)),
-                  color: CoreColor.mainGreen.withOpacity(.2)),
+                  color: CoreColor.mainPurple.withOpacity(.2)),
               child: Column(
                 children: [
                   Row(
@@ -1271,7 +1267,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              actionBtn('цэнэглэх', CoreColor.mainGreen, () async {
+              actionBtn('цэнэглэх', CoreColor.mainPurple, () async {
                 await getWalletAccounts();
                 setState(() {
                   chargeModal();

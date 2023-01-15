@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gerege_app_v2/global_players.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
@@ -32,14 +33,8 @@ class _PayInfoState extends State<PayInfo> {
     return Scaffold(
       appBar: AppbarSquare(
         height: GlobalVariables.gHeight * .12,
-        leadingIcon: const Icon(
-          FontAwesomeIcons.leftLong,
-          color: Colors.black,
-          size: 18,
-        ),
-        menuAction: () {
-          Get.back();
-        },
+        leadingIcon: const SizedBox(),
+        menuAction: () {},
         titleColor: Colors.black,
         color: CoreColor.backlightGrey,
         title: 'Төлбөрийн мэдээлэл',
@@ -124,7 +119,7 @@ class _PayInfoState extends State<PayInfo> {
                         borderRadius: const BorderRadius.only(
                             topRight: Radius.circular(15),
                             bottomRight: Radius.circular(15)),
-                        color: CoreColor.mainGreen,
+                        color: CoreColor.mainPurple,
                       ),
                       width: 50,
                       height: 50,
@@ -148,7 +143,7 @@ class _PayInfoState extends State<PayInfo> {
                 children: [
                   Icon(
                     FontAwesomeIcons.storeSlash,
-                    color: CoreColor.mainGreen,
+                    color: CoreColor.mainPurple,
                   ),
                   Container(
                     width: GlobalVariables.gWidth * .4,
@@ -165,7 +160,7 @@ class _PayInfoState extends State<PayInfo> {
                       child: Text(
                         'learn more',
                         style: TextStyle(
-                            color: CoreColor.mainGreen,
+                            color: CoreColor.mainPurple,
                             fontWeight: FontWeight.bold),
                       ))
                 ],
@@ -178,7 +173,7 @@ class _PayInfoState extends State<PayInfo> {
                 padding: const EdgeInsets.only(
                     top: 10, bottom: 10, left: 30, right: 30),
                 decoration: BoxDecoration(
-                    color: CoreColor.mainGreen,
+                    color: CoreColor.mainPurple,
                     borderRadius: const BorderRadius.all(Radius.circular(15))),
                 child: const Text(
                   'хөрөнгө оруулах',
@@ -204,40 +199,24 @@ class _PayInfoState extends State<PayInfo> {
     var bodyData = {
       "fund_id": int.parse(widget.item['id']),
       "user_id": int.parse(GlobalVariables.id),
-      "amount": fundingValue * 1000,
+      "amount": fundingValue * 10000,
     };
-    try {
-      await Services()
-          .postRequest(json.encode(bodyData),
-              '${CoreUrl.crowdfund}crowdfund_user', true, '')
-          .then((data) {
-        // Navigator.of(Get.overlayContext!).pop();
-        var res = data.body;
-        crowdlog.wtf(
-            '---fund to project---:body: $bodyData.................returned data ${data.body.toString()}');
-        switch (data.statusCode) {
-          case 200:
-            Get.snackbar(
-              '',
-              'Төсөлд амжилттай хөрөнгө орууллаа. Таньд амжилт хүсье',
-              backgroundColor: Colors.white60,
-              colorText: Colors.black,
-            );
-            break;
-          case 400:
-            break;
-          default:
-            Get.snackbar(
-              'warning_tr'.translationWord(),
-              res['message'].toString(),
-              backgroundColor: Colors.white60,
-              colorText: Colors.black,
-            );
-        }
-      });
-    } catch (e) {
+    await Services()
+        .postRequest(json.encode(bodyData),
+            '${CoreUrl.crowdfund}crowdfund_user', true, '')
+        .then((data) {
+      // Navigator.of(Get.overlayContext!).pop();
+      var res = data.body;
       crowdlog.wtf(
-          '---GET PROJECT LIST---:TOKEN: ${GlobalVariables.gStorage.read("token")}.................returned data ${e.toString()}');
-    }
+          '---fund to project---:body: $bodyData.................returned data ${data.body.toString()}');
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
+        Get.snackbar(
+          '',
+          'Төсөлд амжилттай хөрөнгө орууллаа. Таньд амжилт хүсье',
+          backgroundColor: Colors.white60,
+          colorText: Colors.black,
+        );
+      }, () {});
+    });
   }
 }

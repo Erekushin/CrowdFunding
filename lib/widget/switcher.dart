@@ -77,7 +77,7 @@ class _MySwitcher extends State<MySwitcher> with TickerProviderStateMixin {
               width: GlobalVariables.gWidth / 7.89,
               height: GlobalVariables.gHeight / 40,
               decoration: BoxDecoration(
-                color: switcherValue ? CoreColor.mainGreen : Colors.grey,
+                color: switcherValue ? CoreColor.mainPurple : Colors.grey,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(99),
                 ),

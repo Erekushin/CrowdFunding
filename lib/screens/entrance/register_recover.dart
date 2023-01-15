@@ -69,11 +69,7 @@ class _Register_RecoverState extends State<Register_Recover> {
       child: Scaffold(
         appBar: AppbarSquare(
           height: GlobalVariables.gHeight * .12,
-          leadingIcon: const Icon(
-            FontAwesomeIcons.chevronLeft,
-            color: Colors.black,
-            size: 18,
-          ),
+          leadingIcon: const SizedBox(),
           menuAction: () {
             cont.cleanRegisterInfo();
             Get.back();
@@ -102,15 +98,15 @@ class _Register_RecoverState extends State<Register_Recover> {
                               '99999999',
                               '',
                               '',
-                              CoreColor.mainGreen,
+                              CoreColor.mainPurple,
                               'Нууц дугаар авах', () {
-                            jumptobottom();
                             cont.otpSend(
                                 widget.title,
                                 'Утас',
                                 widget.title == 'Бүртгүүлэх'
                                     ? 'auth/identify?text='
                                     : 'auth/password?identity=');
+                            jumptobottom();
                           }),
                           cont.phoneVis.value),
                       box(
@@ -123,7 +119,7 @@ class _Register_RecoverState extends State<Register_Recover> {
                               'hello@exaple.com',
                               '',
                               '',
-                              CoreColor.mainGreen,
+                              CoreColor.mainPurple,
                               'Нууц дугаар авах', () async {
                             await cont.otpSend(
                                 widget.title,
@@ -147,13 +143,9 @@ class _Register_RecoverState extends State<Register_Recover> {
                               'otp код',
                               'нууц дугаар',
                               'нууц дугаар давтах',
-                              CoreColor.mainGreen,
+                              CoreColor.mainPurple,
                               'Бүртгүүлэх', () async {
-                            await cont.register(() {
-                              return dialogy();
-                            }, () {
-                              return failedDialogy();
-                            });
+                            await cont.register(context);
                           }),
                           cont.otpVis.value),
                       box(
@@ -166,7 +158,7 @@ class _Register_RecoverState extends State<Register_Recover> {
                               'otp код',
                               'нууц дугаар',
                               'нууц дугаар давтах',
-                              CoreColor.mainGreen,
+                              CoreColor.mainPurple,
                               'Нууц үг сэргээх', () async {
                             await cont.resetPassword();
                           }),
@@ -416,8 +408,8 @@ class _Register_RecoverState extends State<Register_Recover> {
                             padding: const EdgeInsets.only(left: 30, right: 30),
                             child: Obx(
                               () => DropdownButton(
-                                iconEnabledColor: CoreColor.mainGreen,
-                                iconDisabledColor: CoreColor.mainGreen,
+                                iconEnabledColor: CoreColor.mainPurple,
+                                iconDisabledColor: CoreColor.mainPurple,
                                 value: selectionCountry,
                                 isExpanded: true,
                                 hint: Text(
@@ -463,7 +455,7 @@ class _Register_RecoverState extends State<Register_Recover> {
                           Container(
                             padding: const EdgeInsets.only(left: 25, right: 25),
                             child:
-                                generalBtn(CoreColor.mainGreen, 'илгээх', () {
+                                generalBtn(CoreColor.mainPurple, 'илгээх', () {
                               cont.documentFind(
                                   context, selectionCountry, selectionGender);
                             }),
@@ -568,7 +560,7 @@ class _Register_RecoverState extends State<Register_Recover> {
                             padding: const EdgeInsets.only(
                                 top: 10, bottom: 10, left: 40, right: 40),
                             decoration: BoxDecoration(
-                                color: CoreColor.mainGreen,
+                                color: CoreColor.mainPurple,
                                 borderRadius: const BorderRadius.all(
                                     Radius.circular(15))),
                             child: const Text(
@@ -608,8 +600,8 @@ class _Register_RecoverState extends State<Register_Recover> {
         Container(
           padding: const EdgeInsets.only(left: 10, right: 10),
           child: DropdownButton(
-            iconEnabledColor: CoreColor.mainGreen,
-            iconDisabledColor: CoreColor.mainGreen,
+            iconEnabledColor: CoreColor.mainPurple,
+            iconDisabledColor: CoreColor.mainPurple,
             isExpanded: true,
             hint: const Text(
               'Хүйс',

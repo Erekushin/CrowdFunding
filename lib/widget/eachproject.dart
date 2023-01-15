@@ -86,7 +86,7 @@ Widget greenInfo(String txt) {
   return Text(
     txt,
     style: TextStyle(
-        fontWeight: FontWeight.bold, color: CoreColor.mainGreen, fontSize: 11),
+        fontWeight: FontWeight.bold, color: CoreColor.mainPurple, fontSize: 11),
   );
 }
 

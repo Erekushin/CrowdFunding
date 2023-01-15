@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 
 class GeregeTextField extends StatelessWidget {
-  const GeregeTextField({
+  GeregeTextField({
     Key? key,
     required this.controller,
     this.label,

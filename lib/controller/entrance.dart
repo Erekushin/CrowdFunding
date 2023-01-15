@@ -11,6 +11,7 @@ import '../helpers/gvariables.dart';
 import '../helpers/services.dart';
 import '../helpers/working_string.dart';
 import '../screens/content_home/home.dart';
+import '../screens/dialogs/registration_dialogs.dart';
 
 class EntranceCont extends GetxController {
   final crowdlog = logger(EntranceCont);
@@ -31,7 +32,7 @@ class EntranceCont extends GetxController {
   var passVerifyTxt = TextEditingController();
   String registerText = '';
 
-  register(Function countrySuccess, Function countryFailed) async {
+  register(BuildContext context) async {
     var bytes = utf8.encode(passTxt.text);
     var digest = md5.convert(bytes);
     var bodyData = {
@@ -64,7 +65,7 @@ class EntranceCont extends GetxController {
             GlobalVariables.gStorage
                 .write('userInformation', res['result']['user']);
             GlobalVariables.storageToVar();
-            getCountryList(countrySuccess, countryFailed);
+            getCountryList(context);
             loading.value = false;
           }, () {
             loading.value = false;
@@ -160,11 +161,12 @@ class EntranceCont extends GetxController {
               '---resetPassword---:text $registerText...passOrigin: ${passTxt.text} pass: $digest....otp: ${otpTxt.text}......... data ${data.body.toString()}.....url: $url');
 
           GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
+            cleanRegisterInfo();
             Get.snackbar(
               'Амжилттай',
               'Нууц үг амжилттай шинэчлэгдлээ',
               colorText: Colors.black,
-              backgroundColor: Colors.grey.withOpacity(0.2),
+              backgroundColor: Colors.white.withOpacity(0.5),
             );
             Get.to(() => const ContentHome());
             loading.value = false;
@@ -291,16 +293,16 @@ class EntranceCont extends GetxController {
   }
 
   RxList countryList = [].obs;
-  getCountryList(Function success, Function failed) async {
+  getCountryList(BuildContext context) async {
     loading.value = true;
     String url = '${CoreUrl.crowdfund}countries?page_size=500&page_number=1';
     await Services().getRequest(url, true, '').then((data) {
       crowdlog.wtf('---country list---:returned data ${data.body.toString()}');
       GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         countryList.value = data.body['result']['items'];
-        success();
+        dialogy(context);
       }, () {
-        failed();
+        failedDialogy(context);
       });
       loading.value = false;
     });

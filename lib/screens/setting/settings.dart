@@ -8,6 +8,7 @@ import '../../helpers/gvariables.dart';
 import '../../style/color.dart';
 import '../../widget/appbar_squeare.dart';
 import '../../widget/switcher.dart';
+import '../dialogs/registration_dialogs.dart';
 
 class Settings extends StatefulWidget {
   const Settings({Key? key}) : super(key: key);
@@ -23,16 +24,12 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       appBar: AppbarSquare(
         height: GlobalVariables.gHeight * .12,
-        leadingIcon: const Icon(
-          FontAwesomeIcons.chevronLeft,
-          color: Colors.white,
-          size: 18,
-        ),
+        leadingIcon: const SizedBox(),
         menuAction: () {
           Get.back();
         },
         titleColor: Colors.white,
-        color: CoreColor.mainGreen,
+        color: CoreColor.mainPurple,
         title: 'Тохиргоо',
       ),
       body: Container(
@@ -40,7 +37,7 @@ class _SettingsState extends State<Settings> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              settingUnit('Хурууны хээн нэвтрэлт', () {
+              settingUnit('Хурууны хээн нэвтрэлт', '', Colors.green, () {
                 if (GlobalVariables.ifFingering == false) {
                   GlobalPlayers.workingWithFile
                       .addNewItem('isFingering', 'true');
@@ -52,8 +49,25 @@ class _SettingsState extends State<Settings> {
                   GlobalPlayers.workingWithFile.deleteAll();
                 }
               }, true, GlobalVariables.ifFingering),
-              settingUnit('Нууц үг солих', () {}, false, false),
-              settingUnit('Гүйлгээний нууц үг солих', () {}, false, false)
+              settingUnit(
+                  'Нууц үг солих', '', Colors.green, () {}, false, false),
+              settingUnit('Гүйлгээний нууц үг солих', '', Colors.green, () {},
+                  false, false),
+              settingUnit(GlobalVariables.email.value, '', Colors.green, () {},
+                  false, false),
+              GlobalVariables.phoneNumber == ''
+                  ? settingUnit('Утасны дугаар оруулах', '', Colors.green, () {
+                      phoneDialogy(context);
+                    }, false, false)
+                  : settingUnit(GlobalVariables.phoneNumber, '', Colors.green,
+                      () {}, false, false),
+              GlobalVariables.regNo == ''
+                  ? settingUnit('Регистрийн дугаар оруулах',
+                      'баталгаажаагүй байна', Colors.red, () {
+                      auth.getCountryList(context);
+                    }, false, false)
+                  : settingUnit(GlobalVariables.regNo, '', Colors.green, () {},
+                      false, false),
             ],
           ),
         ),
@@ -61,29 +75,48 @@ class _SettingsState extends State<Settings> {
     );
   }
 
-  Widget settingUnit(
-      String title, Function func, bool isSwitcher, bool isSwitcherActivated) {
+  Widget settingUnit(String title, String discription, Color discriptionColor,
+      Function func, bool isSwitcher, bool isSwitcherActivated) {
     return Container(
       padding: const EdgeInsets.all(5),
-      margin: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-          border:
-              Border(bottom: BorderSide(color: Colors.black45, width: 0.5))),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      margin: const EdgeInsets.only(left: 20, right: 20, top: 5, bottom: 5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(title),
-          isSwitcher
-              ? MySwitcher(
-                  switcherValue: isSwitcherActivated,
-                  func: () {
-                    func();
-                  },
-                )
-              : const Icon(
-                  FontAwesomeIcons.rightLong,
-                  size: 12,
-                )
+          InkWell(
+            onTap: () {
+              if (!isSwitcher) {
+                func();
+              }
+            },
+            child: Container(
+              decoration: const BoxDecoration(
+                  border: Border(
+                      bottom: BorderSide(color: Colors.black45, width: 0.5))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(title),
+                  isSwitcher
+                      ? MySwitcher(
+                          switcherValue: isSwitcherActivated,
+                          func: () {
+                            func();
+                          },
+                        )
+                      : const Icon(
+                          FontAwesomeIcons.rightLong,
+                          size: 12,
+                        )
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          Text(
+            discription,
+            style: TextStyle(color: discriptionColor),
+          )
         ],
       ),
     );

@@ -15,7 +15,7 @@ class AppbarSquare extends StatefulWidget implements PreferredSizeWidget {
   String title;
   Color titleColor;
   double height;
-  Icon leadingIcon;
+  Widget leadingIcon;
   final VoidCallback menuAction;
   Color color;
   @override
@@ -37,9 +37,20 @@ class _AppbarSquareState extends State<AppbarSquare> {
             color: widget.color,
             border: Border.all(color: widget.color, width: 0)),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            Text(
+              widget.title,
+              maxLines: 4,
+              softWrap: true,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.sourceSansPro(
+                  height: 1,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: widget.titleColor),
+            ),
             InkWell(
               onTap: () {
                 widget.menuAction();
@@ -52,23 +63,6 @@ class _AppbarSquareState extends State<AppbarSquare> {
                 child: widget.leadingIcon,
               ),
             ),
-            const SizedBox(
-              width: 20,
-            ),
-            Text(
-              widget.title,
-              maxLines: 4,
-              softWrap: true,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.sourceSansPro(
-                  height: 1,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: widget.titleColor),
-            ),
-            const SizedBox(
-              width: 10,
-            )
           ],
         ),
       ),

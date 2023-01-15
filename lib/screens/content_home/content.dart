@@ -129,7 +129,7 @@ class _ContentState extends State<Content> {
                       const Spacer(),
                       Container(
                         decoration: BoxDecoration(
-                            color: CoreColor.mainGreen,
+                            color: CoreColor.mainPurple,
                             borderRadius:
                                 const BorderRadius.all(Radius.circular(5))),
                         width: 100,
@@ -242,7 +242,7 @@ class _ContentState extends State<Content> {
                     width: 220,
                     height: 50,
                     decoration: BoxDecoration(
-                        color: CoreColor.mainGreen,
+                        color: CoreColor.mainPurple,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(15))),
                     child: const Center(
@@ -293,7 +293,7 @@ class _ContentState extends State<Content> {
           style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: CoreColor.mainGreen),
+              color: CoreColor.mainPurple),
         ),
         infoTxtStyle(blackOne)
       ],

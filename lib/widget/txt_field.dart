@@ -37,6 +37,51 @@ Widget txtField2(
   );
 }
 
+Widget titledTextField() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'First name',
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      Container(
+        padding: const EdgeInsets.only(
+          left: 15,
+        ),
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey.withOpacity(.5)),
+            borderRadius: const BorderRadius.all(Radius.circular(5))),
+        child: TextField(
+          onChanged: (value) {},
+          style: GoogleFonts.sourceSansPro(
+              height: 2,
+              fontWeight: FontWeight.w600,
+              fontSize: 15,
+              color: Colors.black54),
+          decoration: const InputDecoration(
+            suffixIcon: Icon(
+              FontAwesomeIcons.pen,
+              color: Colors.grey,
+              size: 15,
+            ),
+            hintStyle: TextStyle(color: Colors.black54),
+            border: InputBorder.none,
+            contentPadding: EdgeInsets.all(4),
+            hintText: 'dfdfd',
+          ),
+        ),
+      ),
+      const SizedBox(
+        height: 30,
+      )
+    ],
+  );
+}
+
 class TxtFieldPass extends StatefulWidget {
   TxtFieldPass({super.key, required this.txtCont, required this.hinttxt});
   TextEditingController txtCont;
