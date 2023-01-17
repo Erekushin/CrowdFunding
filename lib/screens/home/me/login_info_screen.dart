@@ -296,8 +296,8 @@ class _LoginInfoScreenState extends State<LoginInfoScreen> {
                       ),
                       const SizedBox(height: 20),
                       Center(
-                        child: generalBtn(CoreColor().backgroundGreen,
-                            CoreColor().backgroundGreen, 'Нууц үг солих', () {
+                        child: generalBtn(CoreColor.mainPurple,
+                            CoreColor.mainPurple, 'Нууц үг солих', () {
                           if (passFormkey.currentState!.validate()) {
                             changePassword();
                           }

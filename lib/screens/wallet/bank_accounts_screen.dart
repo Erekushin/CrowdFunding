@@ -184,6 +184,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
           children: [
             InkWell(
               onTap: () {
+                print('zov huudas');
                 setState(() {
                   getBankList();
                 });
@@ -227,6 +228,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
           return GestureDetector(
             onTap: () {
               setState(() {});
+              print('dsdsdsd');
             },
             child: Container(
               height: 200,
@@ -414,9 +416,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
                 ),
               ),
               const SizedBox(height: 20),
-              generalBtn(
-                  CoreColor().backgroundGreen,
-                  CoreColor().backgroundGreen,
+              generalBtn(CoreColor.mainPurple, CoreColor.mainPurple,
                   'delete_tr'.translationWord(), () {
                 setState(() {
                   // ren(data['id']);
@@ -615,9 +615,7 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
                   width: GlobalVariables.gWidth,
                   height: 50,
                   alignment: Alignment.center,
-                  child: generalBtn(
-                      CoreColor().backgroundGreen,
-                      CoreColor().backgroundGreen,
+                  child: generalBtn(CoreColor.mainPurple, CoreColor.mainPurple,
                       'save_tr'.translationWord(), () {
                     if (bankId != null && accountNumber.text != '') {
                       addBankAccount();

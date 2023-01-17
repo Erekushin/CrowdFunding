@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 
 import '../../../helpers/services.dart';
 import '../../../widget/fundamental/btn.dart';
-import '../../content_home/home.dart';
+import '../../funding/projects.dart';
 
 class DocumentScreen extends StatefulWidget {
   const DocumentScreen({Key? key}) : super(key: key);
@@ -47,7 +47,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
 
   back() {
     // Get.offAll(() => const MainTab(indexTab: 0));
-    Get.to(() => const ContentHome());
+    Get.to(() => const Projects());
   }
 
   deleteDocument(item) {
@@ -84,7 +84,7 @@ class _DocumentScreenState extends State<DocumentScreen> {
             onPressed: () {
               // Get.back();
               // Get.offAll(() => const MainTab(indexTab: 0));
-              Get.to(() => const ContentHome());
+              Get.to(() => const Projects());
             },
             icon: const Icon(
               Icons.arrow_back_ios_new,
@@ -235,12 +235,12 @@ class _DocumentScreenState extends State<DocumentScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              generalBtn(CoreColor().backgroundGreen,
-                  CoreColor().backgroundGreen, 'Буцах', () {
+              generalBtn(CoreColor.mainPurple, CoreColor.mainPurple, 'Буцах',
+                  () {
                 Get.back();
               }),
-              generalBtn(CoreColor().backgroundGreen,
-                  CoreColor().backgroundGreen, 'Устгах', () {
+              generalBtn(CoreColor.mainPurple, CoreColor.mainPurple, 'Устгах',
+                  () {
                 deleteDocument(item);
               }),
               const SizedBox(width: 10),

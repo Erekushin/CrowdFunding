@@ -3,15 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
-import 'package:local_auth/local_auth.dart';
 
 import '../../controller/entrance.dart';
 import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
 import '../../helpers/gvariables.dart';
-import '../../widget/combos/appbar_squeare.dart';
 import '../../widget/fundamental/btn.dart';
 import '../../widget/combos/sidebar.dart';
+import '../funding/projects.dart';
 
 class LandingHome extends StatefulWidget {
   const LandingHome({super.key});
@@ -57,20 +56,6 @@ class _LandingHomeState extends State<LandingHome> {
               menuSidebarKey.currentState?.closeEndDrawer();
             },
           ),
-          appBar: AppbarSquare(
-            height: GlobalVariables.gWidth * .26,
-            leadingIcon: Icon(
-              FontAwesomeIcons.bars,
-              color: Colors.black,
-              size: Sizes.iconSize,
-            ),
-            title: 'CrowdfundingMN',
-            titleColor: Colors.black,
-            menuAction: () {
-              menuSidebarKey.currentState!.openEndDrawer();
-            },
-            color: Colors.white,
-          ),
           body: SizedBox(
             height: GlobalVariables.gHeight,
             child: Column(
@@ -78,6 +63,7 @@ class _LandingHomeState extends State<LandingHome> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 50),
+                //TODO hel solih yum tavih
                 SizedBox(
                     width: 400,
                     child: Image.asset('assets/images/success.png')),
@@ -127,12 +113,17 @@ class _LandingHomeState extends State<LandingHome> {
                   width: GlobalVariables.gWidth * .5,
                   child: generalBtn(
                       CoreColor.mainPurple, Colors.white, 'Dive Into', () {
-                    GlobalPlayers.workingBioMatrix.checkBiometrics(mounted, () {
-                      _loginController.passwordTextController.text =
-                          GlobalVariables.pass;
-                      _loginController.searchText.text = GlobalVariables.name;
-                      _loginController.loginUser();
-                    });
+                    if (GlobalVariables.pass != '') {
+                      GlobalPlayers.workingBioMatrix.checkBiometrics(mounted,
+                          () {
+                        _loginController.passwordTextController.text =
+                            GlobalVariables.pass;
+                        _loginController.searchText.text = GlobalVariables.name;
+                        _loginController.loginUser();
+                      });
+                    } else {
+                      Get.to(() => const Projects());
+                    }
                   }),
                 ),
                 Row(

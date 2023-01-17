@@ -59,6 +59,15 @@ class WorkingBioMatrix {
   final LocalAuthentication auth = LocalAuthentication();
   List<BiometricType>? _availableBiometrics;
   BioSupportState bioSupportState = BioSupportState.unknown;
+
+  void checkSupportState() {
+    auth.isDeviceSupported().then(
+          (bool isSupported) => bioSupportState = isSupported
+              ? BioSupportState.supported
+              : BioSupportState.unsupported,
+        );
+  }
+
   Future<void> checkBiometrics(bool moun, Function successFunc) async {
     late bool canCheckBiometrics;
     try {

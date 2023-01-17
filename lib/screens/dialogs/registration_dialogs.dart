@@ -10,7 +10,7 @@ import '../../helpers/gvariables.dart';
 import '../../style/color.dart';
 import '../../widget/fundamental/btn.dart';
 import '../../widget/fundamental/txt_field.dart';
-import '../content_home/home.dart';
+import '../funding/projects.dart';
 
 var auth = Get.find<EntranceCont>();
 String selectionCountry = "MNG";
@@ -49,7 +49,7 @@ Object dialogy(BuildContext context) {
                                     Image.asset('assets/images/success.png')),
                             InkWell(
                               onTap: () {
-                                Get.offAll(() => const ContentHome());
+                                Get.offAll(() => const Projects());
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(10),
@@ -388,7 +388,7 @@ Object failedDialogy(BuildContext context) {
                               child: Image.asset('assets/images/success.png')),
                           InkWell(
                             onTap: () {
-                              Get.offAll(() => const ContentHome());
+                              Get.offAll(() => const Projects());
                             },
                             child: Container(
                               margin: const EdgeInsets.all(10),
@@ -435,7 +435,7 @@ Object failedDialogy(BuildContext context) {
                       ),
                       InkWell(
                         onTap: () {
-                          Get.offAll(() => const ContentHome());
+                          Get.offAll(() => const Projects());
                         },
                         child: Container(
                           padding: const EdgeInsets.only(

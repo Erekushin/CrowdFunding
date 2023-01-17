@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
+import 'package:gerege_app_v2/screens/profile/paymentDetail.dart';
 import 'package:gerege_app_v2/screens/profile/security.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
 import '../../widget/combos/appbar_squeare.dart';
+import '../../widget/combos/sidebar.dart';
 import '../../widget/fundamental/btn.dart';
 import '../../widget/fundamental/txt_field.dart';
 import 'fundedProjects.dart';
@@ -34,9 +36,11 @@ class _ProfileState extends State<Profile> {
   TextEditingController email = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController rd = TextEditingController();
+  GlobalKey<ScaffoldState> menuSidebarKeyPro = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return profileTop(
+        menuSidebarKeyPro,
         optionBtnsHeight,
         0,
         Column(
@@ -127,7 +131,7 @@ List optionBtns = [
     'icon': FontAwesomeIcons.creditCard,
     'name': 'Payment Details',
     'func': (int i) {
-      Get.off(() => const Profile(), arguments: i);
+      Get.off(() => const PaymentDetail(), arguments: i);
     }
   },
   {
@@ -139,10 +143,19 @@ List optionBtns = [
   },
 ];
 
-//each btn is 60 for height
-Widget profileTop(double optionBtnsHeight, int comingIndex, Widget profileBody,
+Widget profileTop(
+    GlobalKey<ScaffoldState> menuSidebarKey,
+    double optionBtnsHeight,
+    int comingIndex,
+    Widget profileBody,
     Function func) {
   return Scaffold(
+      key: menuSidebarKey,
+      endDrawer: Sidebar(
+        menuAction: () {
+          menuSidebarKey.currentState?.closeEndDrawer();
+        },
+      ),
       appBar: AppbarSquare(
         height: GlobalVariables.gHeight * .12,
         leadingIcon: Icon(
@@ -150,7 +163,9 @@ Widget profileTop(double optionBtnsHeight, int comingIndex, Widget profileBody,
           color: Colors.black,
           size: Sizes.iconSize,
         ),
-        menuAction: () {},
+        menuAction: () {
+          menuSidebarKey.currentState!.openEndDrawer();
+        },
         titleColor: Colors.black,
         color: Colors.white,
         title: 'Crowd',

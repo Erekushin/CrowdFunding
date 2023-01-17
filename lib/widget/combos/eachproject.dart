@@ -4,6 +4,7 @@ import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import '../../helpers/working_dates.dart';
 import '../../style/color.dart';
+import '../fundamental/accessory.dart';
 
 Widget eachproject(var item, int progress, String imageUrl, Function func) {
   return InkWell(
@@ -110,12 +111,7 @@ Widget greenInfo(String txt, IconData icon) {
   );
 }
 
-Widget littleSpacer() {
-  return Container(
-    height: 1.5,
-    color: Colors.grey.withOpacity(.3),
-  );
-}
+
 
 
 // Row(

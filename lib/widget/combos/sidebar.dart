@@ -4,10 +4,40 @@ import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
-import '../../global_players.dart';
 import '../../screens/entrance/login.dart';
+import '../../screens/home/landing_home.dart';
 import '../../screens/profile/profile.dart';
 import '../../screens/wallet/wallet_main.dart';
+import '../fundamental/accessory.dart';
+import 'dart:math';
+
+class MyCustomPainter extends CustomPainter {
+  final double animationValue;
+
+  MyCustomPainter(this.animationValue);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    for (int value = 3; value >= 0; value--) {
+      circle(canvas, Rect.fromLTRB(0, 0, size.width, size.height),
+          value + animationValue);
+    }
+  }
+
+  void circle(Canvas canvas, Rect rect, double value) {
+    Paint paint = Paint()
+      ..color =
+          CoreColor.mainPurple.withOpacity((1 - (value / 4)).clamp(.0, 1));
+
+    canvas.drawCircle(rect.center,
+        sqrt((rect.width * .5 * rect.width * .5) * value / 4), paint);
+  }
+
+  @override
+  bool shouldRepaint(MyCustomPainter oldDelegate) {
+    return true;
+  }
+}
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key, required this.menuAction});
@@ -16,7 +46,38 @@ class Sidebar extends StatefulWidget {
   State<Sidebar> createState() => _SidebarState();
 }
 
-class _SidebarState extends State<Sidebar> {
+class _SidebarState extends State<Sidebar> with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _animation;
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+
+    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
+      ..addListener(() {
+        setState(() {});
+      })
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.dismissed) {
+          _animationController.forward();
+        } else if (status == AnimationStatus.completed) {
+          _animationController.repeat();
+        }
+      });
+
+    _animationController.forward();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -46,76 +107,88 @@ class _SidebarState extends State<Sidebar> {
             color: Colors.white,
             child: Column(
               children: [
-                Container(
-                  color: CoreColor.mainPurple,
-                  height: 50,
-                ),
                 Expanded(
-                  flex: 3,
+                  flex: 4,
                   child: Container(
-                    color: CoreColor.mainPurple,
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        const SizedBox(
-                          width: 50,
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Get.to(() => const Profile());
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: CoreColor.backlightGrey,
-                                backgroundImage: const NetworkImage(
-                                    'https://i.pinimg.com/564x/66/1e/3c/661e3c81c896137ea8b88f54dfebf55c.jpg'),
-                                radius: 40,
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            SizedBox(
-                              width: 140,
-                              height: 20,
-                              child: Center(
-                                child: Text(
-                                  GlobalVariables.firstName,
-                                  softWrap: true,
-                                  maxLines: 3,
+                        Container(
+                          padding: const EdgeInsets.only(
+                              left: 10, right: 5, bottom: 5),
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const Text(
+                                  'menu',
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize:
-                                          GlobalVariables.firstName.length > 8
-                                              ? 18
-                                              : 25,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.bold),
                                 ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            )
-                          ],
+                                IconButton(
+                                  onPressed: () {
+                                    widget.menuAction();
+                                  },
+                                  icon: const Icon(
+                                    FontAwesomeIcons.x,
+                                    color: Colors.grey,
+                                    size: 18,
+                                  ),
+                                ),
+                              ]),
                         ),
-                        IconButton(
-                          onPressed: () {
-                            widget.menuAction();
-                          },
-                          icon: Container(
-                            padding: const EdgeInsets.all(7),
-                            decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(.2),
-                                shape: BoxShape.circle),
-                            child: Icon(
-                              FontAwesomeIcons.bars,
-                              color: Colors.white,
-                              size: Sizes.iconSize,
+                        littleSpacer(),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        InkWell(
+                            onTap: () {
+                              Get.to(() => const Profile());
+                            },
+                            child: SizedBox(
+                              width: 150,
+                              child: Stack(
+                                children: [
+                                  CustomPaint(
+                                    painter: MyCustomPainter(_animation.value),
+                                    child: Container(
+                                      margin: EdgeInsets.all(40),
+                                    ),
+                                  ),
+                                  Center(
+                                    child: CircleAvatar(
+                                      backgroundColor: CoreColor.backlightGrey,
+                                      backgroundImage: const NetworkImage(
+                                          'https://i.pinimg.com/564x/66/1e/3c/661e3c81c896137ea8b88f54dfebf55c.jpg'),
+                                      radius: 40,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            )),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                        SizedBox(
+                          width: 140,
+                          height: 20,
+                          child: Center(
+                            child: Text(
+                              GlobalVariables.firstName,
+                              softWrap: true,
+                              maxLines: 3,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: GlobalVariables.firstName.length > 8
+                                      ? 18
+                                      : 25,
+                                  fontWeight: FontWeight.bold),
                             ),
                           ),
+                        ),
+                        const SizedBox(
+                          height: 20,
                         )
                       ],
                     ),
@@ -130,41 +203,20 @@ class _SidebarState extends State<Sidebar> {
                       menuComponent(
                           context, FontAwesomeIcons.magnifyingGlass, 'Хэтэвч',
                           () {
-                        // Get.to(() => const WalletScreen());
                         Get.to(() => const WalletMain());
+                      }),
+                      menuComponent(
+                          context, FontAwesomeIcons.user, 'Өөр бүртгэл ашиглах',
+                          () {
+                        Get.offAll(() => const LoginScreen());
+                      }),
+                      menuComponent(context, FontAwesomeIcons.doorOpen, 'Гарах',
+                          () {
+                        Get.offAll(() => const LandingHome());
                       }),
                     ],
                   ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.doorOpen,
-                        size: 18,
-                        color: Colors.grey.shade400,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      InkWell(
-                        borderRadius: BorderRadius.circular(15),
-                        splashColor: Colors.grey.withOpacity(0.01),
-                        onTap: () {
-                          Get.offAll(() => const LoginScreen());
-                        },
-                        child: const Text('Гарах'),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      )
-                    ],
-                  ),
-                ),
-                const Expanded(child: SizedBox())
+                )
               ],
             ),
           ),
@@ -199,7 +251,7 @@ class _SidebarState extends State<Sidebar> {
               const SizedBox(
                 width: 10,
               ),
-              Text(txt)
+              SizedBox(width: 100, child: Text(txt))
             ],
           ),
         ),

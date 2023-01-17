@@ -25,9 +25,11 @@ class _SecurityState extends State<Security> {
   TextEditingController a = TextEditingController();
   double optionBtnsHeight = 0;
   bool isSwitcherActivated = GlobalVariables.ifFingering;
+  GlobalKey<ScaffoldState> menuSidebarKeySec = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return profileTop(
+        menuSidebarKeySec,
         optionBtnsHeight,
         proBtnInx,
         Column(

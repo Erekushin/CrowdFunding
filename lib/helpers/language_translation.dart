@@ -12,6 +12,7 @@ class TranslationWords {
           'user has already registered on this account',
 
       //#endregion
+      'select_bank_tr': 'choose bank',
       'continue_btn_tr': 'Continue',
       'login_name_tr': 'Name',
       'password_tr': 'Password',
@@ -62,7 +63,6 @@ class TranslationWords {
       "add_cart_tr": "Add to Cart",
       "add_tr": "Add",
       "add_account_tr": "Add bank account",
-      "select_bank_tr": "Selected bank",
       "bank_number_tr": "Account number",
       'save_tr': 'Save',
       'success_tr': 'Success',

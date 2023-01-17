@@ -10,7 +10,7 @@ import '../../helpers/indicators.dart';
 import '../../helpers/services.dart';
 import '../../widget/combos/eachproject.dart';
 import '../../widget/combos/helper_widgets.dart';
-import '../content_home/content.dart';
+import '../funding/singleProject.dart';
 
 class FundedProjects extends StatefulWidget {
   const FundedProjects({super.key});
@@ -119,9 +119,11 @@ class _FundedProjectsState extends State<FundedProjects> {
   }
 
   double optionBtnsHeight = 0;
+  GlobalKey<ScaffoldState> menuSidebarKeyFunded = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Obx(() => profileTop(
+            menuSidebarKeyFunded,
             optionBtnsHeight,
             proBtnInx,
             Column(
@@ -148,7 +150,7 @@ class _FundedProjectsState extends State<FundedProjects> {
                           progress = progressProcent(amount, balance).toInt();
                           return eachproject(item, progress, item['img_base64'],
                               () {
-                            Get.to(() => Content(
+                            Get.to(() => SingleProject(
                                   item: item,
                                   proProgress: progress,
                                   imgUrl: item['img_base64'],

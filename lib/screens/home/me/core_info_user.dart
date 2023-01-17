@@ -219,8 +219,8 @@ class _CoreInfoScreenState extends State<CoreInfoScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          generalBtn(CoreColor().backgroundGreen, CoreColor().backgroundGreen,
-              'Хадгалах', () {
+          generalBtn(CoreColor.mainPurple, CoreColor.mainPurple, 'Хадгалах',
+              () {
             setState(() {
               if (addressController.text != '') {
                 var bodyData = {

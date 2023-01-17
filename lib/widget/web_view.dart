@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
-import 'package:gerege_app_v2/screens/wallet/cart_screen.dart';
 import 'package:gerege_app_v2/style/color.dart';
 
 import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:io' show Platform;
+
+import '../screens/profile/paymentDetail.dart';
 
 class CallWebView extends StatefulWidget {
   final String title;
@@ -178,7 +179,7 @@ class _CallWebViewState extends State<CallWebView> {
       print('refresh token');
     } else if (data['data'] == "backtolist") {
       print('get back duudsn boldogogooggooggo');
-      Get.to(() => const CartScreen());
+      Get.to(() => const PaymentDetail());
     }
   }
 

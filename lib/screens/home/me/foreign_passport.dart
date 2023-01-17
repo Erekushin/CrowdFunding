@@ -674,7 +674,7 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          generalBtn(CoreColor().backgroundGreen, CoreColor().backgroundGreen,
+          generalBtn(CoreColor.mainPurple, CoreColor.mainPurple,
               'new_user_tr'.translationWord(), () {
             setState(() {
               _trySubmitForm();

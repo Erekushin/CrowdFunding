@@ -10,8 +10,8 @@ import '../helpers/core_url.dart';
 import '../helpers/gvariables.dart';
 import '../helpers/services.dart';
 import '../helpers/working_string.dart';
-import '../screens/content_home/home.dart';
 import '../screens/dialogs/registration_dialogs.dart';
+import '../screens/funding/projects.dart';
 
 class EntranceCont extends GetxController {
   final crowdlog = logger(EntranceCont);
@@ -168,7 +168,7 @@ class EntranceCont extends GetxController {
               colorText: Colors.black,
               backgroundColor: Colors.white.withOpacity(0.5),
             );
-            Get.to(() => const ContentHome());
+            Get.to(() => const Projects());
             loading.value = false;
           }, () {});
         });
@@ -222,7 +222,7 @@ class EntranceCont extends GetxController {
           GlobalVariables.storageToVar();
           searchText.clear();
           passwordTextController.clear();
-          Get.to(() => const ContentHome());
+          Get.to(() => const Projects());
         }, () {});
       });
     } else {
@@ -286,7 +286,7 @@ class EntranceCont extends GetxController {
             backgroundColor: Colors.grey.withOpacity(0.2),
           );
           cleanRegisterInfo();
-          Get.to(() => const ContentHome());
+          Get.to(() => const Projects());
         }, () {});
       });
     }

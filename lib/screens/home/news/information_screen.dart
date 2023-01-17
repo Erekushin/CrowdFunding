@@ -91,7 +91,7 @@ class _InfoScreenState extends State<InfoScreen> {
                 color: index % 3 == 0
                     ? CoreColor().backgroundBlue
                     : index % 2 == 0
-                        ? CoreColor().backgroundGreen
+                        ? CoreColor.mainPurple
                         : CoreColor().backgroundYellow,
                 borderRadius: BorderRadius.circular(10),
               ),

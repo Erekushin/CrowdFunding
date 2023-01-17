@@ -18,7 +18,6 @@ import '../../style/color.dart';
 import '../../widget/combos/appbar_squeare.dart';
 import '../../widget/fundamental/btn.dart';
 import 'bank_accounts_screen.dart';
-import 'cart_screen.dart';
 
 class WalletMain extends StatefulWidget {
   const WalletMain({super.key});
@@ -382,7 +381,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
           GlobalVariables.useTablet
               ? const SizedBox(height: 80)
               : const SizedBox(height: 200),
-          generalBtn(CoreColor().backgroundGreen, CoreColor().backgroundGreen,
+          generalBtn(CoreColor.mainPurple, CoreColor.mainPurple,
               'continue_btn_tr'.translationWord(), () {
             setState(() {
               if (selectedCard.isNotEmpty && _amountController.text != '') {
@@ -883,9 +882,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                   GlobalVariables.useTablet
                       ? const SizedBox(height: 50)
                       : const SizedBox(height: 160),
-                  generalBtn(
-                      CoreColor().backgroundGreen,
-                      CoreColor().backgroundGreen,
+                  generalBtn(CoreColor.mainPurple, CoreColor.mainPurple,
                       'withdraw_tr'.translationWord(), () {
                     setState(() {
                       if (selectedAccount.isNotEmpty &&
@@ -1223,9 +1220,6 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      whiteBtn('картууд', FontAwesomeIcons.creditCard, () {
-                        Get.to(() => const CartScreen());
-                      }),
                       whiteBtn('Банкны данс', FontAwesomeIcons.buildingColumns,
                           () {
                         Get.to(() => const BankAccountsScreen());

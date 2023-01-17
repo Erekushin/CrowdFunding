@@ -100,7 +100,7 @@ class _MyHomePageState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: CoreColor().backgroundGreen,
+      backgroundColor: CoreColor.mainPurple,
       body: Stack(
         children: [
           AnimatedContainer(

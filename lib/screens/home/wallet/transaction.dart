@@ -282,8 +282,8 @@ class _TransactionScreenState extends State<TransactionScreen>
           const Spacer(),
           Container(
             alignment: Alignment.bottomCenter,
-            child: generalBtn(CoreColor().backgroundGreen,
-                CoreColor().backgroundGreen, 'topup_tr'.translationWord(), () {
+            child: generalBtn(CoreColor.mainPurple, CoreColor.mainPurple,
+                'topup_tr'.translationWord(), () {
               // await getWalletAccounts();
               setState(() {
                 topUpModal();
@@ -293,9 +293,7 @@ class _TransactionScreenState extends State<TransactionScreen>
           const SizedBox(height: 20),
           Container(
             alignment: Alignment.bottomCenter,
-            child: generalBtn(
-                CoreColor().backgroundGreen,
-                CoreColor().backgroundGreen,
+            child: generalBtn(CoreColor.mainPurple, CoreColor.mainPurple,
                 'withdraw_tr'.translationWord(), () async {
               await getBankAccounts();
               setState(() {
@@ -558,7 +556,7 @@ class _TransactionScreenState extends State<TransactionScreen>
           GlobalVariables.useTablet
               ? const SizedBox(height: 80)
               : const SizedBox(height: 200),
-          generalBtn(CoreColor().backgroundGreen, CoreColor().backgroundGreen,
+          generalBtn(CoreColor.mainPurple, CoreColor.mainPurple,
               'continue_btn_tr'.translationWord(), () {
             setState(() {
               if (selectedCard.isNotEmpty && _amountController.text != '') {
@@ -969,9 +967,7 @@ class _TransactionScreenState extends State<TransactionScreen>
                   GlobalVariables.useTablet
                       ? const SizedBox(height: 50)
                       : const SizedBox(height: 160),
-                  generalBtn(
-                      CoreColor().backgroundGreen,
-                      CoreColor().backgroundGreen,
+                  generalBtn(CoreColor.mainPurple, CoreColor.mainPurple,
                       'withdraw_tr'.translationWord(), () {
                     setState(() {
                       if (selectedAccount.isNotEmpty &&

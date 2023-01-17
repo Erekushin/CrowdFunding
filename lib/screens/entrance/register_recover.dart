@@ -13,7 +13,7 @@ import '../../widget/combos/appbar_squeare.dart';
 import '../../widget/fundamental/btn.dart';
 import '../../widget/fundamental/options.dart';
 import '../../widget/fundamental/txt_field.dart';
-import '../content_home/home.dart';
+import '../funding/projects.dart';
 
 // ignore: camel_case_types
 class Register_Recover extends StatefulWidget {
@@ -337,7 +337,7 @@ class _Register_RecoverState extends State<Register_Recover> {
                                       Image.asset('assets/images/success.png')),
                               InkWell(
                                 onTap: () {
-                                  Get.offAll(() => const ContentHome());
+                                  Get.offAll(() => const Projects());
                                 },
                                 child: Container(
                                   margin: const EdgeInsets.all(10),
@@ -386,7 +386,7 @@ class _Register_RecoverState extends State<Register_Recover> {
                           InkWell(
                             onTap: () {
                               cont.cleanRegisterInfo();
-                              Get.offAll(() => const ContentHome());
+                              Get.offAll(() => const Projects());
                             },
                             child: Container(
                               padding: const EdgeInsets.only(
@@ -508,7 +508,7 @@ class _Register_RecoverState extends State<Register_Recover> {
                                     Image.asset('assets/images/success.png')),
                             InkWell(
                               onTap: () {
-                                Get.offAll(() => const ContentHome());
+                                Get.offAll(() => const Projects());
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(10),
@@ -555,7 +555,7 @@ class _Register_RecoverState extends State<Register_Recover> {
                         ),
                         InkWell(
                           onTap: () {
-                            Get.offAll(() => const ContentHome());
+                            Get.offAll(() => const Projects());
                           },
                           child: Container(
                             padding: const EdgeInsets.only(

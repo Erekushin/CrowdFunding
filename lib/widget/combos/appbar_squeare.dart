@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../../screens/funding/projects.dart';
 
 // ignore: must_be_immutable
 class AppbarSquare extends StatefulWidget implements PreferredSizeWidget {
@@ -40,16 +43,24 @@ class _AppbarSquareState extends State<AppbarSquare> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            Text(
-              widget.title,
-              maxLines: 4,
-              softWrap: true,
-              overflow: TextOverflow.ellipsis,
-              style: GoogleFonts.sourceSansPro(
-                  height: 1,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: widget.titleColor),
+            TextButton(
+              onPressed: () {
+                Get.to(() => const Projects());
+              },
+              child: Container(
+                margin: const EdgeInsets.only(top: 30),
+                child: Text(
+                  widget.title,
+                  maxLines: 4,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                  style: GoogleFonts.sourceSansPro(
+                      height: 1,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: widget.titleColor),
+                ),
+              ),
             ),
             InkWell(
               onTap: () {

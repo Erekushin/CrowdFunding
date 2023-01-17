@@ -15,6 +15,7 @@ import '../../controller/entrance.dart';
 import '../../helpers/backHelper.dart';
 import '../../widget/fundamental/btn.dart';
 import '../../widget/fundamental/txt_field.dart';
+import '../dialogs/question_dialogs.dart';
 import 'register_recover.dart';
 
 /// [LoginScreen] login user screen
@@ -138,7 +139,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 "CrowdfundingMN",
                 style: GoogleFonts.ubuntu(
                   textStyle: TextStyle(
-                    color: CoreColor().backgroundGreen,
+                    color: CoreColor.mainPurple,
                     fontWeight: FontWeight.w700,
                     fontSize: 30,
                   ),
@@ -182,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Мартсан?',
                     style: GoogleFonts.ubuntu(
                       textStyle: TextStyle(
-                        color: CoreColor().backgroundGreen,
+                        color: CoreColor.mainPurple,
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
                       ),
@@ -193,20 +194,23 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
             const SizedBox(height: 30),
-            generalBtn(CoreColor().backgroundGreen, CoreColor().backgroundGreen,
-                'login_tr'.translationWord(), () {
-              if (_loginController.searchText.text != "" &&
-                  _loginController.passwordTextController.text != '') {
-                _loginController.loginUser();
-              } else {
-                Get.snackbar(
-                  'warning_tr'.translationWord(),
-                  'field_tr'.translationWord(),
-                  colorText: Colors.black,
-                  backgroundColor: Colors.white,
-                );
-              }
-            }),
+            Container(
+              width: GlobalVariables.gWidth * .5,
+              child: generalBtn(CoreColor.mainPurple, Colors.white,
+                  'login_tr'.translationWord(), () {
+                if (_loginController.searchText.text != "" &&
+                    _loginController.passwordTextController.text != '') {
+                  _loginController.loginUser();
+                } else {
+                  Get.snackbar(
+                    'warning_tr'.translationWord(),
+                    'field_tr'.translationWord(),
+                    colorText: Colors.black,
+                    backgroundColor: Colors.white,
+                  );
+                }
+              }),
+            ),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -226,97 +230,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (GlobalVariables.pass != '') {
                         _checkBiometrics();
                       } else {
-                        showDialog(
-                            context: context,
-                            builder: (context) => SimpleDialog(
-                                  title: const Text(
-                                      'Хурууны хээн нэвтрэлтийг идвэхжүүлхүү?'),
-                                  children: [
-                                    InkWell(
-                                      onTap: () {
-                                        if (bioSupportState ==
-                                            BioSupportState.unknown) {
-                                          Get.snackbar('Уучлаарай',
-                                              "Хурууны хээ уншигчийн төрөл таарахгүй байна!",
-                                              snackPosition:
-                                                  SnackPosition.BOTTOM,
-                                              colorText: Colors.white,
-                                              backgroundColor: Colors.grey[900],
-                                              margin: const EdgeInsets.all(5));
-                                        } else if (bioSupportState ==
-                                            BioSupportState.supported) {
-                                          GlobalPlayers.workingWithFile
-                                              .addNewItem(
-                                                  'isFingering', 'true');
-
-                                          Get.snackbar('Боломжтой',
-                                              "Та эхний удаа нэр, нууц үгээ хийж нэвтэрнэ үү!",
-                                              snackPosition:
-                                                  SnackPosition.BOTTOM,
-                                              colorText: Colors.white,
-                                              backgroundColor: Colors.grey[900],
-                                              margin: const EdgeInsets.all(5));
-                                        } else {
-                                          Get.snackbar('Уучлаарай',
-                                              "Хурууны хээ уншигчийг ачааллахад алдаа гарлаа!",
-                                              snackPosition:
-                                                  SnackPosition.BOTTOM,
-                                              colorText: Colors.white,
-                                              backgroundColor: Colors.grey[900],
-                                              margin: const EdgeInsets.all(5));
-                                        }
-                                        Navigator.pop(context);
-                                      },
-                                      child: Container(
-                                        width: GlobalVariables.gWidth * .4,
-                                        margin: const EdgeInsets.all(10),
-                                        padding: const EdgeInsets.all(10),
-                                        color: Colors.grey.shade300,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text('идвэхжүүлэх'),
-                                            Icon(
-                                              FontAwesomeIcons.check,
-                                              color: Colors.amber,
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 20,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Container(
-                                            margin: const EdgeInsets.all(5),
-                                            padding: const EdgeInsets.only(
-                                                left: 10,
-                                                right: 10,
-                                                top: 5,
-                                                bottom: 5),
-                                            decoration: BoxDecoration(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(5)),
-                                                color: Colors.amber),
-                                            child: Center(
-                                              child: Text('хаах'),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    )
-                                  ],
-                                ));
+                        fingerActivation(context);
                       }
                     },
                     child: Container(
@@ -380,7 +294,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           'new_user_tr'.translationWord(),
                           style: GoogleFonts.ubuntu(
                             textStyle: TextStyle(
-                              color: CoreColor().backgroundGreen,
+                              color: CoreColor.mainPurple,
                               fontWeight: FontWeight.w700,
                               fontSize: 12,
                             ),
