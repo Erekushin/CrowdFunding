@@ -6,10 +6,10 @@ import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/style/color.dart';
-import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:get/get.dart';
 
 import '../../../helpers/services.dart';
+import '../../../widget/fundamental/btn.dart';
 
 class LoginInfoScreen extends StatefulWidget {
   const LoginInfoScreen({Key? key}) : super(key: key);
@@ -296,24 +296,12 @@ class _LoginInfoScreenState extends State<LoginInfoScreen> {
                       ),
                       const SizedBox(height: 20),
                       Center(
-                        child: GeregeButtonWidget(
-                          radius: 10.0,
-                          elevation: 0.0,
-                          minWidth: GlobalVariables.gWidth / 1.6,
-                          backgroundColor: CoreColor().backgroundBtnBlue,
-                          borderColor: CoreColor().backgroundBtnBlue,
-                          text: const Text(
-                            'Нууц үг солих',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
-                          onPressed: () {
-                            if (passFormkey.currentState!.validate()) {
-                              changePassword();
-                            }
-                          },
-                        ),
+                        child: generalBtn(CoreColor().backgroundGreen,
+                            CoreColor().backgroundGreen, 'Нууц үг солих', () {
+                          if (passFormkey.currentState!.validate()) {
+                            changePassword();
+                          }
+                        }),
                       ),
                     ],
                   ),

@@ -22,7 +22,7 @@ class _ConfirmationScreenState extends State<ConfirmationScreen> {
 
   @override
   void initState() {
-    emailController.text = GlobalVariables.email.value;
+    emailController.text = GlobalVariables.email;
     phoneController.text = GlobalVariables.phoneNumber;
     super.initState();
   }

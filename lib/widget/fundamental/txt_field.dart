@@ -37,13 +37,14 @@ Widget txtField2(
   );
 }
 
-Widget titledTextField() {
+Widget titledTextField(TextEditingController cont, String title, String label,
+    IconData suffixIcon, Function func) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
-      const Text(
-        'First name',
-        style: TextStyle(fontWeight: FontWeight.bold),
+      Text(
+        title,
+        style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       const SizedBox(
         height: 10,
@@ -56,22 +57,23 @@ Widget titledTextField() {
             border: Border.all(color: Colors.grey.withOpacity(.5)),
             borderRadius: const BorderRadius.all(Radius.circular(5))),
         child: TextField(
+          controller: cont,
           onChanged: (value) {},
           style: GoogleFonts.sourceSansPro(
               height: 2,
               fontWeight: FontWeight.w600,
               fontSize: 15,
               color: Colors.black54),
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             suffixIcon: Icon(
-              FontAwesomeIcons.pen,
+              suffixIcon,
               color: Colors.grey,
               size: 15,
             ),
-            hintStyle: TextStyle(color: Colors.black54),
+            hintStyle: const TextStyle(color: Colors.black54),
             border: InputBorder.none,
-            contentPadding: EdgeInsets.all(4),
-            hintText: 'dfdfd',
+            contentPadding: const EdgeInsets.all(4),
+            hintText: label,
           ),
         ),
       ),

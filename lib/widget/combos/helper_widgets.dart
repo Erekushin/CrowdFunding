@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../helpers/gvariables.dart';
+import '../../helpers/gvariables.dart';
 
 Widget screenModes(ScreenModes mode, RxBool visBool, String imgUrl) {
   switch (mode) {

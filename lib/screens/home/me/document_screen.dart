@@ -4,10 +4,10 @@ import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/home/me/foreign_passport.dart';
 import 'package:gerege_app_v2/style/color.dart';
-import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:get/get.dart';
 
 import '../../../helpers/services.dart';
+import '../../../widget/fundamental/btn.dart';
 import '../../content_home/home.dart';
 
 class DocumentScreen extends StatefulWidget {
@@ -235,41 +235,15 @@ class _DocumentScreenState extends State<DocumentScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              GeregeButtonWidget(
-                radius: 10.0,
-                elevation: 0.0,
-                height: 40,
-                minWidth: GlobalVariables.gWidth / 4,
-                backgroundColor: Colors.transparent,
-                borderColor: Colors.black,
-                text: const Text(
-                  'Буцах',
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                ),
-                onPressed: () {
-                  Get.back();
-                },
-              ),
+              generalBtn(CoreColor().backgroundGreen,
+                  CoreColor().backgroundGreen, 'Буцах', () {
+                Get.back();
+              }),
+              generalBtn(CoreColor().backgroundGreen,
+                  CoreColor().backgroundGreen, 'Устгах', () {
+                deleteDocument(item);
+              }),
               const SizedBox(width: 10),
-              GeregeButtonWidget(
-                radius: 10.0,
-                elevation: 0.0,
-                height: 40,
-                minWidth: GlobalVariables.gWidth / 4,
-                backgroundColor: Colors.transparent,
-                borderColor: Colors.red,
-                text: const Text(
-                  'Устгах',
-                  style: TextStyle(
-                    color: Colors.red,
-                  ),
-                ),
-                onPressed: () {
-                  deleteDocument(item);
-                },
-              ),
             ],
           )
         ],

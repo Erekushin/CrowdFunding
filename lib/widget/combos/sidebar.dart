@@ -4,11 +4,10 @@ import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
-import '../global_players.dart';
-import '../screens/entrance/login.dart';
-import '../screens/profile/profile.dart';
-import '../screens/setting/settings.dart';
-import '../screens/wallet/wallet_main.dart';
+import '../../global_players.dart';
+import '../../screens/entrance/login.dart';
+import '../../screens/profile/profile.dart';
+import '../../screens/wallet/wallet_main.dart';
 
 class Sidebar extends StatefulWidget {
   const Sidebar({super.key, required this.menuAction});
@@ -22,6 +21,25 @@ class _SidebarState extends State<Sidebar> {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        Expanded(
+            flex: 1,
+            child: InkWell(
+              onTap: () {
+                widget.menuAction();
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.black.withOpacity(.15),
+                      Colors.black.withOpacity(.15),
+                    ],
+                  ),
+                ),
+              ),
+            )),
         Expanded(
           flex: 2,
           child: Container(
@@ -115,11 +133,6 @@ class _SidebarState extends State<Sidebar> {
                         // Get.to(() => const WalletScreen());
                         Get.to(() => const WalletMain());
                       }),
-                      menuComponent(
-                          context, FontAwesomeIcons.peopleGroup, 'Тохиргоо',
-                          () {
-                        Get.to(() => const Settings());
-                      }),
                     ],
                   ),
                 ),
@@ -155,26 +168,7 @@ class _SidebarState extends State<Sidebar> {
               ],
             ),
           ),
-        ),
-        Expanded(
-            flex: 1,
-            child: InkWell(
-              onTap: () {
-                widget.menuAction();
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [
-                      Colors.black.withOpacity(.15),
-                      Colors.black.withOpacity(.15),
-                    ],
-                  ),
-                ),
-              ),
-            ))
+        )
       ],
     );
   }

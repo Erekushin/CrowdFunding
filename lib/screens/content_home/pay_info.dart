@@ -13,7 +13,7 @@ import '../../helpers/backHelper.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/services.dart';
-import '../../widget/appbar_squeare.dart';
+import '../../widget/combos/appbar_squeare.dart';
 
 // ignore: must_be_immutable
 class PayInfo extends StatefulWidget {

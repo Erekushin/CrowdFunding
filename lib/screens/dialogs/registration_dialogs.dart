@@ -8,8 +8,8 @@ import '../../controller/entrance.dart';
 import '../../global_players.dart';
 import '../../helpers/gvariables.dart';
 import '../../style/color.dart';
-import '../../widget/btn.dart';
-import '../../widget/txt_field.dart';
+import '../../widget/fundamental/btn.dart';
+import '../../widget/fundamental/txt_field.dart';
 import '../content_home/home.dart';
 
 var auth = Get.find<EntranceCont>();
@@ -144,7 +144,8 @@ Object dialogy(BuildContext context) {
                         ),
                         Container(
                           padding: const EdgeInsets.only(left: 25, right: 25),
-                          child: generalBtn(CoreColor.mainPurple, 'илгээх', () {
+                          child: generalBtn(
+                              CoreColor.mainPurple, Colors.white, 'илгээх', () {
                             auth.documentFind(
                                 context, selectionCountry, selectionGender);
                           }),
@@ -193,7 +194,7 @@ Widget registerSeq2(
           const SizedBox(
             height: 15,
           ),
-          generalBtn(btnClr, btnTitle, func)
+          generalBtn(btnClr, Colors.white, btnTitle, func)
         ],
       );
     case 3:
@@ -205,7 +206,7 @@ Widget registerSeq2(
           const SizedBox(
             height: 15,
           ),
-          generalBtn(btnClr, btnTitle, func)
+          generalBtn(btnClr, Colors.white, btnTitle, func)
         ],
       );
     default:

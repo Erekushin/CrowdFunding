@@ -45,7 +45,7 @@ class GlobalVariables {
   static String firstName = '';
   static String userName = '';
   static String rootAccount = "";
-  static RxString email = ''.obs;
+  static String email = '';
   static String phoneNumber = '';
   static int gender = 0;
   static String birthDate = '';
@@ -80,7 +80,7 @@ class GlobalVariables {
     GlobalVariables.firstName = userInformation['first_name'] ?? '';
     GlobalVariables.userName = userInformation['username'] ?? '';
     GlobalVariables.rootAccount = userInformation['root_account'] ?? '';
-    GlobalVariables.email.value = userInformation['email'] ?? '';
+    GlobalVariables.email = userInformation['email'] ?? '';
     GlobalVariables.phoneNumber = userInformation['phone_no'] ?? '';
     GlobalVariables.gender = userInformation['gender'] ?? 0;
     GlobalVariables.birthDate = userInformation['birth_date'] ?? '';

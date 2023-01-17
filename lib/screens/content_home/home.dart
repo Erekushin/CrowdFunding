@@ -11,10 +11,10 @@ import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/indicators.dart';
 import '../../helpers/services.dart';
-import '../../widget/appbar_squeare.dart';
-import '../../widget/eachproject.dart';
-import '../../widget/helper_widgets.dart';
-import '../../widget/sidebar.dart';
+import '../../widget/combos/appbar_squeare.dart';
+import '../../widget/combos/eachproject.dart';
+import '../../widget/combos/helper_widgets.dart';
+import '../../widget/combos/sidebar.dart';
 import 'content.dart';
 
 class ContentHome extends StatefulWidget {
@@ -31,7 +31,6 @@ class _ContentHomeState extends State<ContentHome> {
   void initState() {
     getTypeList();
     getProjectList();
-    scrollController.addListener(_scrollListener);
     super.initState();
   }
 
@@ -131,250 +130,198 @@ class _ContentHomeState extends State<ContentHome> {
         }
       });
       loading.value = false;
-      setState(() {
-        scrollController.animateTo(55,
-            duration: const Duration(milliseconds: 500), curve: Curves.ease);
-      });
     } catch (e) {
       crowdlog.wtf(
           '---GET PROJECT LIST---:TOKEN: ${GlobalVariables.gStorage.read("token")}.................returned data ${e.toString()}');
-      setState(() {
-        scrollController.animateTo(55,
-            duration: const Duration(milliseconds: 500), curve: Curves.ease);
-      });
       loading.value = false;
     }
   }
 
-  double rotate = 0;
-  _scrollListener() async {
-    setState(() {
-      rotate = scrollController.offset;
-    });
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
-      //reach bottom
-    }
-    if (scrollController.offset <= scrollController.position.minScrollExtent &&
-        !scrollController.position.outOfRange) {
-      //reach the top
-      getProjectList();
-    }
-  }
-
-  Future<bool> cloaseTheApp(BuildContext context) async {
-    return await Get.defaultDialog(
-        title: 'Crowdfund app ыг хаахуу?',
-        content: Image.asset('assets/images/ger.png'),
-        actions: <Widget>[
-          TextButton(
-              onPressed: () {
-                SystemNavigator.pop();
-              },
-              child: const Text(
-                "exit",
-                style: TextStyle(fontSize: 20),
-              )),
-        ]);
-  }
-
   //#endregion
-  var scrollController = ScrollController(initialScrollOffset: 55);
   GlobalKey<ScaffoldState> menuSidebarKey = GlobalKey<ScaffoldState>();
   PageController pageCont = PageController();
-  int chosenTap = 0;
+  RxList itemList4 = [].obs;
+  TextEditingController searchCont = TextEditingController();
+  String selectionType = "1";
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        return cloaseTheApp(context);
-      },
-      child: Scaffold(
+    return Scaffold(
         key: menuSidebarKey,
-        drawer: Sidebar(
+        endDrawer: Sidebar(
           menuAction: () {
-            menuSidebarKey.currentState?.closeDrawer();
+            menuSidebarKey.currentState?.closeEndDrawer();
           },
         ),
         appBar: AppbarSquare(
           height: GlobalVariables.gWidth * .26,
           leadingIcon: Icon(
             FontAwesomeIcons.bars,
-            color: Colors.white,
+            color: Colors.black,
             size: Sizes.iconSize,
           ),
           title: 'CrowdfundingMN',
-          titleColor: Colors.white,
+          titleColor: Colors.black,
           menuAction: () {
-            menuSidebarKey.currentState!.openDrawer();
+            menuSidebarKey.currentState!.openEndDrawer();
           },
-          color: CoreColor.mainPurple,
+          color: Colors.white,
         ),
-        body: Column(
-          children: [
-            SizedBox(
-                height: GlobalVariables.gHeight * .066,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            setState(() {
-                              chosenTap = 0;
-                              pageCont.jumpToPage(0);
-                            });
-                          },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              tabtext('Бүгд'),
-                              chosenTap == 0
-                                  ? Container(
-                                      margin: const EdgeInsets.only(top: 4),
-                                      height: 4,
-                                      width: 100,
-                                      color: CoreColor.mainPurple,
-                                    )
-                                  : const SizedBox(
-                                      width: 100,
-                                    )
-                            ],
-                          )),
-                      Obx(() => ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          itemCount: typeList.length,
-                          itemBuilder: (c, i) {
-                            var item = typeList[i];
-                            return TextButton(
-                                onPressed: () {
-                                  setState(() {
-                                    chosenTap = int.parse(item['id']);
-                                    pageCont.jumpToPage(int.parse(item['id']));
-                                  });
-                                },
-                                child: Column(
-                                  children: [
-                                    tabtext(item['name']),
-                                    chosenTap == int.parse(item['id'])
-                                        ? Container(
-                                            margin:
-                                                const EdgeInsets.only(top: 4),
-                                            height: 4,
-                                            width: 100,
-                                            color: CoreColor.mainPurple,
-                                          )
-                                        : const SizedBox(
-                                            width: 100,
-                                          )
-                                  ],
-                                ));
-                          }))
-                    ],
-                  ),
-                )),
-            SizedBox(
-              height: GlobalVariables.gHeight * .78,
-              child: PageView.builder(
-                onPageChanged: (currentpageIndex) {
-                  setState(() {
-                    chosenTap = currentpageIndex;
-                  });
-                },
-                controller: pageCont,
-                itemCount: typeList.length + 1,
-                itemBuilder: (c, pageIndex) {
-                  RxList itemList = [].obs;
-                  for (int a = 0; a < projectList.length; a++) {
-                    if (projectList[a]['category_id'] == pageIndex) {
-                      itemList.add(projectList[a]);
-                    }
-                  }
-                  return Obx(() => Stack(
-                        children: [
-                          SizedBox(
-                            height: GlobalVariables.gHeight * .8,
-                            child: SingleChildScrollView(
-                                physics: const BouncingScrollPhysics(
-                                    parent: AlwaysScrollableScrollPhysics()),
-                                controller:
-                                    pageIndex == 0 ? scrollController : null,
-                                child: Column(
-                                  children: [
-                                    pageIndex == 0
-                                        ? Transform.rotate(
-                                            angle: 3.14 / (rotate + 1) * 2,
-                                            child: Container(
-                                              decoration: const BoxDecoration(
-                                                  color: Colors.grey,
-                                                  shape: BoxShape.circle),
-                                              width: 50,
-                                              height: 50,
-                                              child: const Icon(
-                                                FontAwesomeIcons.rotateLeft,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          )
-                                        : const SizedBox(),
-                                    ListView.builder(
-                                        shrinkWrap: true,
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        itemCount: pageIndex == 0
-                                            ? projectList.length
-                                            : itemList.length,
-                                        itemBuilder: (c, projectIndex) {
-                                          int progress;
-                                          var item = pageIndex == 0
-                                              ? projectList[projectIndex]
-                                              : itemList[projectIndex];
-                                          int amount = item['amount'];
-                                          int balance = item['balance'];
-                                          progress =
-                                              progressProcent(amount, balance)
-                                                  .toInt();
-                                          return eachproject(item, progress,
-                                              item['img_base64'], () {
-                                            Get.to(() => Content(
-                                                  item: item,
-                                                  proProgress: progress,
-                                                  imgUrl: item['img_base64'],
-                                                ));
-                                          });
-                                        }),
-                                  ],
-                                )),
+        body: Obx(() => Stack(
+              children: [
+                SingleChildScrollView(
+                    padding: const EdgeInsets.only(
+                        top: 5, bottom: 5, left: 20, right: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: [
+                            const Icon(
+                              FontAwesomeIcons.house,
+                              size: 15,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            const Text(
+                              ' Home  ',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const Icon(
+                              FontAwesomeIcons.anglesRight,
+                              size: 15,
+                              color: Colors.grey,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              'Projects',
+                              style: TextStyle(
+                                  color: CoreColor.mainPurple,
+                                  fontWeight: FontWeight.bold),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        const Text(
+                          'Projects',
+                          style: TextStyle(
+                              fontSize: 25, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          //search
+                          padding: const EdgeInsets.only(
+                            left: 15,
                           ),
-                          screenModes(ScreenModes.noProject, noProject,
-                              'assets/images/empty_box.jpg'),
-                          screenModes(ScreenModes.loading, loading, ''),
-                          screenModes(ScreenModes.noInternet, noInternet,
-                              'assets/images/noInternet.png')
-                        ],
-                      ));
-                },
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget tabtext(String txt) {
-    return Text(
-      txt,
-      maxLines: 4,
-      softWrap: true,
-      overflow: TextOverflow.ellipsis,
-      style: GoogleFonts.sourceSansPro(
-          height: 1,
-          fontWeight: FontWeight.w400,
-          fontSize: 14,
-          color: Colors.black54),
-    );
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.grey.withOpacity(.5)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5))),
+                          child: TextField(
+                            controller: searchCont,
+                            onChanged: (value) {},
+                            style: GoogleFonts.sourceSansPro(
+                                height: 2,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 15,
+                                color: Colors.black54),
+                            decoration: const InputDecoration(
+                              suffixIcon: Icon(
+                                FontAwesomeIcons.magnifyingGlass,
+                                color: Colors.grey,
+                                size: 15,
+                              ),
+                              hintStyle: TextStyle(color: Colors.black54),
+                              border: InputBorder.none,
+                              contentPadding: EdgeInsets.all(4),
+                              hintText: 'search project',
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.only(left: 15, right: 15),
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: Colors.grey.withOpacity(.5)),
+                              borderRadius:
+                                  const BorderRadius.all(Radius.circular(5))),
+                          child: DropdownButton(
+                            iconEnabledColor: CoreColor.mainPurple,
+                            iconDisabledColor: CoreColor.mainPurple,
+                            value: selectionType,
+                            underline: const SizedBox(),
+                            isExpanded: true,
+                            hint: Text(
+                              'Choose category',
+                              style: GoogleFonts.sourceSansPro(
+                                  height: 2,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 15,
+                                  color: Colors.black54),
+                            ),
+                            items: typeList.map((value) {
+                              return DropdownMenuItem(
+                                value: value['id'],
+                                child: Text(
+                                  value['name'],
+                                  style: GoogleFonts.sourceSansPro(
+                                      height: 2,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
+                                      color: Colors.black54),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectionType = value.toString();
+                              });
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: projectList.length,
+                            itemBuilder: (c, projectIndex) {
+                              int progress;
+                              var item = projectList[projectIndex];
+                              int amount = item['amount'];
+                              int balance = item['balance'];
+                              progress =
+                                  progressProcent(amount, balance).toInt();
+                              return eachproject(
+                                  item, progress, item['img_base64'], () {
+                                Get.to(() => Content(
+                                      item: item,
+                                      proProgress: progress,
+                                      imgUrl: item['img_base64'],
+                                    ));
+                              });
+                            }),
+                      ],
+                    )),
+                screenModes(ScreenModes.noProject, noProject,
+                    'assets/images/empty_box.jpg'),
+                screenModes(ScreenModes.loading, loading, ''),
+                screenModes(ScreenModes.noInternet, noInternet,
+                    'assets/images/noInternet.png')
+              ],
+            )));
   }
 }

@@ -9,16 +9,14 @@ import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
 import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/helperfuncs.dart';
 import '../../helpers/services.dart';
 import '../../style/color.dart';
-import '../../widget/appbar_squeare.dart';
-import '../../widget/empty.dart';
-import '../../widget/gerege_button.dart';
+import '../../widget/combos/appbar_squeare.dart';
+import '../../widget/fundamental/btn.dart';
 import 'bank_accounts_screen.dart';
 import 'cart_screen.dart';
 
@@ -384,43 +382,31 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
           GlobalVariables.useTablet
               ? const SizedBox(height: 80)
               : const SizedBox(height: 200),
-          GeregeButtonWidget(
-            radius: 10.0,
-            elevation: 0.0,
-            minWidth: GlobalVariables.gWidth / 1.6,
-            backgroundColor: CoreColor.mainPurple,
-            borderColor: CoreColor().btnBlue,
-            text: Text(
-              'continue_btn_tr'.translationWord(),
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () {
-              setState(() {
-                if (selectedCard.isNotEmpty && _amountController.text != '') {
-                  if (int.parse(_amountController.text.replaceAll(',', '')) <=
-                      499) {
-                    Get.snackbar(
-                      'warning_tr'.translationWord(),
-                      '500 -c их дүн оруулна уу'.translationWord(),
-                      colorText: Colors.black,
-                      backgroundColor: Colors.white,
-                    );
-                  } else {
-                    hmacEncryp(selectedCard.value);
-                  }
-                } else {
+          generalBtn(CoreColor().backgroundGreen, CoreColor().backgroundGreen,
+              'continue_btn_tr'.translationWord(), () {
+            setState(() {
+              if (selectedCard.isNotEmpty && _amountController.text != '') {
+                if (int.parse(_amountController.text.replaceAll(',', '')) <=
+                    499) {
                   Get.snackbar(
                     'warning_tr'.translationWord(),
-                    'field_tr'.translationWord(),
+                    '500 -c их дүн оруулна уу'.translationWord(),
                     colorText: Colors.black,
                     backgroundColor: Colors.white,
                   );
+                } else {
+                  hmacEncryp(selectedCard.value);
                 }
-              });
-            },
-          ),
+              } else {
+                Get.snackbar(
+                  'warning_tr'.translationWord(),
+                  'field_tr'.translationWord(),
+                  colorText: Colors.black,
+                  backgroundColor: Colors.white,
+                );
+              }
+            });
+          }),
         ],
       ),
     );
@@ -897,45 +883,35 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                   GlobalVariables.useTablet
                       ? const SizedBox(height: 50)
                       : const SizedBox(height: 160),
-                  GeregeButtonWidget(
-                    radius: 10.0,
-                    elevation: 0.0,
-                    minWidth: GlobalVariables.gWidth / 1.6,
-                    backgroundColor: CoreColor.mainPurple,
-                    borderColor: CoreColor.mainPurple,
-                    text: Text(
-                      'withdraw_tr'.translationWord(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (selectedAccount.isNotEmpty &&
-                            _amountController.text != '') {
-                          if (int.parse(
-                                  _amountController.text.replaceAll(',', '')) <=
-                              499) {
-                            Get.snackbar(
-                              'warning_tr'.translationWord(),
-                              '500 -c их дүн оруулна уу'.translationWord(),
-                              colorText: Colors.black,
-                              backgroundColor: Colors.white,
-                            );
-                          } else {
-                            withDrawMoney();
-                          }
-                        } else {
+                  generalBtn(
+                      CoreColor().backgroundGreen,
+                      CoreColor().backgroundGreen,
+                      'withdraw_tr'.translationWord(), () {
+                    setState(() {
+                      if (selectedAccount.isNotEmpty &&
+                          _amountController.text != '') {
+                        if (int.parse(
+                                _amountController.text.replaceAll(',', '')) <=
+                            499) {
                           Get.snackbar(
                             'warning_tr'.translationWord(),
-                            'field_tr'.translationWord(),
+                            '500 -c их дүн оруулна уу'.translationWord(),
                             colorText: Colors.black,
                             backgroundColor: Colors.white,
                           );
+                        } else {
+                          withDrawMoney();
                         }
-                      });
-                    },
-                  ),
+                      } else {
+                        Get.snackbar(
+                          'warning_tr'.translationWord(),
+                          'field_tr'.translationWord(),
+                          colorText: Colors.black,
+                          backgroundColor: Colors.white,
+                        );
+                      }
+                    });
+                  }),
                 ],
               ),
             ),
@@ -1070,7 +1046,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                                   itemBuilder:
                                       (BuildContext context, int index) {
                                     return transactionDocument.isEmpty
-                                        ? isEmptyData("doc_empty_tr")
+                                        ? const SizedBox()
                                         : InkWell(
                                             onTap: () {
                                               setState(() {

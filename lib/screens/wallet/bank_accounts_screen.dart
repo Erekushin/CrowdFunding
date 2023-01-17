@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/style/color.dart';
-import 'package:gerege_app_v2/widget/back_bar.dart';
-import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:get/route_manager.dart';
 
 import '../../helpers/services.dart';
-import '../../widget/appbar_squeare.dart';
+import '../../widget/combos/appbar_squeare.dart';
+import '../../widget/fundamental/btn.dart';
 
 class BankAccountsScreen extends StatefulWidget {
   const BankAccountsScreen({Key? key}) : super(key: key);
@@ -416,24 +414,15 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
                 ),
               ),
               const SizedBox(height: 20),
-              GeregeButtonWidget(
-                radius: 50.0,
-                minWidth: GlobalVariables.gWidth / 2,
-                backgroundColor: Colors.red.withOpacity(0.7),
-                borderColor: Colors.red.withOpacity(0.7),
-                text: Text(
-                  'delete_tr'.translationWord(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-                onPressed: () {
-                  setState(() {
-                    // ren(data['id']);
-                    removeAccount(data['id']);
-                  });
-                },
-              ),
+              generalBtn(
+                  CoreColor().backgroundGreen,
+                  CoreColor().backgroundGreen,
+                  'delete_tr'.translationWord(), () {
+                setState(() {
+                  // ren(data['id']);
+                  removeAccount(data['id']);
+                });
+              }),
             ],
           ),
         );
@@ -626,30 +615,21 @@ class _BankAccountsScreenState extends State<BankAccountsScreen>
                   width: GlobalVariables.gWidth,
                   height: 50,
                   alignment: Alignment.center,
-                  child: GeregeButtonWidget(
-                    radius: 50.0,
-                    minWidth: GlobalVariables.gWidth / 1.5,
-                    backgroundColor: CoreColor().backgroundButton,
-                    borderColor: CoreColor().backgroundButton,
-                    text: Text(
-                      'save_tr'.translationWord(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    onPressed: () {
-                      if (bankId != null && accountNumber.text != '') {
-                        addBankAccount();
-                      } else {
-                        Get.snackbar(
-                          'warning_tr'.translationWord(),
-                          'field_tr'.translationWord(),
-                          colorText: Colors.black,
-                          backgroundColor: Colors.white,
-                        );
-                      }
-                    },
-                  ),
+                  child: generalBtn(
+                      CoreColor().backgroundGreen,
+                      CoreColor().backgroundGreen,
+                      'save_tr'.translationWord(), () {
+                    if (bankId != null && accountNumber.text != '') {
+                      addBankAccount();
+                    } else {
+                      Get.snackbar(
+                        'warning_tr'.translationWord(),
+                        'field_tr'.translationWord(),
+                        colorText: Colors.black,
+                        backgroundColor: Colors.white,
+                      );
+                    }
+                  }),
                 ),
               ),
             ],

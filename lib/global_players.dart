@@ -1,5 +1,6 @@
+import 'package:gerege_app_v2/helpers/working_local.dart';
+
 import 'helpers/frontHelper.dart';
-import 'helpers/working_file.dart';
 
 enum BioSupportState {
   unknown,
@@ -9,6 +10,7 @@ enum BioSupportState {
 
 class GlobalPlayers {
   static WorkingFiles workingWithFile = WorkingFiles();
+  static WorkingBioMatrix workingBioMatrix = WorkingBioMatrix();
   static FrontHelper frontHelper = FrontHelper();
 }
 

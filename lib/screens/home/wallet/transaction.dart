@@ -8,7 +8,6 @@ import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/style/color.dart';
-import 'package:gerege_app_v2/widget/gerege_button.dart';
 
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
@@ -16,6 +15,7 @@ import 'package:intl/intl.dart';
 
 import '../../../helpers/backHelper.dart';
 import '../../../helpers/services.dart';
+import '../../../widget/fundamental/btn.dart';
 
 class TransactionScreen extends StatefulWidget {
   const TransactionScreen({Key? key}) : super(key: key);
@@ -282,50 +282,26 @@ class _TransactionScreenState extends State<TransactionScreen>
           const Spacer(),
           Container(
             alignment: Alignment.bottomCenter,
-            child: GeregeButtonWidget(
-              radius: 10.0,
-              elevation: 0.0,
-              minWidth: GlobalVariables.gWidth / 1.6,
-              backgroundColor: CoreColor().btnBlue,
-              borderColor: CoreColor().btnBlue,
-              text: Text(
-                'topup_tr'.translationWord(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
-              ),
-              onPressed: () async {
-                // await getWalletAccounts();
-                setState(() {
-                  topUpModal();
-                });
-              },
-            ),
+            child: generalBtn(CoreColor().backgroundGreen,
+                CoreColor().backgroundGreen, 'topup_tr'.translationWord(), () {
+              // await getWalletAccounts();
+              setState(() {
+                topUpModal();
+              });
+            }),
           ),
           const SizedBox(height: 20),
           Container(
             alignment: Alignment.bottomCenter,
-            child: GeregeButtonWidget(
-              radius: 10.0,
-              elevation: 0.0,
-              minWidth: GlobalVariables.gWidth / 1.6,
-              backgroundColor: CoreColor().btnGrey,
-              borderColor: CoreColor().btnGrey,
-              text: Text(
-                'withdraw_tr'.translationWord(),
-                style: TextStyle(
-                  color: CoreColor().btnBlue,
-                  fontSize: 16,
-                ),
-              ),
-              onPressed: () async {
-                await getBankAccounts();
-                setState(() {
-                  withdrawModal();
-                });
-              },
-            ),
+            child: generalBtn(
+                CoreColor().backgroundGreen,
+                CoreColor().backgroundGreen,
+                'withdraw_tr'.translationWord(), () async {
+              await getBankAccounts();
+              setState(() {
+                withdrawModal();
+              });
+            }),
           ),
           GlobalVariables.useTablet
               ? const SizedBox(height: 50)
@@ -582,43 +558,31 @@ class _TransactionScreenState extends State<TransactionScreen>
           GlobalVariables.useTablet
               ? const SizedBox(height: 80)
               : const SizedBox(height: 200),
-          GeregeButtonWidget(
-            radius: 10.0,
-            elevation: 0.0,
-            minWidth: GlobalVariables.gWidth / 1.6,
-            backgroundColor: CoreColor().btnBlue,
-            borderColor: CoreColor().btnBlue,
-            text: Text(
-              'continue_btn_tr'.translationWord(),
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () {
-              setState(() {
-                if (selectedCard.isNotEmpty && _amountController.text != '') {
-                  if (int.parse(_amountController.text.replaceAll(',', '')) <=
-                      499) {
-                    Get.snackbar(
-                      'warning_tr'.translationWord(),
-                      '500 -c их дүн оруулна уу'.translationWord(),
-                      colorText: Colors.black,
-                      backgroundColor: Colors.white,
-                    );
-                  } else {
-                    hmacEncryp(selectedCard.value);
-                  }
-                } else {
+          generalBtn(CoreColor().backgroundGreen, CoreColor().backgroundGreen,
+              'continue_btn_tr'.translationWord(), () {
+            setState(() {
+              if (selectedCard.isNotEmpty && _amountController.text != '') {
+                if (int.parse(_amountController.text.replaceAll(',', '')) <=
+                    499) {
                   Get.snackbar(
                     'warning_tr'.translationWord(),
-                    'field_tr'.translationWord(),
+                    '500 -c их дүн оруулна уу'.translationWord(),
                     colorText: Colors.black,
                     backgroundColor: Colors.white,
                   );
+                } else {
+                  hmacEncryp(selectedCard.value);
                 }
-              });
-            },
-          ),
+              } else {
+                Get.snackbar(
+                  'warning_tr'.translationWord(),
+                  'field_tr'.translationWord(),
+                  colorText: Colors.black,
+                  backgroundColor: Colors.white,
+                );
+              }
+            });
+          }),
         ],
       ),
     );
@@ -1005,45 +969,35 @@ class _TransactionScreenState extends State<TransactionScreen>
                   GlobalVariables.useTablet
                       ? const SizedBox(height: 50)
                       : const SizedBox(height: 160),
-                  GeregeButtonWidget(
-                    radius: 10.0,
-                    elevation: 0.0,
-                    minWidth: GlobalVariables.gWidth / 1.6,
-                    backgroundColor: CoreColor().btnBlue,
-                    borderColor: CoreColor().btnBlue,
-                    text: Text(
-                      'withdraw_tr'.translationWord(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        if (selectedAccount.isNotEmpty &&
-                            _amountController.text != '') {
-                          if (int.parse(
-                                  _amountController.text.replaceAll(',', '')) <=
-                              499) {
-                            Get.snackbar(
-                              'warning_tr'.translationWord(),
-                              '500 -c их дүн оруулна уу'.translationWord(),
-                              colorText: Colors.black,
-                              backgroundColor: Colors.white,
-                            );
-                          } else {
-                            withDrawMoney();
-                          }
-                        } else {
+                  generalBtn(
+                      CoreColor().backgroundGreen,
+                      CoreColor().backgroundGreen,
+                      'withdraw_tr'.translationWord(), () {
+                    setState(() {
+                      if (selectedAccount.isNotEmpty &&
+                          _amountController.text != '') {
+                        if (int.parse(
+                                _amountController.text.replaceAll(',', '')) <=
+                            499) {
                           Get.snackbar(
                             'warning_tr'.translationWord(),
-                            'field_tr'.translationWord(),
+                            '500 -c их дүн оруулна уу'.translationWord(),
                             colorText: Colors.black,
                             backgroundColor: Colors.white,
                           );
+                        } else {
+                          withDrawMoney();
                         }
-                      });
-                    },
-                  ),
+                      } else {
+                        Get.snackbar(
+                          'warning_tr'.translationWord(),
+                          'field_tr'.translationWord(),
+                          colorText: Colors.black,
+                          backgroundColor: Colors.white,
+                        );
+                      }
+                    });
+                  }),
                 ],
               ),
             ),

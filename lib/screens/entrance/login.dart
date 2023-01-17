@@ -11,10 +11,10 @@ import 'package:local_auth/local_auth.dart';
 import '../../../global_players.dart';
 import '../../../helpers/gvariables.dart';
 import '../../../style/color.dart';
-import '../../../widget/gerege_button.dart';
-import '../../../widget/gerege_textfield.dart';
 import '../../controller/entrance.dart';
 import '../../helpers/backHelper.dart';
+import '../../widget/fundamental/btn.dart';
+import '../../widget/fundamental/txt_field.dart';
 import 'register_recover.dart';
 
 /// [LoginScreen] login user screen
@@ -147,14 +147,10 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             const SizedBox(height: 50),
             Container(
-              margin: const EdgeInsets.only(
-                  left: 35, right: 35, top: 50, bottom: 15),
-              child: GeregeTextField(
-                controller: _loginController.searchText,
-                label: 'login_name_tr',
-                keyboardType: TextInputType.emailAddress,
-              ),
-            ),
+                margin: const EdgeInsets.only(
+                    left: 35, right: 35, top: 50, bottom: 15),
+                child: txtField2(_loginController.searchText,
+                    'login_name_tr'.translationWord())),
             const SizedBox(height: 20),
             Container(
               margin: const EdgeInsets.only(
@@ -165,21 +161,11 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Row(
                 children: [
                   SizedBox(
-                    width: GlobalVariables.gWidth * .8,
-                    child: GeregeTextField(
-                      controller: _loginController.passwordTextController,
-                      label: 'password_tr',
-                      obscureText: hidePassword,
-                      suffinIcon: IconButton(
-                          onPressed: () => setState(() {
-                                hidePassword = !hidePassword;
-                              }),
-                          icon: const Icon(
-                            FontAwesomeIcons.eye,
-                            size: 20,
-                          )),
-                    ),
-                  ),
+                      width: GlobalVariables.gWidth * .8,
+                      child: TxtFieldPass(
+                        txtCont: _loginController.passwordTextController,
+                        hinttxt: 'password_tr'.translationWord(),
+                      )),
                 ],
               ),
             ),
@@ -207,29 +193,20 @@ class _LoginScreenState extends State<LoginScreen> {
               ],
             ),
             const SizedBox(height: 30),
-            GeregeButtonWidget(
-              elevation: 0.0,
-              minWidth: GlobalVariables.gWidth / 1.2,
-              backgroundColor: CoreColor().backgroundGreen,
-              borderColor: CoreColor().backgroundGreen,
-              text: Text(
-                'login_tr'.translationWord(),
-                style: const TextStyle(color: Colors.white),
-              ),
-              onPressed: () {
-                if (_loginController.searchText.text != "" &&
-                    _loginController.passwordTextController.text != '') {
-                  _loginController.loginUser();
-                } else {
-                  Get.snackbar(
-                    'warning_tr'.translationWord(),
-                    'field_tr'.translationWord(),
-                    colorText: Colors.black,
-                    backgroundColor: Colors.white,
-                  );
-                }
-              },
-            ),
+            generalBtn(CoreColor().backgroundGreen, CoreColor().backgroundGreen,
+                'login_tr'.translationWord(), () {
+              if (_loginController.searchText.text != "" &&
+                  _loginController.passwordTextController.text != '') {
+                _loginController.loginUser();
+              } else {
+                Get.snackbar(
+                  'warning_tr'.translationWord(),
+                  'field_tr'.translationWord(),
+                  colorText: Colors.black,
+                  backgroundColor: Colors.white,
+                );
+              }
+            }),
             const SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,

@@ -28,7 +28,7 @@ class _AppbarSquareState extends State<AppbarSquare> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 0,
+      elevation: 1,
       borderOnForeground: false,
       child: Container(
         padding: const EdgeInsets.all(15),

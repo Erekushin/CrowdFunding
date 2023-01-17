@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/home/wallet/money_screen.dart';
-import 'package:gerege_app_v2/screens/home/wallet/wallet_info.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
@@ -55,9 +54,7 @@ class WalletScreenPhone extends StatelessWidget {
           ),
           Expanded(
             child: InkWell(
-              onTap: () {
-                Get.to(() => const WalletInfoScreen());
-              },
+              onTap: () {},
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

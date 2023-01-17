@@ -5,12 +5,12 @@ import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/screens/home/me/document_screen.dart';
 import 'package:gerege_app_v2/style/color.dart';
-import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:get/route_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 
 import '../../../helpers/services.dart';
+import '../../../widget/fundamental/btn.dart';
 
 class ForeignPassScreen extends StatefulWidget {
   const ForeignPassScreen({
@@ -674,25 +674,12 @@ class _ForeignPassScreenState extends State<ForeignPassScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          GeregeButtonWidget(
-            radius: 50.0,
-            height: 50,
-            elevation: 0.0,
-            minWidth: GlobalVariables.gWidth,
-            backgroundColor: CoreColor().backgroundBlue,
-            borderColor: Colors.transparent,
-            text: Text(
-              'new_user_tr'.translationWord(),
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () {
-              setState(() {
-                _trySubmitForm();
-              });
-            },
-          ),
+          generalBtn(CoreColor().backgroundGreen, CoreColor().backgroundGreen,
+              'new_user_tr'.translationWord(), () {
+            setState(() {
+              _trySubmitForm();
+            });
+          }),
         ],
       ),
     );

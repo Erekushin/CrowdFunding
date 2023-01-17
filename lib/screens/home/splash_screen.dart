@@ -2,16 +2,15 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/screens/entrance/login.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 // import 'dart:math' as math;
 // import 'package:crowdfund_app/style/color.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:google_fonts/google_fonts.dart';
 
-import 'global_players.dart';
-import 'helpers/gvariables.dart';
+import '../../global_players.dart';
+import '../../helpers/gvariables.dart';
+import 'landing_home.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -72,7 +71,7 @@ class _MyHomePageState extends State<SplashScreen>
     });
     Timer(const Duration(seconds: 4), () async {
       await GlobalPlayers.workingWithFile.readAll();
-      Get.to(() => const LoginScreen());
+      Get.to(() => const LandingHome());
     });
   }
 

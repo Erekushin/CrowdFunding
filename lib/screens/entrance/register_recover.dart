@@ -9,10 +9,10 @@ import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
 import '../../helpers/gvariables.dart';
 import '../../style/color.dart';
-import '../../widget/appbar_squeare.dart';
-import '../../widget/btn.dart';
-import '../../widget/options.dart';
-import '../../widget/txt_field.dart';
+import '../../widget/combos/appbar_squeare.dart';
+import '../../widget/fundamental/btn.dart';
+import '../../widget/fundamental/options.dart';
+import '../../widget/fundamental/txt_field.dart';
 import '../content_home/home.dart';
 
 // ignore: camel_case_types
@@ -282,7 +282,7 @@ class _Register_RecoverState extends State<Register_Recover> {
             const SizedBox(
               height: 15,
             ),
-            generalBtn(btnClr, btnTitle, func)
+            generalBtn(btnClr, Colors.white, btnTitle, func)
           ],
         );
       case 3:
@@ -294,7 +294,7 @@ class _Register_RecoverState extends State<Register_Recover> {
             const SizedBox(
               height: 15,
             ),
-            generalBtn(btnClr, btnTitle, func)
+            generalBtn(btnClr, Colors.white, btnTitle, func)
           ],
         );
       default:
@@ -454,8 +454,9 @@ class _Register_RecoverState extends State<Register_Recover> {
                           ),
                           Container(
                             padding: const EdgeInsets.only(left: 25, right: 25),
-                            child:
-                                generalBtn(CoreColor.mainPurple, 'илгээх', () {
+                            child: generalBtn(
+                                CoreColor.mainPurple, Colors.white, 'илгээх',
+                                () {
                               cont.documentFind(
                                   context, selectionCountry, selectionGender);
                             }),

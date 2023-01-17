@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/style/color.dart';
-import 'package:gerege_app_v2/widget/gerege_button.dart';
 import 'package:get/get.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../../helpers/services.dart';
+import '../../../widget/fundamental/btn.dart';
 
 class CoreInfoScreen extends StatefulWidget {
   const CoreInfoScreen({Key? key}) : super(key: key);
@@ -219,37 +219,25 @@ class _CoreInfoScreenState extends State<CoreInfoScreen> {
             ),
           ),
           const SizedBox(height: 10),
-          GeregeButtonWidget(
-            radius: 10.0,
-            elevation: 0.0,
-            minWidth: GlobalVariables.gWidth / 1.6,
-            backgroundColor: CoreColor().backgroundBtnBlue,
-            borderColor: CoreColor().backgroundBtnBlue,
-            text: const Text(
-              'Хадгалах',
-              style: TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () {
-              setState(() {
-                if (addressController.text != '') {
-                  var bodyData = {
-                    "id": GlobalVariables.id,
-                    "address": descAddressController.text.trim()
-                  };
-                  updateUser(bodyData);
-                } else {
-                  Get.snackbar(
-                    'warning_tr'.translationWord(),
-                    'Дэлгэрэнгүй хаяг оруулна уу !',
-                    colorText: Colors.white,
-                    backgroundColor: Colors.red.withOpacity(0.2),
-                  );
-                }
-              });
-            },
-          ),
+          generalBtn(CoreColor().backgroundGreen, CoreColor().backgroundGreen,
+              'Хадгалах', () {
+            setState(() {
+              if (addressController.text != '') {
+                var bodyData = {
+                  "id": GlobalVariables.id,
+                  "address": descAddressController.text.trim()
+                };
+                updateUser(bodyData);
+              } else {
+                Get.snackbar(
+                  'warning_tr'.translationWord(),
+                  'Дэлгэрэнгүй хаяг оруулна уу !',
+                  colorText: Colors.white,
+                  backgroundColor: Colors.red.withOpacity(0.2),
+                );
+              }
+            });
+          }),
         ],
       ),
     );

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget generalBtn(Color clr, String title, Function func) {
+Widget generalBtn(Color clr, Color textColor, String title, Function func) {
   return InkWell(
     onTap: () {
       func();
@@ -13,8 +13,8 @@ Widget generalBtn(Color clr, String title, Function func) {
       child: Center(
         child: Text(
           title,
-          style: const TextStyle(
-              color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
+          style: TextStyle(
+              color: textColor, fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ),
     ),

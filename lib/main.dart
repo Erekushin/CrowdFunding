@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/platforms/desktop_helper.dart';
-import 'package:gerege_app_v2/splash_screen.dart';
+import 'package:gerege_app_v2/screens/home/splash_screen.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:flutter/services.dart';
