@@ -43,23 +43,20 @@ class _AppbarSquareState extends State<AppbarSquare> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            TextButton(
-              onPressed: () {
+            InkWell(
+              onTap: () {
                 Get.to(() => const Projects());
               },
-              child: Container(
-                margin: const EdgeInsets.only(top: 30),
-                child: Text(
-                  widget.title,
-                  maxLines: 4,
-                  softWrap: true,
-                  overflow: TextOverflow.ellipsis,
-                  style: GoogleFonts.sourceSansPro(
-                      height: 1,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: widget.titleColor),
-                ),
+              child: Text(
+                widget.title,
+                maxLines: 4,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.sourceSansPro(
+                    height: 1,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: widget.titleColor),
               ),
             ),
             InkWell(

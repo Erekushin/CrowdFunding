@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gerege_app_v2/global_players.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
@@ -212,6 +213,7 @@ class _SidebarState extends State<Sidebar> with SingleTickerProviderStateMixin {
                       }),
                       menuComponent(context, FontAwesomeIcons.doorOpen, 'Гарах',
                           () {
+                        GlobalPlayers.workingWithFile.cleanUserInfo();
                         Get.offAll(() => const LandingHome());
                       }),
                     ],

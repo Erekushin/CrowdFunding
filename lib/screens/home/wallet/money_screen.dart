@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/screens/wallet/bank_accounts_screen.dart';
 import 'package:gerege_app_v2/screens/home/wallet/recieve_screen.dart';
 import 'package:gerege_app_v2/style/color.dart';
 
@@ -246,9 +245,7 @@ class _NMoneyScreenState extends State<MoneyScreen> {
                     onTap: () {
                       if (item['id'] == 0) {
                         Get.to(() => const RecieveScreen());
-                      } else {
-                        Get.to(() => const BankAccountsScreen());
-                      }
+                      } else {}
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

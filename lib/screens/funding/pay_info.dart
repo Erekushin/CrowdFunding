@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/global_players.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
+import 'package:gerege_app_v2/screens/funding/projects.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
@@ -28,161 +29,158 @@ class _PayInfoState extends State<PayInfo> {
   EdgeInsetsGeometry containerPadding =
       const EdgeInsets.only(left: 30, right: 30);
   int fundingValue = 1;
+  GlobalKey<ScaffoldState> menuSidebarKeyPayment = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppbarSquare(
-        height: GlobalVariables.gHeight * .12,
-        leadingIcon: const SizedBox(),
-        menuAction: () {},
-        titleColor: Colors.black,
-        color: CoreColor.backlightGrey,
-        title: 'Төлбөрийн мэдээлэл',
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          Container(
-            padding: containerPadding,
-            child: rowofinfo('Ашигийн тооцоолол', '2 Сая₮'),
-          ),
-          Container(
-            padding: containerPadding,
-            color: CoreColor.backlightGrey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                Text('Хэтэвчний мэдээлэл'),
-                SizedBox(
-                  height: 30,
-                ),
-                rowofinfo(
-                    'Үлдэгдэл', '${GlobalVariables.accountBalance.value}₮'),
-                rowofinfo('Хөрөнгө оруулалт', '1 Сая₮'),
-                rowofinfo('Боломжит үлдэгдэл', '1 Сая₮'),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
+    return fundingTop(
+        context,
+        widget.item,
+        3,
+        'Funding Detail',
+        menuSidebarKeyPayment,
+        Column(
+          children: [
+            Container(
+              padding: containerPadding,
+              child: rowofinfo('Ашигийн тооцоолол', '2 Сая₮'),
             ),
-          ),
-          Column(
-            children: [
-              Text('Хөрөнгө оруулалтын хэмжээ (10,0000 төг)'),
-              SizedBox(
-                height: 50,
-              ),
-              Text(
-                '${fundingValue * 10},000',
-                style: TextStyle(fontSize: 25),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        if (fundingValue > 1) {
-                          --fundingValue;
-                        }
-                      });
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(15),
-                            bottomLeft: Radius.circular(15)),
-                        color: CoreColor.backlightGrey,
-                      ),
-                      width: 50,
-                      height: 50,
-                      child: const Icon(FontAwesomeIcons.minus),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      setState(() {
-                        setState(() {
-                          ++fundingValue;
-                        });
-                      });
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(15),
-                            bottomRight: Radius.circular(15)),
-                        color: CoreColor.mainPurple,
-                      ),
-                      width: 50,
-                      height: 50,
-                      child: const Icon(
-                        FontAwesomeIcons.plus,
-                        color: Colors.white,
-                      ),
-                    ),
-                  )
-                ],
-              )
-            ],
-          ),
-          Container(
-              margin: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                  color: CoreColor.backlightGrey,
-                  borderRadius: const BorderRadius.all(Radius.circular(15))),
-              child: Row(
+            Container(
+              padding: containerPadding,
+              color: CoreColor.backlightGrey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Icon(
-                    FontAwesomeIcons.storeSlash,
-                    color: CoreColor.mainPurple,
+                  SizedBox(
+                    height: 20,
                   ),
-                  Container(
-                    width: GlobalVariables.gWidth * .4,
-                    child: const Text(
-                      'Crowfunding is not store. it is way to bring creative projects to life',
-                      style: TextStyle(fontSize: 11),
-                      maxLines: 3,
-                      softWrap: true,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+                  Text('Хэтэвчний мэдээлэл'),
+                  SizedBox(
+                    height: 30,
                   ),
-                  TextButton(
-                      onPressed: () {},
-                      child: Text(
-                        'learn more',
-                        style: TextStyle(
-                            color: CoreColor.mainPurple,
-                            fontWeight: FontWeight.bold),
-                      ))
+                  rowofinfo(
+                      'Үлдэгдэл', '${GlobalVariables.accountBalance.value}₮'),
+                  rowofinfo('Хөрөнгө оруулалт', '1 Сая₮'),
+                  rowofinfo('Боломжит үлдэгдэл', '1 Сая₮'),
+                  SizedBox(
+                    height: 20,
+                  ),
                 ],
-              )),
-          InkWell(
-              onTap: () {
-                fundToProject();
-              },
-              child: Container(
-                padding: const EdgeInsets.only(
-                    top: 10, bottom: 10, left: 30, right: 30),
-                decoration: BoxDecoration(
-                    color: CoreColor.mainPurple,
-                    borderRadius: const BorderRadius.all(Radius.circular(15))),
-                child: const Text(
-                  'хөрөнгө оруулах',
-                  style: TextStyle(color: Colors.white),
+              ),
+            ),
+            Column(
+              children: [
+                Text('Хөрөнгө оруулалтын хэмжээ (10,0000 төг)'),
+                SizedBox(
+                  height: 50,
                 ),
-              ))
-        ],
-      ),
-    );
+                Text(
+                  '${fundingValue * 10},000',
+                  style: TextStyle(fontSize: 25),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          if (fundingValue > 1) {
+                            --fundingValue;
+                          }
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              bottomLeft: Radius.circular(15)),
+                          color: CoreColor.backlightGrey,
+                        ),
+                        width: 50,
+                        height: 50,
+                        child: const Icon(FontAwesomeIcons.minus),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          setState(() {
+                            ++fundingValue;
+                          });
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(15),
+                              bottomRight: Radius.circular(15)),
+                          color: CoreColor.mainPurple,
+                        ),
+                        width: 50,
+                        height: 50,
+                        child: const Icon(
+                          FontAwesomeIcons.plus,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+            Container(
+                margin: const EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                    color: CoreColor.backlightGrey,
+                    borderRadius: const BorderRadius.all(Radius.circular(15))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.storeSlash,
+                      color: CoreColor.mainPurple,
+                    ),
+                    Container(
+                      width: GlobalVariables.gWidth * .4,
+                      child: const Text(
+                        'Crowfunding is not store. it is way to bring creative projects to life',
+                        style: TextStyle(fontSize: 11),
+                        maxLines: 3,
+                        softWrap: true,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'learn more',
+                          style: TextStyle(
+                              color: CoreColor.mainPurple,
+                              fontWeight: FontWeight.bold),
+                        ))
+                  ],
+                )),
+            InkWell(
+                onTap: () {
+                  fundToProject();
+                },
+                child: Container(
+                  padding: const EdgeInsets.only(
+                      top: 10, bottom: 10, left: 30, right: 30),
+                  decoration: BoxDecoration(
+                      color: CoreColor.mainPurple,
+                      borderRadius:
+                          const BorderRadius.all(Radius.circular(15))),
+                  child: const Text(
+                    'хөрөнгө оруулах',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ))
+          ],
+        ));
   }
 
   Widget rowofinfo(String info1, String info2) {

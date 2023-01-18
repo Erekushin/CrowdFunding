@@ -8,6 +8,7 @@ import 'package:get_storage/get_storage.dart';
 enum ScreenModes { loading, noProject, noInternet, error, data }
 
 class GlobalVariables {
+  var userInfo;
   static bool ifFingering = false;
   static String pass = '';
   static String name = '';
@@ -70,38 +71,58 @@ class GlobalVariables {
 
   /// [storageToVar] user variables assign a value
   static storageToVar() {
-    var userInformation = GlobalVariables.gStorage.read('userInformation');
+    var userInformation = gStorage.read('userInformation');
 
-    GlobalVariables.id = userInformation['id'] ?? '';
-    GlobalVariables.civilId = userInformation['civil_id'] ?? '';
-    GlobalVariables.regNo = userInformation['reg_no'] ?? '';
-    GlobalVariables.familyName = userInformation['family_name'] ?? '';
-    GlobalVariables.lastName = userInformation['last_name'] ?? '';
-    GlobalVariables.firstName = userInformation['first_name'] ?? '';
-    GlobalVariables.userName = userInformation['username'] ?? '';
-    GlobalVariables.rootAccount = userInformation['root_account'] ?? '';
-    GlobalVariables.email = userInformation['email'] ?? '';
-    GlobalVariables.phoneNumber = userInformation['phone_no'] ?? '';
-    GlobalVariables.gender = userInformation['gender'] ?? 0;
-    GlobalVariables.birthDate = userInformation['birth_date'] ?? '';
-    GlobalVariables.isForeign = userInformation['is_foreign'] ?? '';
-    GlobalVariables.aimagCode = userInformation['aimag_code'] ?? '';
-    GlobalVariables.aimagName = userInformation['aimag_name'] ?? '';
-    GlobalVariables.sumCode = userInformation['sum_code'] ?? '';
-    GlobalVariables.sumName = userInformation['sum_name'] ?? '';
-    GlobalVariables.bagCode = userInformation['bag_code'] ?? '';
-    GlobalVariables.bagName = userInformation['bag_name'] ?? '';
-    GlobalVariables.address = userInformation['address'] ?? '';
-    GlobalVariables.profileImage.value = userInformation['profile_image'] ?? '';
-    GlobalVariables.countryCode = userInformation['country_code'] ?? '';
-    GlobalVariables.countryName = userInformation['country_name'] ?? '';
-    GlobalVariables.nationality = userInformation['nationality'] ?? '';
-    GlobalVariables.countryNameEn = userInformation['country_name_en'] ?? '';
-    GlobalVariables.cLevel = userInformation['c_level'] ?? 0;
+    GlobalVariables.id = gStorage.read('userInformation')['id'] ?? '';
+    GlobalVariables.civilId =
+        gStorage.read('userInformation')['civil_id'] ?? '';
+    GlobalVariables.regNo = gStorage.read('userInformation')['reg_no'] ?? '';
+    GlobalVariables.familyName =
+        gStorage.read('userInformation')['family_name'] ?? '';
+    GlobalVariables.lastName =
+        gStorage.read('userInformation')['last_name'] ?? '';
+    GlobalVariables.firstName =
+        gStorage.read('userInformation')['first_name'] ?? '';
+    GlobalVariables.userName =
+        gStorage.read('userInformation')['username'] ?? '';
+    GlobalVariables.rootAccount =
+        gStorage.read('userInformation')['root_account'] ?? '';
+    GlobalVariables.email = gStorage.read('userInformation')['email'] ?? '';
+    GlobalVariables.phoneNumber =
+        gStorage.read('userInformation')['phone_no'] ?? '';
+    GlobalVariables.gender = gStorage.read('userInformation')['gender'] ?? 0;
+    GlobalVariables.birthDate =
+        gStorage.read('userInformation')['birth_date'] ?? '';
+    GlobalVariables.isForeign =
+        gStorage.read('userInformation')['is_foreign'] ?? '';
+    GlobalVariables.aimagCode =
+        gStorage.read('userInformation')['aimag_code'] ?? '';
+    GlobalVariables.aimagName =
+        gStorage.read('userInformation')['aimag_name'] ?? '';
+    GlobalVariables.sumCode =
+        gStorage.read('userInformation')['sum_code'] ?? '';
+    GlobalVariables.sumName =
+        gStorage.read('userInformation')['sum_name'] ?? '';
+    GlobalVariables.bagCode =
+        gStorage.read('userInformation')['bag_code'] ?? '';
+    GlobalVariables.bagName =
+        gStorage.read('userInformation')['bag_name'] ?? '';
+    GlobalVariables.address = gStorage.read('userInformation')['address'] ?? '';
+    GlobalVariables.profileImage.value =
+        gStorage.read('userInformation')['profile_image'] ?? '';
+    GlobalVariables.countryCode =
+        gStorage.read('userInformation')['country_code'] ?? '';
+    GlobalVariables.countryName =
+        gStorage.read('userInformation')['country_name'] ?? '';
+    GlobalVariables.nationality =
+        gStorage.read('userInformation')['nationality'] ?? '';
+    GlobalVariables.countryNameEn =
+        gStorage.read('userInformation')['country_name_en'] ?? '';
+    GlobalVariables.cLevel = gStorage.read('userInformation')['c_level'] ?? 0;
     GlobalVariables.isConfirmedPhone =
-        userInformation['is_confirmed_phone_no'] ?? 0;
+        gStorage.read('userInformation')['is_confirmed_phone_no'] ?? 0;
     GlobalVariables.isConfirmedEmail =
-        userInformation['is_confirmed_email'] ?? 0;
+        gStorage.read('userInformation')['is_confirmed_email'] ?? 0;
   }
 
   ///[updateUserInformation] update user information

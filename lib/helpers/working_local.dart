@@ -51,6 +51,39 @@ class WorkingFiles {
     );
     readAll();
   }
+
+  void cleanUserInfo() {
+    GlobalVariables.id = '';
+    GlobalVariables.civilId = '';
+    GlobalVariables.regNo = '';
+    GlobalVariables.familyName = '';
+    GlobalVariables.lastName = '';
+    GlobalVariables.firstName = '';
+    GlobalVariables.userName = '';
+    GlobalVariables.rootAccount = "";
+    GlobalVariables.email = '';
+    GlobalVariables.phoneNumber = '';
+    GlobalVariables.gender = 0;
+    GlobalVariables.birthDate = '';
+    GlobalVariables.isForeign = 0;
+    GlobalVariables.aimagCode = '';
+    GlobalVariables.aimagName = '';
+    GlobalVariables.sumCode = '';
+    GlobalVariables.sumName = '';
+    GlobalVariables.bagCode = '';
+    GlobalVariables.bagName = '';
+    GlobalVariables.address = '';
+    GlobalVariables.profileImage = ''.obs;
+    GlobalVariables.countryCode = '';
+    GlobalVariables.countryName = '';
+    GlobalVariables.nationality = '';
+    GlobalVariables.countryNameEn = '';
+    GlobalVariables.cLevel = 0;
+    GlobalVariables.isConfirmedPhone = 0;
+    GlobalVariables.isConfirmedEmail = 0;
+    GlobalVariables.accountBalance = 1.obs;
+    GlobalVariables.accountNoList = [];
+  }
 }
 
 class WorkingBioMatrix {

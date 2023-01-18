@@ -13,6 +13,7 @@ import '../../widget/combos/appbar_squeare.dart';
 import '../../widget/combos/sidebar.dart';
 import '../../widget/fundamental/btn.dart';
 import '../../widget/fundamental/txt_field.dart';
+import '../home/landing_home.dart';
 import 'fundedProjects.dart';
 
 class Profile extends StatefulWidget {
@@ -138,7 +139,7 @@ List optionBtns = [
     'icon': FontAwesomeIcons.rightFromBracket,
     'name': 'Sign Out',
     'func': (int i) {
-      Get.off(() => const Security(), arguments: i);
+      Get.off(() => const LandingHome(), arguments: i);
     }
   },
 ];

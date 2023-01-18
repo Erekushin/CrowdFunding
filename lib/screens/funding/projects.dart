@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
+import 'package:gerege_app_v2/screens/funding/pay_info.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,6 +17,8 @@ import '../../widget/combos/eachproject.dart';
 import '../../widget/combos/helper_widgets.dart';
 import '../../widget/combos/pre_sidebar.dart';
 import '../../widget/combos/sidebar.dart';
+import '../dialogs/warning_dialogs.dart';
+import '../home/landing_home.dart';
 import 'singleProject.dart';
 
 class Projects extends StatefulWidget {
@@ -77,6 +80,7 @@ class _ProjectsState extends State<Projects> {
     }
   }
 
+  var all = {"id": "0", "name": "Бүгд", "created_date": "2022-12-06 19:00:44"};
   RxList typeList = [].obs;
   void getTypeList() async {
     await Services()
@@ -87,6 +91,7 @@ class _ProjectsState extends State<Projects> {
           '---GET TYPE LIST---:TOKEN: ${GlobalVariables.gStorage.read("token")}.................returned data ${data.body.toString()}');
       if (data.statusCode == 200) {
         typeList.value = data.body['result']['items'];
+        typeList.insert(0, all);
       } else {
         print("wtf");
         print(res);
@@ -114,6 +119,7 @@ class _ProjectsState extends State<Projects> {
         switch (data.statusCode) {
           case 200:
             projectList.value = data.body['result']['items'];
+            itemList4.value = data.body['result']['items'];
             if (projectList.isEmpty) {
               noProject.value = true;
             }
@@ -142,11 +148,15 @@ class _ProjectsState extends State<Projects> {
   GlobalKey<ScaffoldState> menuSidebarKeyProjects = GlobalKey<ScaffoldState>();
   PageController pageCont = PageController();
   RxList itemList4 = [].obs;
+  RxList itemList = [].obs;
   TextEditingController searchCont = TextEditingController();
   String selectionType = "1";
   @override
   Widget build(BuildContext context) {
     return fundingTop(
+        context,
+        null,
+        1,
         'Projects',
         menuSidebarKeyProjects,
         Obx(() => Column(
@@ -219,6 +229,18 @@ class _ProjectsState extends State<Projects> {
                       setState(() {
                         selectionType = value.toString();
                       });
+                      if (value == '0') {
+                        itemList4 = projectList;
+                        crowdlog.wtf(projectList.length);
+                      } else {
+                        itemList.replaceRange(
+                            0,
+                            itemList.length,
+                            projectList.where((element) =>
+                                element['category_id'] ==
+                                int.parse(value.toString())));
+                        itemList4 = itemList;
+                      }
                     },
                   ),
                 ),
@@ -226,10 +248,10 @@ class _ProjectsState extends State<Projects> {
                 ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: projectList.length,
+                    itemCount: itemList4.length,
                     itemBuilder: (c, projectIndex) {
                       int progress;
-                      var item = projectList[projectIndex];
+                      var item = itemList4[projectIndex];
                       int amount = item['amount'];
                       int balance = item['balance'];
                       progress = progressProcent(amount, balance).toInt();
@@ -247,8 +269,8 @@ class _ProjectsState extends State<Projects> {
   }
 }
 
-Widget fundingTop(
-    String title, GlobalKey<ScaffoldState> menuSidebarKey, Widget body) {
+Widget fundingTop(BuildContext context, var item, int step, String title,
+    GlobalKey<ScaffoldState> menuSidebarKey, Widget body) {
   return Scaffold(
     key: menuSidebarKey,
     endDrawer: GlobalVariables.id == ""
@@ -284,44 +306,107 @@ Widget fundingTop(
             const SizedBox(
               height: 20,
             ),
-            Row(
-              children: [
-                const Icon(
-                  FontAwesomeIcons.house,
-                  size: 15,
-                  color: Colors.grey,
-                ),
-                const SizedBox(
-                  width: 5,
-                ),
-                const Text(
-                  ' Home  ',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const Icon(
-                  FontAwesomeIcons.anglesRight,
-                  size: 15,
-                  color: Colors.grey,
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  'Projects  ',
-                  style: TextStyle(
-                      color: CoreColor.mainPurple, fontWeight: FontWeight.bold),
-                ),
-                const Icon(
-                  FontAwesomeIcons.anglesRight,
-                  size: 15,
-                  color: Colors.grey,
-                ),
-                Text(
-                  '  Single Project  ',
-                  style: TextStyle(
-                      color: CoreColor.mainPurple, fontWeight: FontWeight.bold),
-                ),
-              ],
+            SizedBox(
+              width: GlobalVariables.gWidth,
+              child: Wrap(
+                children: [
+                  const Icon(
+                    FontAwesomeIcons.house,
+                    size: 15,
+                    color: Colors.grey,
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      switch (step) {
+                        case 2:
+                          Get.back();
+                          break;
+                        case 3:
+                          Get.close(2);
+                          break;
+                        default:
+                      }
+                    },
+                    child: Text(
+                      '   Projects   ',
+                      style: TextStyle(
+                          color: step == 1
+                              ? CoreColor.mainPurple
+                              : Colors.grey.shade400,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const Icon(
+                    FontAwesomeIcons.anglesRight,
+                    size: 15,
+                    color: Colors.grey,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      switch (step) {
+                        case 1:
+                          Get.snackbar('Анхаараарай',
+                              'та хөрөнгө оруулах төсөлөө сонгоно уу?',
+                              colorText: Colors.black,
+                              backgroundColor: Colors.grey.withOpacity(0.2),
+                              duration: const Duration(seconds: 1));
+                          break;
+                        case 3:
+                          Get.back();
+                          break;
+                        default:
+                      }
+                    },
+                    child: Text(
+                      '   Single Project   ',
+                      style: TextStyle(
+                          color: step == 2
+                              ? CoreColor.mainPurple
+                              : Colors.grey.shade400,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const Icon(
+                    FontAwesomeIcons.anglesRight,
+                    size: 15,
+                    color: Colors.grey,
+                  ),
+                  InkWell(
+                    onTap: () {
+                      switch (step) {
+                        case 1:
+                          Get.snackbar('Анхаараарай',
+                              'та хөрөнгө оруулах төсөлөө сонгоно уу?',
+                              colorText: Colors.black,
+                              backgroundColor: Colors.grey.withOpacity(0.2),
+                              duration: const Duration(seconds: 1));
+                          break;
+                        case 2:
+                          if (GlobalVariables.id == "") {
+                            signinReminder(context);
+                          } else {
+                            Get.to(() => PayInfo(
+                                  item: item,
+                                ));
+                          }
+                          break;
+                        default:
+                      }
+                    },
+                    child: Text(
+                      '   Funding',
+                      style: TextStyle(
+                          color: step == 3
+                              ? CoreColor.mainPurple
+                              : Colors.grey.shade400,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
             ),
             const SizedBox(
               height: 20,

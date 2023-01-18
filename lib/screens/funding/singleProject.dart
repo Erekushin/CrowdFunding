@@ -34,6 +34,9 @@ class _SingleProjectState extends State<SingleProject> {
   @override
   Widget build(BuildContext context) {
     return fundingTop(
+        context,
+        widget.item,
+        2,
         widget.item['name'].toString(),
         menuSidebarKeySingle,
         Column(

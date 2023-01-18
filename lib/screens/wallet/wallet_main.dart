@@ -17,7 +17,6 @@ import '../../helpers/services.dart';
 import '../../style/color.dart';
 import '../../widget/combos/appbar_squeare.dart';
 import '../../widget/fundamental/btn.dart';
-import 'bank_accounts_screen.dart';
 
 class WalletMain extends StatefulWidget {
   const WalletMain({super.key});
@@ -1214,18 +1213,6 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      whiteBtn('Банкны данс', FontAwesomeIcons.buildingColumns,
-                          () {
-                        Get.to(() => const BankAccountsScreen());
-                      }),
-                    ],
-                  )
                 ],
               ),
             ),
@@ -1256,30 +1243,6 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
     );
   }
   //#region.............WIDGETS...............
-
-  Widget whiteBtn(String title, IconData icon, Function func) {
-    return InkWell(
-      onTap: () => func(),
-      child: Container(
-          padding:
-              const EdgeInsets.only(left: 10, right: 10, bottom: 5, top: 5),
-          margin: const EdgeInsets.all(5),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.black),
-              borderRadius: const BorderRadius.all(Radius.circular(15))),
-          child: Row(children: [
-            Icon(
-              icon,
-              size: 15,
-            ),
-            const SizedBox(
-              width: 10,
-            ),
-            Text(title)
-          ])),
-    );
-  }
 
   Widget actionBtn(String title, Color clr, Function func) {
     return InkWell(
