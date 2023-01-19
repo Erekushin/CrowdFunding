@@ -6,7 +6,6 @@ import 'package:gerege_app_v2/global_players.dart';
 import 'package:get/get.dart';
 
 import '../helpers/backHelper.dart';
-import '../helpers/core_url.dart';
 import '../helpers/gvariables.dart';
 import '../helpers/services.dart';
 import '../helpers/working_string.dart';
@@ -60,11 +59,8 @@ class EntranceCont extends GetxController {
               '---register---:body $bodyData........ data ${data.body.toString()}');
           GlobalPlayers.frontHelper.requestErrorSnackbar(data, 2, () {
             var res = data.body;
-            GlobalVariables.gStorage
-                .write("token", res['result']['authorization']['token']);
-            GlobalVariables.gStorage
-                .write('userInformation', res['result']['user']);
-            GlobalVariables.storageToVar();
+            GlobalVariables.token = res['result']['authorization']['token'];
+            GlobalVariables.userInfo = res['result']['user'];
             getCountryList(context);
             loading.value = false;
           }, () {
@@ -216,10 +212,8 @@ class EntranceCont extends GetxController {
                 .addNewItem('pass', passwordTextController.text);
             GlobalPlayers.workingWithFile.addNewItem('name', searchText.text);
           }
-          GlobalVariables.gStorage
-              .write("token", res['authorization']['token']);
-          GlobalVariables.gStorage.write('userInformation', res['user']);
-          GlobalVariables.storageToVar();
+          GlobalVariables.token = res['authorization']['token'];
+          GlobalVariables.userInfo = res['user'];
           searchText.clear();
           passwordTextController.clear();
           Get.to(() => const Projects());

@@ -11,7 +11,6 @@ import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/backHelper.dart';
-import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/services.dart';
 import '../../widget/combos/appbar_squeare.dart';
@@ -196,7 +195,7 @@ class _PayInfoState extends State<PayInfo> {
   void fundToProject() async {
     var bodyData = {
       "fund_id": int.parse(widget.item['id']),
-      "user_id": int.parse(GlobalVariables.id),
+      "user_id": int.parse(GlobalVariables.userInfo['id']),
       "amount": fundingValue * 10000,
     };
     await Services()

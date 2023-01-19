@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/screens/funding/pay_info.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
 import '../../global_players.dart';
-import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
-import '../../helpers/working_dates.dart';
-import '../../widget/combos/appbar_squeare.dart';
-import '../../widget/combos/pre_sidebar.dart';
-import '../../widget/combos/sidebar.dart';
 import '../dialogs/warning_dialogs.dart';
 import 'projects.dart';
 
@@ -48,7 +41,7 @@ class _SingleProjectState extends State<SingleProject> {
                 Text('data'),
                 InkWell(
                   onTap: () {
-                    if (GlobalVariables.id == "") {
+                    if (GlobalVariables.userInfo['id'] == "") {
                       signinReminder(context);
                     } else {
                       Get.to(() => PayInfo(

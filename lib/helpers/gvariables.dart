@@ -1,14 +1,47 @@
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/services.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../global_players.dart';
+
 enum ScreenModes { loading, noProject, noInternet, error, data }
 
 class GlobalVariables {
-  var userInfo;
+  static Map userInfo = {
+    "id": "",
+    "civil_id": "",
+    "reg_no": "",
+    "family_name": "",
+    "last_name": "",
+    "first_name": "",
+    "username": "",
+    "root_account": "",
+    "email": "",
+    "phone_no": "",
+    "gender": 1,
+    "birth_date": "",
+    "is_foreign": 0,
+    "aimag_code": "",
+    "aimag_name": "",
+    "sum_code": "",
+    "sum_name": "",
+    "bag_code": "",
+    "bag_name": "",
+    "address": "",
+    "profile_image": "",
+    "country_code": "",
+    "country_name": "",
+    "nationality": "",
+    "country_name_en": "",
+    "c_level": 0,
+    "created_date": "",
+    "updated_date": "",
+    "is_confirmed_phone_no": 0,
+    "is_confirmed_email": 1
+  };
+  static var token;
   static bool ifFingering = false;
   static String pass = '';
   static String name = '';
@@ -33,106 +66,19 @@ class GlobalVariables {
   static RxBool isTabletSidebar = true.obs;
   static double gWidth = Get.width;
   static double gHeight = Get.height;
-  static GetStorage gStorage = GetStorage();
   static String deviceToken = '';
   static String localeLong = '';
 
-  /// user information data start
-  static String id = "";
-  static String civilId = '';
-  static String regNo = 'Регистрийн дугаар';
-  static String familyName = '';
-  static String lastName = '';
-  static String firstName = '';
-  static String userName = '';
-  static String rootAccount = "";
-  static String email = '';
-  static String phoneNumber = '';
-  static int gender = 0;
-  static String birthDate = '';
-  static int isForeign = 0;
-  static String aimagCode = '';
-  static String aimagName = '';
-  static String sumCode = '';
-  static String sumName = '';
-  static String bagCode = '';
-  static String bagName = '';
-  static String address = '';
-  static RxString profileImage = ''.obs;
-  static String countryCode = '';
-  static String countryName = '';
-  static String nationality = '';
-  static String countryNameEn = '';
-  static int cLevel = 0;
-  static int isConfirmedPhone = 0;
-  static int isConfirmedEmail = 0;
   static RxInt accountBalance = 1.obs;
   static List accountNoList = [];
-
-  /// [storageToVar] user variables assign a value
-  static storageToVar() {
-    var userInformation = gStorage.read('userInformation');
-
-    GlobalVariables.id = gStorage.read('userInformation')['id'] ?? '';
-    GlobalVariables.civilId =
-        gStorage.read('userInformation')['civil_id'] ?? '';
-    GlobalVariables.regNo = gStorage.read('userInformation')['reg_no'] ?? '';
-    GlobalVariables.familyName =
-        gStorage.read('userInformation')['family_name'] ?? '';
-    GlobalVariables.lastName =
-        gStorage.read('userInformation')['last_name'] ?? '';
-    GlobalVariables.firstName =
-        gStorage.read('userInformation')['first_name'] ?? '';
-    GlobalVariables.userName =
-        gStorage.read('userInformation')['username'] ?? '';
-    GlobalVariables.rootAccount =
-        gStorage.read('userInformation')['root_account'] ?? '';
-    GlobalVariables.email = gStorage.read('userInformation')['email'] ?? '';
-    GlobalVariables.phoneNumber =
-        gStorage.read('userInformation')['phone_no'] ?? '';
-    GlobalVariables.gender = gStorage.read('userInformation')['gender'] ?? 0;
-    GlobalVariables.birthDate =
-        gStorage.read('userInformation')['birth_date'] ?? '';
-    GlobalVariables.isForeign =
-        gStorage.read('userInformation')['is_foreign'] ?? '';
-    GlobalVariables.aimagCode =
-        gStorage.read('userInformation')['aimag_code'] ?? '';
-    GlobalVariables.aimagName =
-        gStorage.read('userInformation')['aimag_name'] ?? '';
-    GlobalVariables.sumCode =
-        gStorage.read('userInformation')['sum_code'] ?? '';
-    GlobalVariables.sumName =
-        gStorage.read('userInformation')['sum_name'] ?? '';
-    GlobalVariables.bagCode =
-        gStorage.read('userInformation')['bag_code'] ?? '';
-    GlobalVariables.bagName =
-        gStorage.read('userInformation')['bag_name'] ?? '';
-    GlobalVariables.address = gStorage.read('userInformation')['address'] ?? '';
-    GlobalVariables.profileImage.value =
-        gStorage.read('userInformation')['profile_image'] ?? '';
-    GlobalVariables.countryCode =
-        gStorage.read('userInformation')['country_code'] ?? '';
-    GlobalVariables.countryName =
-        gStorage.read('userInformation')['country_name'] ?? '';
-    GlobalVariables.nationality =
-        gStorage.read('userInformation')['nationality'] ?? '';
-    GlobalVariables.countryNameEn =
-        gStorage.read('userInformation')['country_name_en'] ?? '';
-    GlobalVariables.cLevel = gStorage.read('userInformation')['c_level'] ?? 0;
-    GlobalVariables.isConfirmedPhone =
-        gStorage.read('userInformation')['is_confirmed_phone_no'] ?? 0;
-    GlobalVariables.isConfirmedEmail =
-        gStorage.read('userInformation')['is_confirmed_email'] ?? 0;
-  }
 
   ///[updateUserInformation] update user information
   static updateUserInformation() {
     String url =
-        '${CoreUrl.crowdfund}user/find?search_text=${GlobalVariables.id}';
+        '${CoreUrl.crowdfund}user/find?search_text=${GlobalVariables.userInfo['id']}';
     Services().getRequest(url, true, '').then((data) {
       if (data.statusCode == 200) {
-        GlobalVariables.gStorage.write('userInformation', data.body['result']);
-        storageToVar();
+        userInfo = data.body['result'];
       } else {
         Get.snackbar(
           'warning_tr'.translationWord(),

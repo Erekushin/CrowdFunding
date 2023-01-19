@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/style/color.dart';
@@ -9,6 +8,7 @@ import 'package:get/route_manager.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
+import '../../global_players.dart';
 import '../../helpers/services.dart';
 
 class QrCodeScanner extends StatelessWidget {

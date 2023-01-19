@@ -50,6 +50,7 @@ class Sidebar extends StatefulWidget {
 class _SidebarState extends State<Sidebar> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _animation;
+  double optionBtnsHeight = 0;
   @override
   void initState() {
     super.initState();
@@ -176,12 +177,14 @@ class _SidebarState extends State<Sidebar> with SingleTickerProviderStateMixin {
                           height: 20,
                           child: Center(
                             child: Text(
-                              GlobalVariables.firstName,
+                              GlobalVariables.userInfo['first_name'],
                               softWrap: true,
                               maxLines: 3,
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontSize: GlobalVariables.firstName.length > 8
+                                  fontSize: GlobalVariables
+                                              .userInfo['first_name'].length >
+                                          8
                                       ? 18
                                       : 25,
                                   fontWeight: FontWeight.bold),
@@ -197,26 +200,72 @@ class _SidebarState extends State<Sidebar> with SingleTickerProviderStateMixin {
                 ),
                 Expanded(
                   flex: 6,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      menuComponent(
-                          context, FontAwesomeIcons.magnifyingGlass, 'Хэтэвч',
-                          () {
-                        Get.to(() => const WalletMain());
-                      }),
-                      menuComponent(
-                          context, FontAwesomeIcons.user, 'Өөр бүртгэл ашиглах',
-                          () {
-                        Get.offAll(() => const LoginScreen());
-                      }),
-                      menuComponent(context, FontAwesomeIcons.doorOpen, 'Гарах',
-                          () {
-                        GlobalPlayers.workingWithFile.cleanUserInfo();
-                        Get.offAll(() => const LandingHome());
-                      }),
-                    ],
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        menuComponent(context, Icons.wallet, 'Хэтэвч', () {
+                          Get.to(() => const WalletMain());
+                        }),
+                        menuComponent(context, Icons.person, 'Профайл', () {
+                          setState(() {
+                            optionBtnsHeight == 0
+                                ? optionBtnsHeight = 300
+                                : optionBtnsHeight = 0;
+                          });
+                        }),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 500),
+                          height: optionBtnsHeight,
+                          child: ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: optionBtns.length,
+                              itemBuilder: (c, i) {
+                                return InkWell(
+                                  onTap: () {
+                                    optionBtns[i]['func'](i, true);
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Row(
+                                      children: [
+                                        const SizedBox(
+                                          width: 40,
+                                        ),
+                                        Icon(
+                                          optionBtns[i]['icon'],
+                                          size: 15,
+                                          color: CoreColor.mainPurple,
+                                        ),
+                                        const SizedBox(
+                                          width: 20,
+                                        ),
+                                        Text(
+                                          optionBtns[i]['name'],
+                                          style: const TextStyle(
+                                              color: Colors.black),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+                        ),
+                        menuComponent(context, Icons.switch_account,
+                            'Өөр бүртгэл ашиглах', () {
+                          Get.offAll(() => const LoginScreen());
+                        }),
+                        menuComponent(context, Icons.exit_to_app, 'Гарах', () {
+                          GlobalPlayers.workingWithFile.cleanUserInfo();
+                          // GlobalVariables.us
+                          Get.offAll(() => const LandingHome());
+                        }),
+                        const SizedBox(
+                          height: 20,
+                        )
+                      ],
+                    ),
                   ),
                 )
               ],

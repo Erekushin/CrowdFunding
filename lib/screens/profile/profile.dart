@@ -65,16 +65,32 @@ class _ProfileState extends State<Profile> {
             const SizedBox(
               height: 20,
             ),
-            titledTextField(firstname, 'First name', GlobalVariables.firstName,
+            titledTextField(
+                firstname,
+                'First name',
+                GlobalVariables.userInfo['first_name'],
+                FontAwesomeIcons.pen,
+                () {}),
+            titledTextField(
+                lastname,
+                'Last name',
+                GlobalVariables.userInfo['last_name'],
+                FontAwesomeIcons.pen,
+                () {}),
+            titledTextField(email, 'Email', GlobalVariables.userInfo['email'],
                 FontAwesomeIcons.pen, () {}),
-            titledTextField(lastname, 'Last name', GlobalVariables.lastName,
-                FontAwesomeIcons.pen, () {}),
-            titledTextField(email, 'Email', GlobalVariables.email,
-                FontAwesomeIcons.pen, () {}),
-            titledTextField(phone, 'Phone number', GlobalVariables.phoneNumber,
-                FontAwesomeIcons.pen, () {}),
-            titledTextField(rd, 'Citizen Info', GlobalVariables.regNo,
-                FontAwesomeIcons.pen, () {}),
+            titledTextField(
+                phone,
+                'Phone number',
+                GlobalVariables.userInfo['phone_no'],
+                FontAwesomeIcons.pen,
+                () {}),
+            titledTextField(
+                rd,
+                'Citizen Info',
+                GlobalVariables.userInfo['reg_no'],
+                FontAwesomeIcons.pen,
+                () {}),
             Row(
               children: [
                 generalBtn(
@@ -96,50 +112,47 @@ List optionBtns = [
   {
     'icon': FontAwesomeIcons.gear,
     'name': 'AccountDetail',
-    'func': (int i) {
-      Get.off(() => const Profile(), arguments: i);
+    'func': (int i, bool toOrOff) {
+      toOrOff
+          ? Get.to(() => const Profile(), arguments: i)
+          : Get.off(() => const Profile(), arguments: i);
     }
   },
   {
     'icon': FontAwesomeIcons.lock,
     'name': 'Security',
-    'func': (int i) {
-      Get.off(() => const Security(), arguments: i);
+    'func': (int i, bool toOrOff) {
+      toOrOff
+          ? Get.to(() => const Security(), arguments: i)
+          : Get.off(() => const Security(), arguments: i);
     }
   },
   {
     'icon': FontAwesomeIcons.bell,
     'name': 'Notifications',
-    'func': (int i) {
-      Get.off(() => const Security(), arguments: i);
-    }
+    'func': (int i, bool toOrOff) {}
   },
   {
     'icon': FontAwesomeIcons.bookmark,
     'name': 'SavedItems',
-    'func': (int i) {
-      Get.off(() => const Profile(), arguments: i);
-    }
+    'func': (int i, bool toOrOff) {}
   },
   {
     'icon': FontAwesomeIcons.rectangleList,
     'name': 'Funded Projects',
-    'func': (int i) {
-      Get.off(() => const FundedProjects(), arguments: i);
+    'func': (int i, bool toOrOff) {
+      toOrOff
+          ? Get.to(() => const FundedProjects(), arguments: i)
+          : Get.off(() => const FundedProjects(), arguments: i);
     }
   },
   {
     'icon': FontAwesomeIcons.creditCard,
     'name': 'Payment Details',
-    'func': (int i) {
-      Get.off(() => const PaymentDetail(), arguments: i);
-    }
-  },
-  {
-    'icon': FontAwesomeIcons.rightFromBracket,
-    'name': 'Sign Out',
-    'func': (int i) {
-      Get.off(() => const LandingHome(), arguments: i);
+    'func': (int i, bool toOrOff) {
+      toOrOff
+          ? Get.to(() => const PaymentDetail(), arguments: i)
+          : Get.off(() => const PaymentDetail(), arguments: i);
     }
   },
 ];
@@ -216,7 +229,7 @@ Widget profileTop(
             //ner bolon email
             children: [
               Text(
-                GlobalVariables.firstName,
+                GlobalVariables.userInfo['first_name'],
                 style: const TextStyle(
                     color: Colors.black,
                     fontSize: 20,
@@ -226,7 +239,7 @@ Widget profileTop(
                 height: 10,
               ),
               Text(
-                GlobalVariables.email,
+                GlobalVariables.userInfo['email'],
                 style: const TextStyle(
                     color: Colors.grey,
                     fontSize: 16,
@@ -278,7 +291,7 @@ Widget profileTop(
                     radius: 180,
                     splashColor: const Color.fromARGB(255, 156, 109, 243),
                     onTap: () {
-                      optionBtns[i]['func'](i);
+                      optionBtns[i]['func'](i, false);
                     },
                     child: Container(
                       margin: const EdgeInsets.all(3),

@@ -3,8 +3,8 @@ import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/screens/profile/profile.dart';
 import 'package:get/get.dart';
 
+import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
-import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/indicators.dart';
 import '../../helpers/services.dart';
@@ -39,7 +39,7 @@ class _FundedProjectsState extends State<FundedProjects> {
         // Navigator.of(Get.overlayContext!).pop();
         var res = data.body;
         crowdlog.wtf(
-            '---GET MY PROJECT LIST---:TOKEN: ${GlobalVariables.gStorage.read("token")}.................returned data ${data.body.toString()}');
+            '---GET MY PROJECT LIST---:TOKEN: ${GlobalVariables.token}.................returned data ${data.body.toString()}');
         switch (data.statusCode) {
           case 200:
             myFundedProjects.value = data.body['result']['items'];

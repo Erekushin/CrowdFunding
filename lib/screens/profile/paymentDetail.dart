@@ -7,8 +7,8 @@ import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:get/get.dart';
 
 import '../../controller/entrance.dart';
+import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
-import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/services.dart';
 import '../../style/color.dart';

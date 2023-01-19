@@ -1,5 +1,6 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/screens/funding/pay_info.dart';
@@ -8,17 +9,14 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
-import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/indicators.dart';
 import '../../helpers/services.dart';
 import '../../widget/combos/appbar_squeare.dart';
 import '../../widget/combos/eachproject.dart';
-import '../../widget/combos/helper_widgets.dart';
 import '../../widget/combos/pre_sidebar.dart';
 import '../../widget/combos/sidebar.dart';
 import '../dialogs/warning_dialogs.dart';
-import '../home/landing_home.dart';
 import 'singleProject.dart';
 
 class Projects extends StatefulWidget {
@@ -88,7 +86,7 @@ class _ProjectsState extends State<Projects> {
         .then((data) {
       var res = data.body;
       crowdlog.wtf(
-          '---GET TYPE LIST---:TOKEN: ${GlobalVariables.gStorage.read("token")}.................returned data ${data.body.toString()}');
+          '---GET TYPE LIST---:TOKEN: ${GlobalVariables.token}.................returned data ${data.body.toString()}');
       if (data.statusCode == 200) {
         typeList.value = data.body['result']['items'];
         typeList.insert(0, all);
@@ -108,40 +106,50 @@ class _ProjectsState extends State<Projects> {
   RxList projectList = [].obs;
   void getProjectList() async {
     loading.value = true;
-    try {
-      await Services()
-          .getRequest('${CoreUrl.crowdfund}crowdfund/confirmed', true, '')
-          .then((data) {
-        // Navigator.of(Get.overlayContext!).pop();
-        var res = data.body;
-        crowdlog.wtf(
-            '---GET PROJECT LIST---:TOKEN: ${GlobalVariables.gStorage.read("token")}.................returned data ${data.body.toString()}');
-        switch (data.statusCode) {
-          case 200:
-            projectList.value = data.body['result']['items'];
-            itemList4.value = data.body['result']['items'];
-            if (projectList.isEmpty) {
-              noProject.value = true;
-            }
-            break;
-          case 400:
-            visibilitySwitch(ScreenModes.noInternet);
-            break;
-          default:
-            Get.snackbar(
-              'warning_tr'.translationWord(),
-              res['message'].toString(),
-              backgroundColor: Colors.white60,
-              colorText: Colors.black,
-            );
-        }
-      });
-      loading.value = false;
-    } catch (e) {
+    await Services()
+        .getRequest('${CoreUrl.crowdfund}crowdfund/confirmed', true, '')
+        .then((data) {
       crowdlog.wtf(
-          '---GET PROJECT LIST---:TOKEN: ${GlobalVariables.gStorage.read("token")}.................returned data ${e.toString()}');
-      loading.value = false;
-    }
+          '---GET PROJECT LIST---:TOKEN: ${GlobalVariables.token}.................returned data ${data.body.toString()}');
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
+        projectList.value = data.body['result']['items'];
+        itemList4.value = data.body['result']['items'];
+        if (projectList.isEmpty) {
+          noProject.value = true;
+        }
+      }, () {
+        visibilitySwitch(ScreenModes.noInternet);
+      });
+    });
+    loading.value = false;
+  }
+
+  void searchProject() async {
+    // await Services()
+    //     .getRequest(
+    //         '${CoreUrl.crowdfund}crowdfund/confirmed?search_text=${searchCont.text}&category_id=${selectionType != '0' ? selectionType : ''}',
+    //         true,
+    //         '')
+    //     .then((data) {
+    //   crowdlog.wtf(
+    //       '---Search response---:TOKEN: ${GlobalVariables.token}.................returned data ${data.body.toString()}');
+    //   GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
+    //     itemList4.value = data.body['result']['items'];
+    //     if (projectList.isEmpty) {
+    //       noProject.value = true;
+    //     }
+    //   }, () {
+    //     visibilitySwitch(ScreenModes.noInternet);
+    //   });
+    // });
+    // print(betweenLenth('1'));
+    itemList.replaceRange(
+        0,
+        itemList.length,
+        projectList.where((element) => element['name']
+            .toLowerCase()
+            .contains(searchCont.text.toLowerCase())));
+    itemList4 = itemList;
   }
 
   //#endregion
@@ -150,7 +158,7 @@ class _ProjectsState extends State<Projects> {
   RxList itemList4 = [].obs;
   RxList itemList = [].obs;
   TextEditingController searchCont = TextEditingController();
-  String selectionType = "1";
+  String selectionType = "0";
   @override
   Widget build(BuildContext context) {
     return fundingTop(
@@ -177,11 +185,16 @@ class _ProjectsState extends State<Projects> {
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
                         color: Colors.black54),
-                    decoration: const InputDecoration(
-                      suffixIcon: Icon(
-                        FontAwesomeIcons.magnifyingGlass,
-                        color: Colors.grey,
-                        size: 15,
+                    decoration: InputDecoration(
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          searchProject();
+                        },
+                        icon: const Icon(
+                          FontAwesomeIcons.magnifyingGlass,
+                          color: Colors.grey,
+                          size: 15,
+                        ),
                       ),
                       hintStyle: TextStyle(color: Colors.black54),
                       border: InputBorder.none,
@@ -273,7 +286,7 @@ Widget fundingTop(BuildContext context, var item, int step, String title,
     GlobalKey<ScaffoldState> menuSidebarKey, Widget body) {
   return Scaffold(
     key: menuSidebarKey,
-    endDrawer: GlobalVariables.id == ""
+    endDrawer: GlobalVariables.userInfo['id'] == ""
         ? PreSidebar(
             menuAction: () {
               menuSidebarKey.currentState?.closeEndDrawer();
@@ -385,7 +398,7 @@ Widget fundingTop(BuildContext context, var item, int step, String title,
                               duration: const Duration(seconds: 1));
                           break;
                         case 2:
-                          if (GlobalVariables.id == "") {
+                          if (GlobalVariables.userInfo['id'] == "") {
                             signinReminder(context);
                           } else {
                             Get.to(() => PayInfo(

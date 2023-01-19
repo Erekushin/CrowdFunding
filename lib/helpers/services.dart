@@ -22,14 +22,13 @@ class Services extends GetConnect {
         bodyData,
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'authorization': token == true
-              ? "Bearer ${GlobalVariables.gStorage.read("token")}"
-              : "",
+          'authorization':
+              token == true ? "Bearer ${GlobalVariables.token}" : "",
           'code': msgcode
         },
       );
       crowdlog.wtf(
-          "postreq info: $url  bodyData: $bodyData, msgcode $msgcode, token: ${GlobalVariables.gStorage.read("token")}");
+          "postreq info: $url  bodyData: $bodyData, msgcode $msgcode, token: ${GlobalVariables.token}");
       crowdlog.wtf(
           "postreq status: ${response.status}  statusText: ${response.statusText}, response.statusCode ${response.statusCode}, response: $response ");
     } catch (e) {
@@ -50,15 +49,13 @@ class Services extends GetConnect {
     try {
       response = await get(url, headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': token == true
-            ? "Bearer ${GlobalVariables.gStorage.read("token")}"
-            : "",
+        'authorization': token == true ? "Bearer ${GlobalVariables.token}" : "",
         'code': msgcode
       }, decoder: (data) {
         return data;
       });
       crowdlog.wtf(
-          "getreq info: $url , msgcode $msgcode, token:  ${GlobalVariables.gStorage.read("token")} ");
+          "getreq info: $url , msgcode $msgcode, token:  ${GlobalVariables.token} ");
       crowdlog.wtf(
           "getreq status: ${response.status}  statusText: ${response.statusText} ");
     } catch (e) {
@@ -83,9 +80,7 @@ class Services extends GetConnect {
       url,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': token == true
-            ? "Bearer ${GlobalVariables.gStorage.read("token")}"
-            : "",
+        'authorization': token == true ? "Bearer ${GlobalVariables.token}" : "",
         'code': msgcode
       },
     );
@@ -107,9 +102,7 @@ class Services extends GetConnect {
       bodyData,
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': token == true
-            ? "Bearer ${GlobalVariables.gStorage.read("token")}"
-            : "",
+        'authorization': token == true ? "Bearer ${GlobalVariables.token}" : "",
         'code': msgcode
       },
     );
@@ -131,9 +124,7 @@ class Services extends GetConnect {
       url,
       form,
       headers: <String, String>{
-        'authorization': token == true
-            ? "Bearer ${GlobalVariables.gStorage.read("token")}"
-            : "",
+        'authorization': token == true ? "Bearer ${GlobalVariables.token}" : "",
       },
     );
   }

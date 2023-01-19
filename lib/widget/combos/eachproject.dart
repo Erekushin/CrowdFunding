@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/core_url.dart';
 import 'package:gerege_app_v2/helpers/working_string.dart';
+import '../../global_players.dart';
 import '../../helpers/working_dates.dart';
 import '../../style/color.dart';
 import '../fundamental/accessory.dart';

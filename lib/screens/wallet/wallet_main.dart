@@ -9,14 +9,14 @@ import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
-import '../../helpers/core_url.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/helperfuncs.dart';
 import '../../helpers/services.dart';
 import '../../style/color.dart';
-import '../../widget/combos/appbar_squeare.dart';
 import '../../widget/fundamental/btn.dart';
+import '../profile/profile.dart';
 
 class WalletMain extends StatefulWidget {
   const WalletMain({super.key});
@@ -989,282 +989,312 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  GlobalKey<ScaffoldState> menuSidebarKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppbarSquare(
-        height: GlobalVariables.gHeight * .12,
-        leadingIcon: const SizedBox(),
-        menuAction: () {
-          Get.back();
-        },
-        titleColor: Colors.white,
-        color: CoreColor.mainPurple,
-        title: 'Хэтэвч',
-      ),
       body: Column(
         children: [
-          SizedBox(
-            //gvilgee
-            height: GlobalVariables.gHeight * .3 + 15,
-            child: Stack(
+          Container(
+            padding: const EdgeInsets.all(5),
+            height: GlobalVariables.gHeight * .18,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
-                Container(
-                  height: GlobalVariables.gHeight * .3,
-                  decoration: BoxDecoration(
-                    color: CoreColor().btnGrey,
-                  ),
-                  child: Column(
+                InkWell(
+                  onTap: () {
+                    Get.to(() => const Profile());
+                  },
+                  child: Stack(
+                    //profile pic
                     children: [
-                      const SizedBox(height: 10),
                       Container(
-                        // height: 30,
-                        padding: const EdgeInsets.only(left: 20, right: 20),
-                        decoration: const BoxDecoration(
-                          color: Colors.transparent,
-                        ),
-                        child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.0),
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.grey.withOpacity(0.2),
-                                  width: 1,
-                                ),
-                              ),
-                            ),
-                            child: SizedBox(
-                              height: 200,
-                              child: ListView.builder(
-                                  //gvilgee list
-                                  padding: const EdgeInsets.all(0),
-                                  itemCount: transactionDocument.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return transactionDocument.isEmpty
-                                        ? const SizedBox()
-                                        : InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                // Get.to(
-                                                //   () => CallWebView(
-                                                //     title: "Баримт",
-                                                //     initialUrl:
-                                                //         "https://insurance.gerege.mn/barimt/?invoice_id=${transactionDocument[index]['invoice_id']}&type=1&request_user_id=${GlobalVariables.id}&app_id=6601",
-                                                //     exitButton: false,
-                                                //   ),
-                                                // );
-                                              });
-                                            },
-                                            child: Container(
-                                              margin: const EdgeInsets.only(
-                                                  top: 10, right: 20, left: 20),
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    CoreColor().backgroundWhite,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                  Radius.circular(10.0),
-                                                ),
-                                                border: Border.all(
-                                                  width: 1,
-                                                  color: Colors.grey
-                                                      .withOpacity(0.1),
-                                                ),
-                                                // boxShadow: [
-                                                //   BoxShadow(
-                                                //     color: Colors.grey.withOpacity(0.1),
-                                                //     spreadRadius: 2,
-                                                //     blurRadius: 1,
-                                                //     offset:
-                                                //         const Offset(0, 1), // changes position of shadow
-                                                //   ),
-                                                // ],
-                                              ),
-                                              child: ListTile(
-                                                leading: Container(
-                                                  width: 40,
-                                                  height: 40,
-                                                  decoration: BoxDecoration(
-                                                    color: CoreColor()
-                                                        .backgroundBlue
-                                                        .withOpacity(0.5),
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                            Radius.circular(
-                                                                10.0)),
-                                                  ),
-                                                ),
-                                                trailing: Text(
-                                                  // "${moneyFormat(transactionDocument[index]['amount'].toString())}₮",
-                                                  // "${transactionDocument[index]['amount']}₮",
-                                                  "${_formatNumber(transactionDocument[index]['amount'] == null ? "0" : transactionDocument[index]['amount'].toString().replaceAll(',', ''))}₮",
-                                                  style: const TextStyle(
-                                                    color: Colors.black,
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: "MBold",
-                                                  ),
-                                                ),
-                                                title: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      transactionDocument[index]
-                                                          ['service_name'],
-                                                      style: const TextStyle(
-                                                        // fontWeight: FontWeight.w500,
-                                                        fontSize: 14,
-                                                      ),
-                                                    ),
-                                                    const SizedBox(height: 5),
-                                                    Text(
-                                                      time(transactionDocument[
-                                                              index]
-                                                          ['created_date']),
-                                                      style: const TextStyle(
-                                                        fontSize: 10,
-                                                      ),
-                                                    )
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                  }),
-                            )),
+                        margin: const EdgeInsets.all(10),
+                        child: CircleAvatar(
+                            backgroundColor: CoreColor.backlightGrey,
+                            backgroundImage: const NetworkImage(
+                                'https://i.pinimg.com/564x/66/1e/3c/661e3c81c896137ea8b88f54dfebf55c.jpg'),
+                            radius: 20),
                       ),
+                      Positioned(
+                          top: 30,
+                          left: 30,
+                          child: Container(
+                              width: 22,
+                              height: 22,
+                              padding: const EdgeInsets.all(5),
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.white),
+                                  color: Colors.grey,
+                                  shape: BoxShape.circle,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(.3),
+                                      blurRadius: 5,
+                                      offset: const Offset(1, 1),
+                                    )
+                                  ]),
+                              child: const Icon(
+                                FontAwesomeIcons.bars,
+                                size: 12,
+                                color: Colors.white,
+                              )))
                     ],
                   ),
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: CoreColor.mainPurple,
-                    ),
-                    width: 30,
-                    height: 30,
-                    child: const Icon(
-                      FontAwesomeIcons.chevronDown,
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
-          Align(
-            //wallet
-            alignment: Alignment.center,
-            child: Container(
-              margin: const EdgeInsets.all(10),
-              padding: const EdgeInsets.all(10),
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                  color: CoreColor.mainPurple.withOpacity(.2)),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: Row(
                     children: [
-                      const SizedBox(width: 20),
-                      const Text(
-                        'Хэтэвч:',
-                        style: TextStyle(fontSize: 20),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          FontAwesomeIcons.rotateRight,
+                          color: Colors.black,
+                          size: Sizes.iconSize,
+                        ),
                       ),
-                      Obx(
-                        () => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              margin: const EdgeInsets.only(left: 10),
-                              width: 200,
-                              child: Align(
-                                alignment: Alignment.centerRight,
-                                child: Text(
-                                  _formatNumber(GlobalVariables
-                                      .accountBalance.value
-                                      .toString()
-                                      .replaceAll(',', '')),
-                                  style: const TextStyle(
-                                      fontSize: 30,
-                                      fontWeight: FontWeight.bold,
-                                      height: 1),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              alignment: Alignment.bottomCenter,
-                              child: const Text(
-                                '₮',
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            )
-                          ],
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(
+                          FontAwesomeIcons.magnifyingGlass,
+                          color: Colors.black,
+                          size: Sizes.iconSize,
                         ),
                       )
                     ],
                   ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          Container(
+            //mongo
+            alignment: Alignment.centerLeft,
+            margin: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(10),
+            child: Obx(
+              () => Container(
+                alignment: Alignment.centerLeft,
+                margin: const EdgeInsets.only(left: 10),
+                width: 400,
+                child: RichText(
+                    text: TextSpan(
+                        children: [
+                      const TextSpan(
+                        text: '₮',
+                      ),
+                      TextSpan(
+                        text: _formatNumber(GlobalVariables.accountBalance.value
+                            .toString()
+                            .replaceAll(',', '')),
+                      )
+                    ],
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: 30,
+                        ))),
               ),
             ),
+          ),
+          SizedBox(
+            width: GlobalVariables.gWidth,
+            child: Wrap(
+              direction: Axis.horizontal,
+              children: [
+                const SizedBox(
+                  width: 20,
+                ),
+                actionBtn('Receive', Icons.arrow_downward, () async {
+                  await getWalletAccounts();
+                  setState(() {
+                    chargeModal();
+                  });
+                }),
+                actionBtn('Send', Icons.arrow_upward, () async {
+                  await getBankAccounts();
+                  setState(() {
+                    withdrawModal();
+                  });
+                }),
+                actionBtn('fund', Icons.add_moderator, () async {
+                  await getWalletAccounts();
+                  setState(() {
+                    chargeModal();
+                  });
+                }),
+                actionBtn('borrow', FontAwesomeIcons.satelliteDish, () async {
+                  await getWalletAccounts();
+                  setState(() {
+                    chargeModal();
+                  });
+                }),
+                const SizedBox(
+                  width: 20,
+                ),
+              ],
+            ),
+          ),
+          Expanded(
+            child: DefaultTabController(
+                length: 2,
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 35,
+                      child: TabBar(
+                          indicatorSize: TabBarIndicatorSize.label,
+                          indicatorColor: Colors.black,
+                          tabs: [
+                            Tab(
+                              child: Text(
+                                'Fundings',
+                                style: TextStyle(color: Colors.black),
+                              ),
+                            ),
+                            Tab(
+                              child: Text('Transactions',
+                                  style: TextStyle(color: Colors.black)),
+                            )
+                          ]),
+                    ),
+                    Expanded(
+                        child: TabBarView(
+                            children: [Text('assets'), transation()]))
+                  ],
+                )),
           ),
           const SizedBox(
             height: 30,
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              actionBtn('цэнэглэх', CoreColor.mainPurple, () async {
-                await getWalletAccounts();
-                setState(() {
-                  chargeModal();
-                });
-              }),
-              actionBtn('татах', CoreColor.hlprOrange, () async {
-                await getBankAccounts();
-                setState(() {
-                  withdrawModal();
-                });
-              }),
-            ],
-          )
         ],
       ),
     );
   }
   //#region.............WIDGETS...............
 
-  Widget actionBtn(String title, Color clr, Function func) {
-    return InkWell(
-      onTap: () => func(),
-      child: Container(
-        padding:
-            const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
-        width: GlobalVariables.gWidth * .5,
-        margin: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(15)),
-            color: clr),
-        child: Align(
-            alignment: Alignment.center,
-            child: Text(
+  Widget actionBtn(String title, IconData icon, Function func) {
+    return SizedBox(
+      width: 70,
+      height: 100,
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            InkWell(
+              onTap: () => func(),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                margin: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(15)),
+                    color: CoreColor.mainPurple),
+                child: Icon(
+                  icon,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            Text(
               title,
               style: const TextStyle(
-                  color: Colors.white, fontWeight: FontWeight.bold),
-            )),
-      ),
+                color: Colors.black,
+              ),
+            )
+          ]),
     );
   }
 
+  Widget transation() {
+    return ListView.builder(
+        //gvilgee list
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: const EdgeInsets.all(0),
+        itemCount: transactionDocument.length,
+        itemBuilder: (BuildContext context, int index) {
+          return transactionDocument.isEmpty
+              ? const SizedBox()
+              : InkWell(
+                  onTap: () {
+                    setState(() {
+                      // Get.to(
+                      //   () => CallWebView(
+                      //     title: "Баримт",
+                      //     initialUrl:
+                      //         "https://insurance.gerege.mn/barimt/?invoice_id=${transactionDocument[index]['invoice_id']}&type=1&request_user_id=${GlobalVariables.id}&app_id=6601",
+                      //     exitButton: false,
+                      //   ),
+                      // );
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(top: 10, right: 20, left: 20),
+                    decoration: BoxDecoration(
+                      color: CoreColor().backgroundWhite,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(10.0),
+                      ),
+                      border: Border.all(
+                        width: 1,
+                        color: Colors.grey.withOpacity(0.1),
+                      ),
+                      // boxShadow: [
+                      //   BoxShadow(
+                      //     color: Colors.grey.withOpacity(0.1),
+                      //     spreadRadius: 2,
+                      //     blurRadius: 1,
+                      //     offset:
+                      //         const Offset(0, 1), // changes position of shadow
+                      //   ),
+                      // ],
+                    ),
+                    child: ListTile(
+                      leading: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: CoreColor().backgroundBlue.withOpacity(0.5),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                      ),
+                      trailing: Text(
+                        // "${moneyFormat(transactionDocument[index]['amount'].toString())}₮",
+                        // "${transactionDocument[index]['amount']}₮",
+                        "${_formatNumber(transactionDocument[index]['amount'] == null ? "0" : transactionDocument[index]['amount'].toString().replaceAll(',', ''))}₮",
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: "MBold",
+                        ),
+                      ),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            transactionDocument[index]['service_name'],
+                            style: const TextStyle(
+                              // fontWeight: FontWeight.w500,
+                              fontSize: 14,
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          Text(
+                            time(transactionDocument[index]['created_date']),
+                            style: const TextStyle(
+                              fontSize: 10,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+        });
+  }
   //#endregion...............................
 }

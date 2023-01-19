@@ -106,12 +106,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    if (GlobalVariables.gStorage.read('localeShort') == null) {
-      GlobalVariables.localeLong = 'mn_MN';
-      GlobalVariables.gStorage.write("localeLong", GlobalVariables.localeLong);
-    } else {
-      GlobalVariables.localeLong = GlobalVariables.gStorage.read("localeLong");
-    }
+    GlobalVariables.localeLong = 'mn_MN';
     auth.isDeviceSupported().then(
           (bool isSupported) => setState(() => bioSupportState = isSupported
               ? BioSupportState.supported
