@@ -56,7 +56,7 @@ class _SidebarState extends State<Sidebar> with SingleTickerProviderStateMixin {
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
     );
 
     _animation = Tween<double>(begin: 0, end: 1).animate(_animationController)
@@ -155,7 +155,7 @@ class _SidebarState extends State<Sidebar> with SingleTickerProviderStateMixin {
                                   CustomPaint(
                                     painter: MyCustomPainter(_animation.value),
                                     child: Container(
-                                      margin: EdgeInsets.all(40),
+                                      margin: const EdgeInsets.all(40),
                                     ),
                                   ),
                                   Center(

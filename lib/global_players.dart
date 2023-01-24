@@ -23,4 +23,5 @@ class CoreUrl {
 
 class Sizes {
   static double iconSize = 22;
+  static int regularSnackDuration = 1;
 }

@@ -1,6 +1,7 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/helpers/working_string.dart';
-import 'package:get/get.dart';
+
+import '../dialogs/snacks.dart';
 
 class FrontHelper {
   ///серверээс ирж байгаа датаг [data] аар авч байгаа
@@ -13,45 +14,37 @@ class FrontHelper {
         succesFunc();
       } else {
         snackAppearance == 1
-            ? Get.snackbar(
-                'warning_tr'.translationWord(),
-                '${data.body['message']}'.translationWord(),
-                colorText: Colors.black,
-                backgroundColor: Colors.grey.withOpacity(0.2),
-              )
+            ? somethingIsWrongSnack(
+                'something_is_wrong_tr', data.body['message'])
             : snackAppearance == 2
                 ? requestErrorSnackbar2(data, failedFunc)
                 : failedFunc();
       }
     } catch (e) {
       snackAppearance == 1
-          ? Get.snackbar(
-              'Уучлаарай',
-              'ямар нэгэн алдаа гарлаа',
-              colorText: Colors.black,
-              backgroundColor: Colors.grey.withOpacity(0.2),
-            )
+          ? errorSnack('error_tr', 'error_tr_body')
           : failedFunc();
     }
   }
 
   requestErrorSnackbar2(var data, Function failedFunc) {
     try {
-      Get.snackbar(
-        'warning_tr'.translationWord(),
-        '${data.body['message']}'.translationWord(),
-        colorText: Colors.black,
-        backgroundColor: Colors.grey.withOpacity(0.2),
-      );
+      somethingIsWrongSnack('something_is_wrong_tr', data.body['message']);
       failedFunc();
     } catch (e) {
-      Get.snackbar(
-        'Уучлаарай',
-        'ямар нэгэн алдаа гарлаа',
-        colorText: Colors.black,
-        backgroundColor: Colors.grey.withOpacity(0.2),
-      );
+      errorSnack('error_tr', 'error_tr_body');
       failedFunc();
     }
+  }
+}
+
+class MyscrollBehavior extends ScrollBehavior {
+  @override
+  Widget buildViewportChrome(
+    BuildContext context,
+    Widget child,
+    AxisDirection axisDirection,
+  ) {
+    return child;
   }
 }

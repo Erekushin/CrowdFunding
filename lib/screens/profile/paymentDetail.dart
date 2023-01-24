@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/working_string.dart';
 
 import 'package:get/get.dart';
 
@@ -62,13 +61,13 @@ class _PaymentDetailState extends State<PaymentDetail> {
     Services()
         .getRequest('${CoreUrl.crowdfund}wallet/card', true, '')
         .then((data) {
-      if (data.statusCode == 200) {
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         setState(() {
           if (data.body['result'].length != 0) {
             cartList.value = data.body['result']['items'];
           }
         });
-      }
+      }, () {});
     });
   }
 
@@ -80,23 +79,9 @@ class _PaymentDetailState extends State<PaymentDetail> {
         .postRequest(json.encode(bodyData),
             '${CoreUrl.crowdfund}wallet/card/delete', true, '')
         .then((data) {
-      if (data.statusCode == 200) {
-        // Get.back();
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.black,
-          backgroundColor: Colors.white,
-        );
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         getCartList();
-      } else {
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'].toString(),
-          colorText: Colors.black,
-          backgroundColor: Colors.white,
-        );
-      }
+      }, () {});
     });
   }
 
@@ -108,7 +93,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
         .then((data) {
       crowdlog.wtf(
           '---CREATE INVOICE---: sent data $bodyData:.................returned data ${data.body.toString()}');
-      if (data.statusCode == 200) {
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         invoice = data.body['result']['invoice'];
         redirectUrl = data.body["result"]["redirect_url"] +
             "/mn/" +
@@ -120,14 +105,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
             exitButton: true,
           ),
         );
-      } else {
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          backgroundColor: Colors.white60,
-          colorText: Colors.black,
-        );
-      }
+      }, () {});
     });
   }
 
@@ -359,7 +337,8 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                 padding: const EdgeInsets.all(2),
                                 decoration: BoxDecoration(
                                     border: Border.all(
-                                        color: Color.fromARGB(255, 187, 12, 0)
+                                        color: const Color.fromARGB(
+                                                255, 187, 12, 0)
                                             .withOpacity(.4),
                                         width: 1),
                                     borderRadius: const BorderRadius.all(
@@ -370,7 +349,7 @@ class _PaymentDetailState extends State<PaymentDetail> {
                                   icon: Icon(
                                     FontAwesomeIcons.trash,
                                     size: 18,
-                                    color: Color.fromARGB(255, 196, 14, 1)
+                                    color: const Color.fromARGB(255, 196, 14, 1)
                                         .withOpacity(.5),
                                   ),
                                 ),

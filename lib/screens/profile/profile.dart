@@ -5,7 +5,6 @@ import 'package:gerege_app_v2/screens/profile/paymentDetail.dart';
 import 'package:gerege_app_v2/screens/profile/security.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
@@ -13,7 +12,6 @@ import '../../widget/combos/appbar_squeare.dart';
 import '../../widget/combos/sidebar.dart';
 import '../../widget/fundamental/btn.dart';
 import '../../widget/fundamental/txt_field.dart';
-import '../home/landing_home.dart';
 import 'fundedProjects.dart';
 
 class Profile extends StatefulWidget {

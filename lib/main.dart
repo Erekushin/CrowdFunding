@@ -4,7 +4,6 @@ import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/platforms/desktop_helper.dart';
 import 'package:gerege_app_v2/screens/home/splash_screen.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:flutter/services.dart';
 
 import 'controller/entrance.dart';
@@ -12,7 +11,7 @@ import 'controller/entrance.dart';
 void main() async {
   //erek changes
   WidgetsFlutterBinding.ensureInitialized();
-  await GetStorage.init();
+  // await GetStorage.init();
 
   /// false -> phone true-> tablet
   GlobalVariables.useTablet = DesktopHelper().getDeviceType();

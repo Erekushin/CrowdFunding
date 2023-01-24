@@ -20,9 +20,9 @@ class LandingHome extends StatefulWidget {
 }
 
 class _LandingHomeState extends State<LandingHome> {
-  final Shader linearGradient = LinearGradient(
+  final Shader linearGradient = const LinearGradient(
     colors: <Color>[Color(0xff8921aa), Color(0xffDA44bb)],
-  ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
+  ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
   final crowdlog = logger(LandingHome);
   static final EntranceCont _loginController = Get.put(EntranceCont());
@@ -91,7 +91,7 @@ class _LandingHomeState extends State<LandingHome> {
                   child: RichText(
                     text: TextSpan(
                         children: [
-                          TextSpan(
+                          const TextSpan(
                               text: 'We ',
                               style: TextStyle(color: Colors.black)),
                           TextSpan(
@@ -99,11 +99,11 @@ class _LandingHomeState extends State<LandingHome> {
                               style: TextStyle(
                                   foreground: Paint()
                                     ..shader = linearGradient)),
-                          TextSpan(
+                          const TextSpan(
                               text: 'Your Ideas into Reality',
                               style: TextStyle(color: Colors.black))
                         ],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         )),
@@ -148,7 +148,7 @@ class _LandingHomeState extends State<LandingHome> {
                           FontAwesomeIcons.chevronDown,
                           size: 15,
                         )),
-                    Text('Discover more'),
+                    const Text('Discover more'),
                   ],
                 ),
               ],

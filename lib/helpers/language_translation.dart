@@ -1,8 +1,16 @@
 class TranslationWords {
   Map<String, Map<String, String>> languageKeys = {
     'en_US': {
-      //#region error messages
+      //#region entrance
 
+      //#endregion
+      //#region snack
+      'error_tr': '😟 sorry',
+      'error_tr_body': 'something is wrong',
+      'something_is_wrong_tr': 'wait 🧐',
+      'warning_tr': '🙃 hey there',
+      'field_unsatisfied_tr': 'user your verified email adress or phone number',
+      'field_tr': 'Please enter your name and password',
       'balance not enough.': 'Your wallet balance is insufficient',
       'record not found': 'record not found',
       'wrong user information': 'user information is incorrect',
@@ -79,7 +87,7 @@ class TranslationWords {
       'account_warning_tr':
           'When you transfer money through the banking app, just copy the above code on the transaction value. If the transaction value is entered incorrectly, the account will not be recharged.',
       'copy_tr': 'Copy',
-      'warning_tr': 'Warning',
+
       'invoice_note_tr': 'The claim is pending',
       'cancel_tr': 'Cancel',
       'payment_code_tr': "Payment",
@@ -87,8 +95,18 @@ class TranslationWords {
       'allow_tr': 'Allow',
     },
     'mn_MN': {
-      //#region error messages
+      //#region entrance
 
+      //#endregion
+
+      //#region snack
+      'error_tr': '😟 уучлаарай',
+      'error_tr_body': 'ямар нэгэн алдаа гарлаа',
+      'something_is_wrong_tr': '🧐 ?',
+      'warning_tr': '🙃',
+      'field_unsatisfied_tr':
+          'нэвтрэлт дээр бүртгэгдсэн е-мэйл эсвэл утас аа оруулна уу',
+      'field_tr': 'Нэвтрэх нэр нууц үгээ бүрэн оруулна уу',
       'balance not enough.': 'таний хэтэвчний үлдэгдэл хүрэлцэхгүй байна',
       'record not found': 'Бүртгэл олдсонгүй',
       'wrong user information': 'Нэвтрэх нэр эсвэл нууц дугаар алдаатай байна.',
@@ -168,27 +186,12 @@ class TranslationWords {
       'copy_tr': 'Хуулах',
       'account_warning_tr':
           'Та банкны апп-р мөнгө шилжүүлэхдээ гүйлгээний утга дээр зөвхөн дээрх кодыг хуулж тавина уу. Гүйлгээний утга буруу бичигдсэн тохиолдолд данс цэнэглэгдэхгүй болно.',
-      'warning_tr': 'Анхааруулга',
+
       'invoice_note_tr': 'Нэхэмжлэл хүлээлгийн төлөвт байна',
       'cancel_tr': 'Татгалзах',
       'payment_code_tr': "Төлөх",
       'invoice_send_tr': 'Нэхэмжлэл илгээх',
       'allow_tr': 'Зөвшөөрөх',
-    },
-    'ru_RU': {
-      'login_name_tr': 'Логин',
-      'password_tr': 'Пароль',
-      'rep_pass_tr': 'Пожалуйста, повторите пароль',
-      'forget_password_tr': 'Забыли свой пароль!',
-      'forget_new_tr': 'Восстановление пароля',
-      'create_register_tr': 'Новый ',
-      'new_user_tr': 'регистр',
-      'enter_info_tr': 'Пожалуйста, введите вашу \nинформацию',
-      'foreigner_tr': 'Вы иностранец?',
-      'register_tr': 'Регистрационный номер',
-      'phone_num_tr': 'Номер телефона',
-      'login_tr': 'Авторизоваться',
-      'continue_tr': 'Пожалуйста, залогиньтесь для продолжения',
     },
   };
 }

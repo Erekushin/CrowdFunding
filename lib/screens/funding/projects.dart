@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/screens/funding/pay_info.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
@@ -16,7 +13,7 @@ import '../../widget/combos/appbar_squeare.dart';
 import '../../widget/combos/eachproject.dart';
 import '../../widget/combos/pre_sidebar.dart';
 import '../../widget/combos/sidebar.dart';
-import '../dialogs/warning_dialogs.dart';
+import '../../dialogs/warning_dialogs.dart';
 import 'singleProject.dart';
 
 class Projects extends StatefulWidget {
@@ -87,19 +84,10 @@ class _ProjectsState extends State<Projects> {
       var res = data.body;
       crowdlog.wtf(
           '---GET TYPE LIST---:TOKEN: ${GlobalVariables.token}.................returned data ${data.body.toString()}');
-      if (data.statusCode == 200) {
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         typeList.value = data.body['result']['items'];
         typeList.insert(0, all);
-      } else {
-        print("wtf");
-        print(res);
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          res['message'].toString(),
-          backgroundColor: Colors.white60,
-          colorText: Colors.black,
-        );
-      }
+      }, () {});
     });
   }
 
@@ -125,31 +113,23 @@ class _ProjectsState extends State<Projects> {
   }
 
   void searchProject() async {
-    // await Services()
-    //     .getRequest(
-    //         '${CoreUrl.crowdfund}crowdfund/confirmed?search_text=${searchCont.text}&category_id=${selectionType != '0' ? selectionType : ''}',
-    //         true,
-    //         '')
-    //     .then((data) {
-    //   crowdlog.wtf(
-    //       '---Search response---:TOKEN: ${GlobalVariables.token}.................returned data ${data.body.toString()}');
-    //   GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
-    //     itemList4.value = data.body['result']['items'];
-    //     if (projectList.isEmpty) {
-    //       noProject.value = true;
-    //     }
-    //   }, () {
-    //     visibilitySwitch(ScreenModes.noInternet);
-    //   });
-    // });
-    // print(betweenLenth('1'));
-    itemList.replaceRange(
-        0,
-        itemList.length,
-        projectList.where((element) => element['name']
-            .toLowerCase()
-            .contains(searchCont.text.toLowerCase())));
-    itemList4 = itemList;
+    await Services()
+        .getRequest(
+            '${CoreUrl.crowdfund}crowdfund/confirmed?search_text=${searchCont.text}&category_id=${selectionType != '0' ? selectionType : ''}',
+            true,
+            '')
+        .then((data) {
+      crowdlog.wtf(
+          '---Search response---:TOKEN: ${GlobalVariables.token}.................returned data ${data.body.toString()}');
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
+        itemList4.value = data.body['result']['items'];
+        if (projectList.isEmpty) {
+          noProject.value = true;
+        }
+      }, () {
+        visibilitySwitch(ScreenModes.noInternet);
+      });
+    });
   }
 
   //#endregion
@@ -196,9 +176,9 @@ class _ProjectsState extends State<Projects> {
                           size: 15,
                         ),
                       ),
-                      hintStyle: TextStyle(color: Colors.black54),
+                      hintStyle: const TextStyle(color: Colors.black54),
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.all(4),
+                      contentPadding: const EdgeInsets.all(4),
                       hintText: 'search project',
                     ),
                   ),
@@ -242,17 +222,21 @@ class _ProjectsState extends State<Projects> {
                       setState(() {
                         selectionType = value.toString();
                       });
-                      if (value == '0') {
-                        itemList4 = projectList;
-                        crowdlog.wtf(projectList.length);
+                      if (searchCont.text.isNotEmpty) {
+                        searchProject();
                       } else {
-                        itemList.replaceRange(
-                            0,
-                            itemList.length,
-                            projectList.where((element) =>
-                                element['category_id'] ==
-                                int.parse(value.toString())));
-                        itemList4 = itemList;
+                        if (value == '0') {
+                          itemList4 = projectList;
+                          crowdlog.wtf(projectList.length);
+                        } else {
+                          itemList.replaceRange(
+                              0,
+                              itemList.length,
+                              projectList.where((element) =>
+                                  element['category_id'] ==
+                                  int.parse(value.toString())));
+                          itemList4 = itemList;
+                        }
                       }
                     },
                   ),

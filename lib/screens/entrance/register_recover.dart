@@ -465,7 +465,6 @@ class _Register_RecoverState extends State<Register_Recover> {
                       ),
                     ),
                   );
-                  ;
                 },
               ),
             ),
@@ -577,7 +576,6 @@ class _Register_RecoverState extends State<Register_Recover> {
                       ],
                     ),
                   );
-                  ;
                 },
               ),
             ),

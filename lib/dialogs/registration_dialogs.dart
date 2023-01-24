@@ -4,13 +4,13 @@ import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../controller/entrance.dart';
-import '../../global_players.dart';
-import '../../helpers/gvariables.dart';
-import '../../style/color.dart';
-import '../../widget/fundamental/btn.dart';
-import '../../widget/fundamental/txt_field.dart';
-import '../funding/projects.dart';
+import '../controller/entrance.dart';
+import '../global_players.dart';
+import '../helpers/gvariables.dart';
+import '../style/color.dart';
+import '../widget/fundamental/btn.dart';
+import '../widget/fundamental/txt_field.dart';
+import '../screens/funding/projects.dart';
 
 var auth = Get.find<EntranceCont>();
 String selectionCountry = "MNG";
@@ -154,7 +154,6 @@ Object dialogy(BuildContext context) {
                     ),
                   ),
                 );
-                ;
               },
             ),
           ),
@@ -343,10 +342,9 @@ Object phoneDialogy(BuildContext context) {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [Text('data')],
+                    children: const [Text('data')],
                   ),
                 );
-                ;
               },
             ),
           ),
@@ -456,7 +454,6 @@ Object failedDialogy(BuildContext context) {
                     ],
                   ),
                 );
-                ;
               },
             ),
           ),

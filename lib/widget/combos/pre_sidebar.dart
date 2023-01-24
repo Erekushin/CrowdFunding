@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/gvariables.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
 
 import '../../screens/entrance/login.dart';
 import '../../screens/entrance/register_recover.dart';
-import '../../screens/home/landing_home.dart';
-import '../../screens/profile/profile.dart';
-import '../../screens/wallet/wallet_main.dart';
 import '../fundamental/accessory.dart';
 import '../fundamental/btn.dart';
 

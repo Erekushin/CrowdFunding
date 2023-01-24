@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:logger/logger.dart';
 
 // ignore: prefer_function_declarations_over_variables

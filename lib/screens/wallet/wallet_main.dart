@@ -71,19 +71,12 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
         .getRequest('${CoreUrl.crowdfund}wallet/invoice', true, '')
         .then((data) {
       crowdlog.wtf('----INVOICE LIST---${data.body.toString()}');
-      if (data.statusCode == 200) {
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         invoiceList.value = data.body['result'];
         setState(() {
           loader = false;
         });
-      } else {
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.black,
-          backgroundColor: Colors.white,
-        );
-      }
+      }, () {});
     });
   }
 
@@ -93,22 +86,9 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
         .postRequest(json.encode(dataBody),
             '${CoreUrl.crowdfund}wallet/invoice/cancel', true, '')
         .then((data) {
-      if (data.statusCode == 200) {
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.black,
-          backgroundColor: Colors.white,
-        );
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         getInvoiceList();
-      } else {
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.black,
-          backgroundColor: Colors.white,
-        );
-      }
+      }, () {});
     });
   }
 
@@ -451,7 +431,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
         .then((data) {
       crowdlog.wtf(
           '---CARD PAY---: sent data $bodyData:.................returned data ${data.body.toString()}');
-      if (data.statusCode == 200) {
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         Get.back();
         Get.back();
         Get.snackbar(
@@ -463,16 +443,9 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
         GlobalVariables.accountBalance.value =
             GlobalVariables.accountBalance.value +
                 int.parse(_amountController.text.replaceAll(',', ''));
-      } else {
+      }, () {
         Navigator.of(Get.overlayContext!).pop();
-
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.black,
-          backgroundColor: Colors.white,
-        );
-      }
+      });
     });
   }
 
@@ -685,14 +658,14 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
     Services()
         .getRequest('${CoreUrl.crowdfund}wallet/bank/account', true, '')
         .then((data) {
-      if (data.statusCode == 200) {
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         setState(() {
           accountList.value = data.body['result'];
           if (accountList.isNotEmpty) {
             selectedAccount.value = accountList[0];
           }
         });
-      }
+      }, () {});
     });
   }
 
@@ -935,8 +908,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
         .postRequest(json.encode(bodyData),
             '${CoreUrl.crowdfund}wallet/withdraw', true, '')
         .then((data) {
-      if (data.statusCode == 200) {
-        // Get.back();
+      GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         Get.back();
         Get.back();
         Get.snackbar(
@@ -949,17 +921,9 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
         GlobalVariables.accountBalance.value =
             GlobalVariables.accountBalance.value -
                 int.parse(_amountController.text.replaceAll(',', ''));
-      } else {
-        // Get.back();
+      }, () {
         Navigator.of(Get.overlayContext!).pop();
-        // Get.back();
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.white,
-          backgroundColor: CoreColor().backgroundYellow.withOpacity(0.2),
-        );
-      }
+      });
     });
   }
 //#endregion.....................
@@ -1162,7 +1126,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                     ),
                     Expanded(
                         child: TabBarView(
-                            children: [Text('assets'), transation()]))
+                            children: [const Text('assets'), transation()]))
                   ],
                 )),
           ),

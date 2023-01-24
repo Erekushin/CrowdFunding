@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import '../../global_players.dart';
-import '../../helpers/gvariables.dart';
-import '../../style/color.dart';
-import '../../widget/fundamental/btn.dart';
+import '../global_players.dart';
+import '../helpers/gvariables.dart';
+import '../style/color.dart';
+import '../widget/fundamental/btn.dart';
 
 Object fingerActivation(BuildContext context) {
   return showGeneralDialog(

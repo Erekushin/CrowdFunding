@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import '../../global_players.dart';
-import '../../helpers/gvariables.dart';
-import '../../style/color.dart';
-import '../../widget/fundamental/btn.dart';
-import '../entrance/login.dart';
-import '../entrance/register_recover.dart';
+import '../global_players.dart';
+import '../helpers/gvariables.dart';
+import '../style/color.dart';
+import '../widget/fundamental/btn.dart';
+import '../screens/entrance/login.dart';
+import '../screens/entrance/register_recover.dart';
 
 Object signinReminder(BuildContext context) {
   return showGeneralDialog(
@@ -42,7 +42,7 @@ Object signinReminder(BuildContext context) {
                                     Image.asset('assets/images/success.png')),
                             InkWell(
                               onTap: () {
-                                //
+                                Navigator.pop(context);
                               },
                               child: Container(
                                 margin: const EdgeInsets.all(10),

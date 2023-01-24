@@ -5,11 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:gerege_app_v2/global_players.dart';
 import 'package:get/get.dart';
 
+import '../dialogs/snacks.dart';
 import '../helpers/backHelper.dart';
 import '../helpers/gvariables.dart';
 import '../helpers/services.dart';
 import '../helpers/working_string.dart';
-import '../screens/dialogs/registration_dialogs.dart';
+import '../dialogs/registration_dialogs.dart';
 import '../screens/funding/projects.dart';
 
 class EntranceCont extends GetxController {
@@ -220,12 +221,7 @@ class EntranceCont extends GetxController {
         }, () {});
       });
     } else {
-      Get.snackbar(
-        'Боломжгүй',
-        'Нэвтрэх нэр буруу байна',
-        colorText: Colors.black,
-        backgroundColor: Colors.grey.withOpacity(0.2),
-      );
+      warningSnack('warning_tr', 'field_unsatisfied_tr');
     }
   }
 

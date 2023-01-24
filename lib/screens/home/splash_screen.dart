@@ -76,18 +76,13 @@ class _MyHomePageState extends State<SplashScreen>
   }
 
   static initDesktop() async {
-    print("kIsWeb: $kIsWeb");
     // print("windows: ${Platform.isWindows}");
     // print("linux: ${Platform.isLinux}");
     // print("mac: ${Platform.isMacOS}");
 
     if (!kIsWeb &&
         (Platform.isWindows || Platform.isLinux || Platform.isMacOS)) {
-      // await DesktopWindow.setMinWindowSize(const Size(750, 400));
-      print('desktop');
-    } else {
-      print('elso');
-    }
+    } else {}
   }
 
   @override

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 
 import '../../global_players.dart';
 import '../../helpers/gvariables.dart';
-import '../dialogs/warning_dialogs.dart';
+import '../../dialogs/warning_dialogs.dart';
 import 'projects.dart';
 
 // ignore: must_be_immutable
@@ -38,7 +38,7 @@ class _SingleProjectState extends State<SingleProject> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('data'),
+                const Text('data'),
                 InkWell(
                   onTap: () {
                     if (GlobalVariables.userInfo['id'] == "") {

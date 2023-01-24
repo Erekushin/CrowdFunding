@@ -72,7 +72,6 @@ class _CallWebViewState extends State<CallWebView> {
                           setUserData('userData', '');
                         } else if (data['type'] == 'errorFunction') {
                           ///алдааны мэдээлэл буцаах
-                          print('errorFunction mobile');
                           nativeFunction(data);
                         }
                       }),
@@ -85,16 +84,12 @@ class _CallWebViewState extends State<CallWebView> {
                 },
                 onPageFinished: (url) {
                   setState(() {
-                    print('ene loader boluilaj');
-                    print(os);
                     if (os != "android") {
                       _loadedPage = true;
                     }
                   });
                 },
                 onProgress: (int progress) {
-                  print('wtd profsafasfasfasf');
-                  print(progress);
                   if (os == "android") {
                     if (progress == 100) {
                       _loadedPage = true;
@@ -137,14 +132,12 @@ class _CallWebViewState extends State<CallWebView> {
       _webViewController!.runJavascriptReturningResult(
           'setUserData(${json.encode(storage.read("userInformation"))})');
     } else if (type == "pinCode") {
-      print('sadsadasdasda pincode');
       _webViewController!.runJavascriptReturningResult('pinCode("$pin")');
     }
   }
 
   ///[nativeFunction] вэб -с дуудах
   nativeFunction(data) {
-    print('data nativeFunction, $data');
     if (data['data'] == 'logout') {
       // Get.to(() => const LoginPage());
       Get.snackbar(
@@ -154,10 +147,8 @@ class _CallWebViewState extends State<CallWebView> {
         colorText: Colors.black,
       );
     } else if (data['data'] == "back") {
-      print('get back duudsn boldogogooggooggo');
       Get.back();
     } else if (data['data'] == "pinCode") {
-      print('pin code call');
       // pinCodeModal();
       final TextEditingController controller1 = TextEditingController();
 

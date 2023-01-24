@@ -1,11 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gerege_app_v2/global_players.dart';
-import 'package:gerege_app_v2/helpers/working_string.dart';
 import 'package:gerege_app_v2/screens/funding/projects.dart';
 import 'package:gerege_app_v2/style/color.dart';
 import 'package:get/get.dart';
@@ -13,7 +10,6 @@ import 'package:get/get.dart';
 import '../../helpers/backHelper.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/services.dart';
-import '../../widget/combos/appbar_squeare.dart';
 
 // ignore: must_be_immutable
 class PayInfo extends StatefulWidget {
@@ -50,18 +46,18 @@ class _PayInfoState extends State<PayInfo> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
-                  Text('Хэтэвчний мэдээлэл'),
-                  SizedBox(
+                  const Text('Хэтэвчний мэдээлэл'),
+                  const SizedBox(
                     height: 30,
                   ),
                   rowofinfo(
                       'Үлдэгдэл', '${GlobalVariables.accountBalance.value}₮'),
                   rowofinfo('Хөрөнгө оруулалт', '1 Сая₮'),
                   rowofinfo('Боломжит үлдэгдэл', '1 Сая₮'),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                 ],
@@ -69,15 +65,15 @@ class _PayInfoState extends State<PayInfo> {
             ),
             Column(
               children: [
-                Text('Хөрөнгө оруулалтын хэмжээ (10,0000 төг)'),
-                SizedBox(
+                const Text('Хөрөнгө оруулалтын хэмжээ (10,0000 төг)'),
+                const SizedBox(
                   height: 50,
                 ),
                 Text(
                   '${fundingValue * 10},000',
-                  style: TextStyle(fontSize: 25),
+                  style: const TextStyle(fontSize: 25),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Row(
@@ -142,7 +138,7 @@ class _PayInfoState extends State<PayInfo> {
                       FontAwesomeIcons.storeSlash,
                       color: CoreColor.mainPurple,
                     ),
-                    Container(
+                    SizedBox(
                       width: GlobalVariables.gWidth * .4,
                       child: const Text(
                         'Crowfunding is not store. it is way to bring creative projects to life',

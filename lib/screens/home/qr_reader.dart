@@ -66,13 +66,10 @@ class _QRViewScannerState extends State<QRViewScanner> {
 
   Future<void> requestCameraPermission() async {
     final status = await Permission.camera.request();
-    print("camera status end bna: $status");
     if (status == PermissionStatus.granted) {
     } else if (status == PermissionStatus.denied) {
-      print('Permission denied');
       // await openAppSettings();
     } else if (status == PermissionStatus.permanentlyDenied) {
-      print('Permission Permanently Denied');
       await openAppSettings();
     }
   }
@@ -87,11 +84,7 @@ class _QRViewScannerState extends State<QRViewScanner> {
   }
 
   loginQr(searchText) {
-    var bodyData = {"search_text": searchText};
-    print(bodyData);
     String url = "${CoreUrl.crowdfund}auth/qrlogin?serial_no=$searchText";
-    print(url);
-    // GET {{local}}/auth/qrlogin?serial_no=12312312313123
     Services().getRequest(url, true, "").then((data) {
       if (data.body['message'] == "success") {
         Get.back();
@@ -147,7 +140,6 @@ class _QRViewScannerState extends State<QRViewScanner> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    print('wets da');
     setState(() {
       this.controller = controller;
     });
@@ -156,7 +148,6 @@ class _QRViewScannerState extends State<QRViewScanner> {
       if (scanData.code != '') {
         controller.pauseCamera();
         // controller.resumeCamera();
-        print('scan hiisen data l end irne de, ${scanData.code}');
         loginQr(scanData.code);
       }
     });
