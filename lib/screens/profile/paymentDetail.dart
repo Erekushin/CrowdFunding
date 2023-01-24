@@ -112,7 +112,6 @@ class _PaymentDetailState extends State<PaymentDetail> {
   //#endregion
   TextEditingController a = TextEditingController();
   double optionBtnsHeight = 0;
-  bool isSwitcherActivated = GlobalVariables.ifFingering;
   GlobalKey<ScaffoldState> menuSidebarKeyPay = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {

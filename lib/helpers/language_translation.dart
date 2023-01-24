@@ -5,6 +5,7 @@ class TranslationWords {
 
       //#endregion
       //#region snack
+      'success_tr': '🥳 Great',
       'error_tr': '😟 sorry',
       'error_tr_body': 'something is wrong',
       'something_is_wrong_tr': 'wait 🧐',
@@ -73,7 +74,7 @@ class TranslationWords {
       "add_account_tr": "Add bank account",
       "bank_number_tr": "Account number",
       'save_tr': 'Save',
-      'success_tr': 'Success',
+
       "bank_accounts_tr": "Bank accounts list",
       'delete_tr': "Delete",
       'gerege_account_tr': "Wallet accounts",
@@ -100,6 +101,7 @@ class TranslationWords {
       //#endregion
 
       //#region snack
+      'success_tr': '🥳 ',
       'error_tr': '😟 уучлаарай',
       'error_tr_body': 'ямар нэгэн алдаа гарлаа',
       'something_is_wrong_tr': '🧐 ?',
@@ -172,7 +174,7 @@ class TranslationWords {
       "select_bank_tr": "Банк сонгох",
       "bank_number_tr": "Дансны дугаар",
       'save_tr': 'Хадгалах',
-      'success_tr': 'Амжилттай',
+
       "bank_accounts_tr": "Банкны данс",
       'delete_tr': "Устгах",
       'gerege_account_tr': "Хэтэвчний данс",

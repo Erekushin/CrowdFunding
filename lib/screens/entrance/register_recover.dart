@@ -92,7 +92,7 @@ class _Register_RecoverState extends State<Register_Recover> {
                           casePhone,
                           registerSeq2(
                               1,
-                              cont.phoneTxt,
+                              cont.registerText,
                               nullTxt,
                               nullTxt,
                               '99999999',
@@ -102,7 +102,6 @@ class _Register_RecoverState extends State<Register_Recover> {
                               'Нууц дугаар авах', () {
                             cont.otpSend(
                                 widget.title,
-                                'Утас',
                                 widget.title == 'Бүртгүүлэх'
                                     ? 'auth/identify?text='
                                     : 'auth/password?identity=');
@@ -113,7 +112,7 @@ class _Register_RecoverState extends State<Register_Recover> {
                           caseEmail,
                           registerSeq2(
                               1,
-                              cont.emailTxt,
+                              cont.registerText,
                               nullTxt,
                               nullTxt,
                               'hello@exaple.com',
@@ -123,7 +122,6 @@ class _Register_RecoverState extends State<Register_Recover> {
                               'Нууц дугаар авах', () async {
                             await cont.otpSend(
                                 widget.title,
-                                'Е-Мэйл',
                                 widget.title == 'Бүртгүүлэх'
                                     ? 'auth/identify?text='
                                     : 'auth/password?identity=');
@@ -239,24 +237,20 @@ class _Register_RecoverState extends State<Register_Recover> {
                 cont.otpVis = false.obs;
                 cont.otpVisRecover = false.obs;
                 cont.loading = false.obs;
-                cont.phoneTxt.clear();
-                cont.emailTxt.clear();
                 cont.otpTxt.clear();
                 cont.passTxt.clear();
                 cont.passVerifyTxt.clear();
-                cont.registerText = '';
+                cont.registerText.clear();
               } else if (value == "Е-Мэйл") {
                 cont.emailVis.value = true;
                 cont.phoneVis.value = false;
                 cont.otpVis = false.obs;
                 cont.otpVisRecover = false.obs;
                 cont.loading = false.obs;
-                cont.phoneTxt.clear();
-                cont.emailTxt.clear();
                 cont.otpTxt.clear();
                 cont.passTxt.clear();
                 cont.passVerifyTxt.clear();
-                cont.registerText = '';
+                cont.registerText.clear();
               }
             }));
   }

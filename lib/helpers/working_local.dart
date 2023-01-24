@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:gerege_app_v2/global_players.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
-
 import 'backHelper.dart';
 import 'gvariables.dart';
 
@@ -52,69 +50,83 @@ class WorkingFiles {
     readAll();
   }
 
-  void cleanUserInfo() {}
+  void cleanUserInfo() {
+    GlobalVariables.userInfo = {
+      "id": "",
+      "civil_id": "",
+      "reg_no": "",
+      "family_name": "",
+      "last_name": "",
+      "first_name": "",
+      "username": "",
+      "root_account": "",
+      "email": "",
+      "phone_no": "",
+      "gender": 1,
+      "birth_date": "",
+      "is_foreign": 0,
+      "aimag_code": "",
+      "aimag_name": "",
+      "sum_code": "",
+      "sum_name": "",
+      "bag_code": "",
+      "bag_name": "",
+      "address": "",
+      "profile_image": "",
+      "country_code": "",
+      "country_name": "",
+      "nationality": "",
+      "country_name_en": "",
+      "c_level": 0,
+      "created_date": "",
+      "updated_date": "",
+      "is_confirmed_phone_no": 0,
+      "is_confirmed_email": 1
+    };
+  }
 }
 
 class WorkingBioMatrix {
   final crowdlog = logger(WorkingBioMatrix);
-  bool? _canCheckBiometrics;
-  final LocalAuthentication auth = LocalAuthentication();
-  List<BiometricType>? _availableBiometrics;
-  BioSupportState bioSupportState = BioSupportState.unknown;
-
+  final LocalAuthentication localauth = LocalAuthentication();
+  List<BiometricType>? availableBiometrics = <BiometricType>[];
+  bool biomatrixSupported = false;
   void checkSupportState() {
-    auth.isDeviceSupported().then(
-          (bool isSupported) => bioSupportState = isSupported
-              ? BioSupportState.supported
-              : BioSupportState.unsupported,
-        );
+    localauth.isDeviceSupported().then((bool isSupported) {
+      biomatrixSupported = isSupported;
+    });
   }
 
-  Future<void> checkBiometrics(bool moun, Function successFunc) async {
-    late bool canCheckBiometrics;
+  Future<bool> checkBiometrics(bool moun) async {
+    bool canCheckBiometrics = false;
     try {
-      canCheckBiometrics = await auth.canCheckBiometrics;
+      canCheckBiometrics = await localauth.canCheckBiometrics;
     } on PlatformException catch (e) {
       canCheckBiometrics = false;
       crowdlog.e(e);
     }
     if (!moun) {
-      return;
+      canCheckBiometrics = false;
     }
-
-    _canCheckBiometrics = canCheckBiometrics;
-    if (_canCheckBiometrics ?? false) {
-      _getAvailableBiometrics(moun, successFunc);
-    }
-  }
-
-  Future<void> _getAvailableBiometrics(bool moun, Function successFunc) async {
-    late List<BiometricType> availableBiometrics;
-    try {
-      availableBiometrics = await auth.getAvailableBiometrics();
-    } on PlatformException catch (e) {
-      availableBiometrics = <BiometricType>[];
-      crowdlog.e(e);
-    }
-    if (!moun) {
-      return;
-    }
-
-    _availableBiometrics = availableBiometrics;
-    if (_availableBiometrics!.isNotEmpty) {
-      if (_availableBiometrics!.contains(BiometricType.strong) ||
-          _availableBiometrics!.contains(BiometricType.fingerprint)) {
+    if (canCheckBiometrics) {
+      try {
+        availableBiometrics = await localauth.getAvailableBiometrics();
+      } on PlatformException catch (e) {
+        canCheckBiometrics = false;
+        crowdlog.e(e);
+      }
+      if (availableBiometrics!.isNotEmpty &&
+          (availableBiometrics!.contains(BiometricType.strong) ||
+              availableBiometrics!.contains(BiometricType.fingerprint))) {
         try {
-          final bool didAuthenticate = await auth.authenticate(
+          final bool didAuthenticate = await localauth.authenticate(
               localizedReason: 'Please authenticate to show account balance');
-
-          if (didAuthenticate) {
-            successFunc();
-          }
+          canCheckBiometrics = didAuthenticate;
         } on PlatformException catch (e) {
-          crowdlog.e(e.code);
+          canCheckBiometrics = false;
+          crowdlog.e('${e.code} ${e.details} ${e.message}');
           Get.snackbar(
-            '',
+            'Энд алдаа заагаад байна',
             e.toString(),
             colorText: Colors.black,
             backgroundColor: Colors.white,
@@ -122,5 +134,6 @@ class WorkingBioMatrix {
         }
       }
     }
+    return canCheckBiometrics;
   }
 }

@@ -30,69 +30,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final crowdlog = logger(_LoginScreenState);
-  bool? _canCheckBiometrics;
-  final LocalAuthentication auth = LocalAuthentication();
-  List<BiometricType>? _availableBiometrics;
-  BioSupportState bioSupportState = BioSupportState.unknown;
-  Future<void> _checkBiometrics() async {
-    late bool canCheckBiometrics;
-    try {
-      canCheckBiometrics = await auth.canCheckBiometrics;
-    } on PlatformException catch (e) {
-      canCheckBiometrics = false;
-      crowdlog.e(e);
-    }
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _canCheckBiometrics = canCheckBiometrics;
-    });
-    if (_canCheckBiometrics ?? false) {
-      _getAvailableBiometrics();
-    }
-  }
-
-  Future<void> _getAvailableBiometrics() async {
-    late List<BiometricType> availableBiometrics;
-    try {
-      availableBiometrics = await auth.getAvailableBiometrics();
-    } on PlatformException catch (e) {
-      availableBiometrics = <BiometricType>[];
-      crowdlog.e(e);
-    }
-    if (!mounted) {
-      return;
-    }
-
-    setState(() {
-      _availableBiometrics = availableBiometrics;
-    });
-    if (_availableBiometrics!.isNotEmpty) {
-      if (_availableBiometrics!.contains(BiometricType.strong) ||
-          _availableBiometrics!.contains(BiometricType.fingerprint)) {
-        try {
-          final bool didAuthenticate = await auth.authenticate(
-              localizedReason: 'Please authenticate to show account balance');
-
-          if (didAuthenticate) {
-            _loginController.passwordTextController.text = GlobalVariables.pass;
-            _loginController.searchText.text = GlobalVariables.name;
-            _loginController.loginUser();
-          }
-        } on PlatformException catch (e) {
-          crowdlog.e(e.code);
-          Get.snackbar(
-            '',
-            e.toString(),
-            colorText: Colors.black,
-            backgroundColor: Colors.white,
-          );
-        }
-      }
-    }
-  }
 
   bool hidePassword = true;
   static final EntranceCont _loginController = Get.put(EntranceCont());
@@ -109,11 +46,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     GlobalVariables.localeLong = 'mn_MN';
-    auth.isDeviceSupported().then(
-          (bool isSupported) => setState(() => bioSupportState = isSupported
-              ? BioSupportState.supported
-              : BioSupportState.unsupported),
-        );
     super.initState();
   }
 
@@ -121,6 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
+        print('fdfdfdff');
         return true;
       },
       child: Scaffold(
@@ -202,67 +135,79 @@ class _LoginScreenState extends State<LoginScreen> {
                           _loginController.passwordTextController.text != '') {
                         _loginController.loginUser();
                       } else {
-                        warningSnack('warning_tr', 'field_tr');
+                        warningSnack('field_tr');
                       }
                     }),
                   ),
                   const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      const Text(
-                        'Хурууны хээн нэвтрэлт',
-                        style: TextStyle(fontSize: 12, color: Colors.grey),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      InkWell(
-                          //finger print tap
-                          //nogoo file maani bgaa esehiig shalgah
-
-                          onTap: () async {
-                            if (GlobalVariables.pass != '') {
-                              _checkBiometrics();
-                            } else {
-                              fingerActivation(context);
-                            }
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.only(right: 35),
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(15)),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(.2),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 0),
-                                    blurStyle: BlurStyle.outer,
-                                  )
-                                ]),
-                            width: 50,
-                            height: 50,
-                            child: ClipRRect(
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(15)),
-                              child: BackdropFilter(
-                                filter: ImageFilter.blur(sigmaY: 5, sigmaX: 5),
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Container(
-                                    margin: const EdgeInsets.only(left: 0),
-                                    child: const Icon(
-                                      FontAwesomeIcons.fingerprint,
-                                      color: Colors.grey,
+                  GlobalPlayers.workingBioMatrix.biomatrixSupported
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            const Text(
+                              'Хурууны хээн нэвтрэлт',
+                              style:
+                                  TextStyle(fontSize: 12, color: Colors.grey),
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            InkWell(
+                                onTap: () async {
+                                  if (GlobalVariables.pass == '') {
+                                    fingerActivation(context);
+                                  } else {
+                                    bool available = false;
+                                    available = await GlobalPlayers
+                                        .workingBioMatrix
+                                        .checkBiometrics(mounted);
+                                    if (available == true) {
+                                      _loginController.passwordTextController
+                                          .text = GlobalVariables.pass;
+                                      _loginController.searchText.text =
+                                          GlobalVariables.name;
+                                      _loginController.loginUser();
+                                    }
+                                  }
+                                },
+                                child: Container(
+                                  margin: const EdgeInsets.only(right: 35),
+                                  decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(15)),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(.2),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 0),
+                                          blurStyle: BlurStyle.outer,
+                                        )
+                                      ]),
+                                  width: 50,
+                                  height: 50,
+                                  child: ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(15)),
+                                    child: BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                          sigmaY: 5, sigmaX: 5),
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Container(
+                                          margin:
+                                              const EdgeInsets.only(left: 0),
+                                          child: const Icon(
+                                            FontAwesomeIcons.fingerprint,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            ),
-                          )),
-                    ],
-                  ),
+                                )),
+                          ],
+                        )
+                      : const SizedBox(),
                   const Spacer(),
                   Container(
                     margin: const EdgeInsets.only(left: 50, right: 50),

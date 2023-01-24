@@ -119,7 +119,7 @@ List optionBtns = [
   {
     'icon': FontAwesomeIcons.lock,
     'name': 'Security',
-    'func': (int i, bool toOrOff) {
+    'func': (int i, bool toOrOff) async {
       toOrOff
           ? Get.to(() => const Security(), arguments: i)
           : Get.off(() => const Security(), arguments: i);

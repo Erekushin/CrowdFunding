@@ -20,21 +20,23 @@ class _MySwitcher extends State<MySwitcher> with TickerProviderStateMixin {
   late Animation<Alignment> animation;
   late AnimationController _animationController;
   late bool switcherValue;
-  _onTap() {
-    widget.func();
-    setState(
-      () {
-        if (switcherValue) {
-          crowdlog.i('untraah daralt');
-          switcherValue = false;
-          _animationController.reverse();
-        } else {
-          crowdlog.i('idvehjvvleh daralt');
-          switcherValue = true;
-          _animationController.forward();
-        }
-      },
-    );
+  _onTap() async {
+    bool available = await widget.func();
+    if (available) {
+      setState(
+        () {
+          if (switcherValue) {
+            crowdlog.i('untraah daralt');
+            switcherValue = false;
+            _animationController.reverse();
+          } else {
+            crowdlog.i('idvehjvvleh daralt');
+            switcherValue = true;
+            _animationController.forward();
+          }
+        },
+      );
+    }
   }
 
   @override

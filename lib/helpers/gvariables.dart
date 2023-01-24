@@ -44,17 +44,6 @@ class GlobalVariables {
   static String pass = '';
   static String name = '';
   GlobalVariables.fingerLoginfo(Map<String, dynamic> json) {
-    if (json['isFingering'] == null) {
-      ifFingering = false;
-    } else {
-      if (json['isFingering'] == 'true') {
-        ifFingering = true;
-      } else if (json['isFingering'] == 'false') {
-        ifFingering = false;
-      } else {
-        ifFingering = false;
-      }
-    }
     pass = json['pass'] ?? '';
     name = json['name'] ?? '';
   }

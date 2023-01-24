@@ -25,12 +25,10 @@ class EntranceCont extends GetxController {
   var otpVisRecover = false.obs;
   var loading = false.obs;
 
-  var phoneTxt = TextEditingController();
-  var emailTxt = TextEditingController();
   var otpTxt = TextEditingController();
   var passTxt = TextEditingController();
   var passVerifyTxt = TextEditingController();
-  String registerText = '';
+  var registerText = TextEditingController();
 
   register(BuildContext context) async {
     var bytes = utf8.encode(passTxt.text);
@@ -70,46 +68,22 @@ class EntranceCont extends GetxController {
         });
       }
     } catch (e) {
-      Get.snackbar(
-        'Боломжгүй',
-        e.toString(),
-        colorText: Colors.black,
-        backgroundColor: Colors.grey.withOpacity(0.2),
-      );
+      errorSnack('error_tr', 'error_tr_body $e');
     }
   }
 
-  otpSend(String route, String value, String incomingurl) async {
+  Future<bool> otpSend(String route, String incomingurl) async {
+    bool success = false;
     bool valid = false;
     loading.value = false;
-    if (value == 'Утас') {
-      phoneTxt.text = phoneTxt.text.replaceAll(' ', '');
-      if (GlobalValidator().phoneValid(phoneTxt.text) == null) {
-        registerText = phoneTxt.text;
-        valid = true;
-      } else {
-        Get.snackbar(
-          'Боломжгүй',
-          'Утасны дугаар алдаатай байна',
-          colorText: Colors.black,
-          backgroundColor: Colors.grey.withOpacity(0.2),
-        );
-      }
-    } else if (value == 'Е-Мэйл') {
-      emailTxt.text = emailTxt.text.replaceAll(' ', '');
-      if (GlobalValidator().emailValid(emailTxt.text) == null) {
-        registerText = emailTxt.text;
-        valid = true;
-      } else {
-        Get.snackbar(
-          'Боломжгүй',
-          'E-mail хаяг буруу байна!',
-          colorText: Colors.black,
-          backgroundColor: Colors.grey.withOpacity(0.2),
-        );
-      }
+    registerText.text = registerText.text.replaceAll(' ', '');
+    if (GlobalValidator().phoneValid(registerText.text) == null ||
+        GlobalValidator().emailValid(registerText.text) == null) {
+      valid = true;
+    } else {
+      warningSnack('Утасны дугаар эсвэл E-mail хаяг алдаатай байна');
     }
-    String url = '${CoreUrl.crowdfund}$incomingurl$registerText';
+    String url = '${CoreUrl.crowdfund}$incomingurl${registerText.text}';
     if (route == "Бүртгүүлэх") {
       otpVis.value = false;
     } else {
@@ -121,6 +95,8 @@ class EntranceCont extends GetxController {
         (data) {
           crowdlog.wtf('---OTP REQ---:returned data ${data.body.toString()}');
           GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
+            successSnack('Otp Code илгээгдлээ');
+            success = true;
             if (route == "Бүртгүүлэх") {
               otpVis.value = true;
             } else {
@@ -131,6 +107,7 @@ class EntranceCont extends GetxController {
         },
       );
     }
+    return success;
   }
 
   resetPassword() async {
@@ -138,7 +115,7 @@ class EntranceCont extends GetxController {
     var bytes = utf8.encode(passTxt.text);
     var digest = md5.convert(bytes);
     String url =
-        '${CoreUrl.crowdfund}auth/password?identity=$registerText&password=$digest&otp=${otpTxt.text}';
+        '${CoreUrl.crowdfund}auth/password?identity=${registerText.text}&password=$digest&otp=${otpTxt.text}';
 
     try {
       if (passTxt.text != passVerifyTxt.text) {
@@ -155,28 +132,18 @@ class EntranceCont extends GetxController {
             .putRequest(json.encode({}), url, false, '')
             .then((data) {
           crowdlog.wtf(
-              '---resetPassword---:text $registerText...passOrigin: ${passTxt.text} pass: $digest....otp: ${otpTxt.text}......... data ${data.body.toString()}.....url: $url');
+              '---resetPassword---:text ${registerText.text}...passOrigin: ${passTxt.text} pass: $digest....otp: ${otpTxt.text}......... data ${data.body.toString()}.....url: $url');
 
           GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
             cleanRegisterInfo();
-            Get.snackbar(
-              'Амжилттай',
-              'Нууц үг амжилттай шинэчлэгдлээ',
-              colorText: Colors.black,
-              backgroundColor: Colors.white.withOpacity(0.5),
-            );
+            successSnack('Нууц үг амжилттай шинэчлэгдлээ');
             Get.to(() => const Projects());
             loading.value = false;
           }, () {});
         });
       }
     } catch (e) {
-      Get.snackbar(
-        'Боломжгүй',
-        e.toString(),
-        colorText: Colors.black,
-        backgroundColor: Colors.grey.withOpacity(0.2),
-      );
+      warningSnack(e.toString());
     }
   }
 
@@ -208,7 +175,6 @@ class EntranceCont extends GetxController {
         GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
           if (GlobalVariables.ifFingering == true &&
               GlobalVariables.pass == '') {
-            GlobalPlayers.workingWithFile.addNewItem('isFingering', 'true');
             GlobalPlayers.workingWithFile
                 .addNewItem('pass', passwordTextController.text);
             GlobalPlayers.workingWithFile.addNewItem('name', searchText.text);
@@ -221,7 +187,7 @@ class EntranceCont extends GetxController {
         }, () {});
       });
     } else {
-      warningSnack('warning_tr', 'field_unsatisfied_tr');
+      warningSnack('field_unsatisfied_tr');
     }
   }
 
@@ -306,12 +272,10 @@ class EntranceCont extends GetxController {
     otpVisRecover = false.obs;
     loading = false.obs;
 
-    phoneTxt.clear();
-    emailTxt.clear();
     otpTxt.clear();
     passTxt.clear();
     passVerifyTxt.clear();
-    registerText = '';
+    registerText.clear();
   }
 
   //#endregion

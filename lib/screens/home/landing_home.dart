@@ -10,6 +10,7 @@ import '../../helpers/backHelper.dart';
 import '../../helpers/gvariables.dart';
 import '../../widget/fundamental/btn.dart';
 import '../../widget/combos/sidebar.dart';
+import '../entrance/login.dart';
 import '../funding/projects.dart';
 
 class LandingHome extends StatefulWidget {
@@ -112,17 +113,19 @@ class _LandingHomeState extends State<LandingHome> {
                 SizedBox(
                   width: GlobalVariables.gWidth * .5,
                   child: generalBtn(
-                      CoreColor.mainPurple, Colors.white, 'Dive Into', () {
-                    if (GlobalVariables.pass != '') {
-                      GlobalPlayers.workingBioMatrix.checkBiometrics(mounted,
-                          () {
+                      CoreColor.mainPurple, Colors.white, 'Dive Into',
+                      () async {
+                    if (GlobalVariables.pass == '') {
+                      Get.to(() => const Projects());
+                    } else {
+                      bool available = await GlobalPlayers.workingBioMatrix
+                          .checkBiometrics(mounted);
+                      if (available) {
                         _loginController.passwordTextController.text =
                             GlobalVariables.pass;
                         _loginController.searchText.text = GlobalVariables.name;
                         _loginController.loginUser();
-                      });
-                    } else {
-                      Get.to(() => const Projects());
+                      }
                     }
                   }),
                 ),

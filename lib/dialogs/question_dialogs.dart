@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
+import 'package:gerege_app_v2/dialogs/snacks.dart';
 import '../global_players.dart';
 import '../helpers/gvariables.dart';
 import '../style/color.dart';
@@ -97,35 +97,13 @@ Object fingerActivation(BuildContext context) {
                                   height: 20,
                                 ),
                                 generalBtn(CoreColor.mainPurple, Colors.white,
-                                    'идвэхжүүлэх', () {
-                                  if (GlobalPlayers
-                                          .workingBioMatrix.bioSupportState ==
-                                      BioSupportState.unknown) {
-                                    Get.snackbar('Уучлаарай',
-                                        "Хурууны хээ уншигчийн төрөл таарахгүй байна!",
-                                        snackPosition: SnackPosition.BOTTOM,
-                                        colorText: Colors.white,
-                                        backgroundColor: Colors.grey[900],
-                                        margin: const EdgeInsets.all(5));
-                                  } else if (GlobalPlayers
-                                          .workingBioMatrix.bioSupportState ==
-                                      BioSupportState.supported) {
-                                    GlobalPlayers.workingWithFile
-                                        .addNewItem('isFingering', 'true');
-
-                                    Get.snackbar('Боломжтой',
-                                        "Та эхний удаа нэр, нууц үгээ хийж нэвтэрнэ үү!",
-                                        snackPosition: SnackPosition.BOTTOM,
-                                        colorText: Colors.white,
-                                        backgroundColor: Colors.grey[900],
-                                        margin: const EdgeInsets.all(5));
-                                  } else {
-                                    Get.snackbar('Уучлаарай',
-                                        "Хурууны хээ уншигчийг ачааллахад алдаа гарлаа!",
-                                        snackPosition: SnackPosition.BOTTOM,
-                                        colorText: Colors.white,
-                                        backgroundColor: Colors.grey[900],
-                                        margin: const EdgeInsets.all(5));
+                                    'идвэхжүүлэх', () async {
+                                  GlobalVariables.ifFingering =
+                                      await GlobalPlayers.workingBioMatrix
+                                          .checkBiometrics(true);
+                                  if (GlobalVariables.ifFingering) {
+                                    successSnack(
+                                        'Эхний удаа нэвтрэх шаардлагатай');
                                   }
                                   Navigator.pop(context);
                                 }),
