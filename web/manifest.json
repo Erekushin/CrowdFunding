@@ -1,6 +1,6 @@
 {
-    "name": "gerege_app_v2",
-    "short_name": "gerege_app_v2",
+    "name": "CrowdFund",
+    "short_name": "CrowdFund",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

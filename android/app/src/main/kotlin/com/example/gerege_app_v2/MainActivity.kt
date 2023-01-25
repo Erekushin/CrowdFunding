@@ -1,4 +1,4 @@
-package com.example.gerege_app_v2
+package medtech.CrowdFund
 
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterFragmentActivity

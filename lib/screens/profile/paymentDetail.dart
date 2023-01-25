@@ -9,7 +9,7 @@ import '../../controller/entrance.dart';
 import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
 import '../../helpers/gvariables.dart';
-import '../../helpers/services.dart';
+import '../../helpers/working_net.dart';
 import '../../style/color.dart';
 import '../../widget/fundamental/btn.dart';
 import '../../widget/web_view.dart';

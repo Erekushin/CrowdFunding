@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/screens/funding/pay_info.dart';
-import 'package:gerege_app_v2/style/color.dart';
+import 'package:CrowdFund/screens/funding/pay_info.dart';
+import 'package:CrowdFund/style/color.dart';
 import 'package:get/get.dart';
 
 import '../../global_players.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/screens/profile/paymentDetail.dart';
-import 'package:gerege_app_v2/screens/profile/security.dart';
-import 'package:gerege_app_v2/style/color.dart';
+import 'package:CrowdFund/helpers/gvariables.dart';
+import 'package:CrowdFund/screens/profile/paymentDetail.dart';
+import 'package:CrowdFund/screens/profile/security.dart';
+import 'package:CrowdFund/style/color.dart';
 import 'package:get/get.dart';
 
 import '../../global_players.dart';

@@ -5,7 +5,8 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/working_string.dart';
+import 'package:CrowdFund/dialogs/snacks.dart';
+import 'package:CrowdFund/helpers/working_string.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -13,7 +14,7 @@ import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/helperfuncs.dart';
-import '../../helpers/services.dart';
+import '../../helpers/working_net.dart';
 import '../../style/color.dart';
 import '../../widget/fundamental/btn.dart';
 import '../profile/profile.dart';
@@ -53,12 +54,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
           GlobalVariables.accountBalance.value = 0;
         }
       } catch (e) {
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          e.toString(),
-          backgroundColor: Colors.white60,
-          colorText: Colors.black,
-        );
+        warningSnack(e.toString());
       }
     });
   }
@@ -366,22 +362,12 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
               if (selectedCard.isNotEmpty && _amountController.text != '') {
                 if (int.parse(_amountController.text.replaceAll(',', '')) <=
                     499) {
-                  Get.snackbar(
-                    'warning_tr'.translationWord(),
-                    '500 -c их дүн оруулна уу'.translationWord(),
-                    colorText: Colors.black,
-                    backgroundColor: Colors.white,
-                  );
+                  warningSnack('500 -c их дүн оруулна уу');
                 } else {
                   hmacEncryp(selectedCard.value);
                 }
               } else {
-                Get.snackbar(
-                  'warning_tr'.translationWord(),
-                  'field_tr'.translationWord(),
-                  colorText: Colors.black,
-                  backgroundColor: Colors.white,
-                );
+                warningSnack('field_tr');
               }
             });
           }),
@@ -434,12 +420,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
       GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         Get.back();
         Get.back();
-        Get.snackbar(
-          'warning_tr'.translationWord(),
-          data.body['message'],
-          colorText: Colors.black,
-          backgroundColor: Colors.white,
-        );
+        warningSnack(data.body['message']);
         GlobalVariables.accountBalance.value =
             GlobalVariables.accountBalance.value +
                 int.parse(_amountController.text.replaceAll(',', ''));
@@ -862,22 +843,12 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
                         if (int.parse(
                                 _amountController.text.replaceAll(',', '')) <=
                             499) {
-                          Get.snackbar(
-                            'warning_tr'.translationWord(),
-                            '500 -c их дүн оруулна уу'.translationWord(),
-                            colorText: Colors.black,
-                            backgroundColor: Colors.white,
-                          );
+                          warningSnack('500 -c их дүн оруулна уу');
                         } else {
                           withDrawMoney();
                         }
                       } else {
-                        Get.snackbar(
-                          'warning_tr'.translationWord(),
-                          'field_tr'.translationWord(),
-                          colorText: Colors.black,
-                          backgroundColor: Colors.white,
-                        );
+                        warningSnack('field_tr');
                       }
                     });
                   }),
@@ -911,13 +882,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
       GlobalPlayers.frontHelper.requestErrorSnackbar(data, 0, () {
         Get.back();
         Get.back();
-        Get.snackbar(
-          'success_tr'.translationWord(),
-          data.body['message'].toString().translationWord(),
-          colorText: Colors.black,
-          backgroundColor: Colors.white,
-        );
-
+        successSnack(data.body['message'].toString());
         GlobalVariables.accountBalance.value =
             GlobalVariables.accountBalance.value -
                 int.parse(_amountController.text.replaceAll(',', ''));

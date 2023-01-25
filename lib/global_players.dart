@@ -1,4 +1,4 @@
-import 'package:gerege_app_v2/helpers/working_local.dart';
+import 'package:CrowdFund/helpers/working_local.dart';
 
 import 'helpers/frontHelper.dart';
 

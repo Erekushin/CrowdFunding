@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/style/color.dart';
+import 'package:CrowdFund/style/color.dart';
 import 'package:get/get.dart';
 
 import '../../screens/entrance/login.dart';

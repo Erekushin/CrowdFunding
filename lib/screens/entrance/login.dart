@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/helpers/working_string.dart';
+import 'package:CrowdFund/helpers/working_string.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:local_auth/local_auth.dart';
@@ -209,6 +209,14 @@ class _LoginScreenState extends State<LoginScreen> {
                         )
                       : const SizedBox(),
                   const Spacer(),
+                  SizedBox(
+                      width: GlobalVariables.gWidth * .5,
+                      child: iconedBtn(Colors.redAccent, Colors.white, 'Google',
+                          FontAwesomeIcons.google, () {})),
+                  SizedBox(
+                      width: GlobalVariables.gWidth * .5,
+                      child: iconedBtn(Colors.blue, Colors.white, 'Facebook',
+                          FontAwesomeIcons.facebook, () {})),
                   Container(
                     margin: const EdgeInsets.only(left: 50, right: 50),
                     child: Row(

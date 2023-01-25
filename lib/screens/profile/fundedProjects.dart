@@ -1,14 +1,15 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/helpers/working_string.dart';
-import 'package:gerege_app_v2/screens/profile/profile.dart';
+import 'package:CrowdFund/dialogs/snacks.dart';
+import 'package:CrowdFund/helpers/working_string.dart';
+import 'package:CrowdFund/screens/profile/profile.dart';
 import 'package:get/get.dart';
 
 import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/indicators.dart';
-import '../../helpers/services.dart';
+import '../../helpers/working_net.dart';
 import '../../widget/combos/eachproject.dart';
 import '../../widget/combos/helper_widgets.dart';
 import '../funding/singleProject.dart';
@@ -41,40 +42,20 @@ class _FundedProjectsState extends State<FundedProjects> {
         var res = data.body;
         crowdlog.wtf(
             '---GET MY PROJECT LIST---:TOKEN: ${GlobalVariables.token}.................returned data ${data.body.toString()}');
-        switch (data.statusCode) {
-          case 200:
-            myFundedProjects.value = data.body['result']['items'];
-            if (myFundedProjects.isEmpty) {
-              visibilitySwitch(ScreenModes.noProject);
-            }
-            setState(() {});
-            break;
-          case 444:
-            visibilitySwitch(ScreenModes.noInternet);
-            Get.snackbar(
-              'warning_tr'.translationWord(),
-              res['message'].toString(),
-              backgroundColor: Colors.white60,
-              colorText: Colors.black,
-            );
-            break;
-          default:
-            Get.snackbar(
-              'warning_tr'.translationWord(),
-              res['message'].toString(),
-              backgroundColor: Colors.white60,
-              colorText: Colors.black,
-            );
-        }
+        GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
+          myFundedProjects.value = data.body['result']['items'];
+          if (myFundedProjects.isEmpty) {
+            visibilitySwitch(ScreenModes.noProject);
+          }
+          setState(() {});
+        }, () {
+          visibilitySwitch(ScreenModes.noInternet);
+          warningSnack(res['message'].toString());
+        });
       });
       loading.value = false;
     } catch (e) {
-      Get.snackbar(
-        'warning_tr'.translationWord(),
-        e.toString(),
-        backgroundColor: Colors.white60,
-        colorText: Colors.black,
-      );
+      warningSnack(e.toString());
       visibilitySwitch(ScreenModes.loading);
     }
   }

@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import 'package:gerege_app_v2/helpers/gvariables.dart';
+import 'package:CrowdFund/helpers/gvariables.dart';
 import 'package:sunmi_barcode_scanner/sunmi_barcode_scanner.dart';
 
 class DesktopHelper {

@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/helpers/working_string.dart';
-import 'package:gerege_app_v2/style/color.dart';
+import 'package:CrowdFund/dialogs/snacks.dart';
+import 'package:CrowdFund/helpers/working_string.dart';
+import 'package:CrowdFund/style/color.dart';
 
 import 'package:get/route_manager.dart';
 import 'package:get_storage/get_storage.dart';
@@ -140,12 +141,7 @@ class _CallWebViewState extends State<CallWebView> {
   nativeFunction(data) {
     if (data['data'] == 'logout') {
       // Get.to(() => const LoginPage());
-      Get.snackbar(
-        'warning_tr'.translationWord(),
-        data['message'],
-        backgroundColor: Colors.white60,
-        colorText: Colors.black,
-      );
+      warningSnack(data['message']);
     } else if (data['data'] == "back") {
       Get.back();
     } else if (data['data'] == "pinCode") {

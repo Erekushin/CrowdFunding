@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/screens/funding/pay_info.dart';
-import 'package:gerege_app_v2/style/color.dart';
+import 'package:CrowdFund/dialogs/snacks.dart';
+import 'package:CrowdFund/screens/funding/pay_info.dart';
+import 'package:CrowdFund/style/color.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../global_players.dart';
 import '../../helpers/backHelper.dart';
 import '../../helpers/gvariables.dart';
 import '../../helpers/indicators.dart';
-import '../../helpers/services.dart';
+import '../../helpers/working_net.dart';
 import '../../widget/combos/appbar_squeare.dart';
 import '../../widget/combos/eachproject.dart';
 import '../../widget/combos/pre_sidebar.dart';
@@ -345,11 +346,7 @@ Widget fundingTop(BuildContext context, var item, int step, String title,
                     onTap: () {
                       switch (step) {
                         case 1:
-                          Get.snackbar('Анхаараарай',
-                              'та хөрөнгө оруулах төсөлөө сонгоно уу?',
-                              colorText: Colors.black,
-                              backgroundColor: Colors.grey.withOpacity(0.2),
-                              duration: const Duration(seconds: 1));
+                          warningSnack('та хөрөнгө оруулах төсөлөө сонгоно уу');
                           break;
                         case 3:
                           Get.back();
@@ -375,11 +372,8 @@ Widget fundingTop(BuildContext context, var item, int step, String title,
                     onTap: () {
                       switch (step) {
                         case 1:
-                          Get.snackbar('Анхаараарай',
-                              'та хөрөнгө оруулах төсөлөө сонгоно уу?',
-                              colorText: Colors.black,
-                              backgroundColor: Colors.grey.withOpacity(0.2),
-                              duration: const Duration(seconds: 1));
+                          warningSnack(
+                              'та хөрөнгө оруулах төсөлөө сонгоно уу?');
                           break;
                         case 2:
                           if (GlobalVariables.userInfo['id'] == "") {

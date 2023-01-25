@@ -21,9 +21,7 @@ class FrontHelper {
                 : failedFunc();
       }
     } catch (e) {
-      snackAppearance == 1
-          ? errorSnack('error_tr', 'error_tr_body')
-          : failedFunc();
+      snackAppearance == 1 ? errorSnack('error_tr_body') : failedFunc();
     }
   }
 
@@ -32,7 +30,7 @@ class FrontHelper {
       somethingIsWrongSnack('something_is_wrong_tr', data.body['message']);
       failedFunc();
     } catch (e) {
-      errorSnack('error_tr', 'error_tr_body');
+      errorSnack('error_tr_body');
       failedFunc();
     }
   }

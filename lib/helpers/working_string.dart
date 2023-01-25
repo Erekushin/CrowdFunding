@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/helpers/language_translation.dart';
+import 'package:CrowdFund/helpers/gvariables.dart';
+import 'package:CrowdFund/helpers/language_translation.dart';
 import 'package:get/get.dart';
+
+import '../dialogs/snacks.dart';
 
 /// string extension capitalize
 extension StringExtension on String {
@@ -83,12 +85,7 @@ class GlobalValidator {
     if (regExp.hasMatch(value!) == true) {
       return null;
     } else {
-      Get.snackbar(
-        'Болохгүй',
-        "rd_regex_tr".translationWord(),
-        colorText: Colors.black,
-        backgroundColor: Colors.grey.withOpacity(0.2),
-      );
+      warningSnack('rd_regex_tr');
       return "rd_regex_tr".translationWord();
     }
   }

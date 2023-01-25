@@ -2,13 +2,13 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/global_players.dart';
+import 'package:CrowdFund/global_players.dart';
 import 'package:get/get.dart';
 
 import '../dialogs/snacks.dart';
 import '../helpers/backHelper.dart';
 import '../helpers/gvariables.dart';
-import '../helpers/services.dart';
+import '../helpers/working_net.dart';
 import '../helpers/working_string.dart';
 import '../dialogs/registration_dialogs.dart';
 import '../screens/funding/projects.dart';
@@ -68,7 +68,7 @@ class EntranceCont extends GetxController {
         });
       }
     } catch (e) {
-      errorSnack('error_tr', 'error_tr_body $e');
+      errorSnack('error_tr_body $e');
     }
   }
 
@@ -235,12 +235,7 @@ class EntranceCont extends GetxController {
         crowdlog.wtf(
             '---findDocument---:selectedCountry: $selectionCountry.... body: $bodyMNG....returned data ${data.body.toString()}');
         GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
-          Get.snackbar(
-            'Амжилттай',
-            'Мэдээллийг амжилттай хавсрагалаа',
-            colorText: Colors.black,
-            backgroundColor: Colors.grey.withOpacity(0.2),
-          );
+          successSnack('Мэдээллийг амжилттай хавсрагалаа');
           cleanRegisterInfo();
           Get.to(() => const Projects());
         }, () {});

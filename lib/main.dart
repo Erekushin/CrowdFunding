@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/global_players.dart';
-import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/platforms/desktop_helper.dart';
-import 'package:gerege_app_v2/screens/home/splash_screen.dart';
+import 'package:CrowdFund/global_players.dart';
+import 'package:CrowdFund/helpers/gvariables.dart';
+import 'package:CrowdFund/platforms/desktop_helper.dart';
+import 'package:CrowdFund/screens/home/splash_screen.dart';
 import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 

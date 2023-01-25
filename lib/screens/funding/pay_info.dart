@@ -2,14 +2,15 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/global_players.dart';
-import 'package:gerege_app_v2/screens/funding/projects.dart';
-import 'package:gerege_app_v2/style/color.dart';
+import 'package:CrowdFund/dialogs/snacks.dart';
+import 'package:CrowdFund/global_players.dart';
+import 'package:CrowdFund/screens/funding/projects.dart';
+import 'package:CrowdFund/style/color.dart';
 import 'package:get/get.dart';
 
 import '../../helpers/backHelper.dart';
 import '../../helpers/gvariables.dart';
-import '../../helpers/services.dart';
+import '../../helpers/working_net.dart';
 
 // ignore: must_be_immutable
 class PayInfo extends StatefulWidget {
@@ -203,12 +204,7 @@ class _PayInfoState extends State<PayInfo> {
       crowdlog.wtf(
           '---fund to project---:body: $bodyData.................returned data ${data.body.toString()}');
       GlobalPlayers.frontHelper.requestErrorSnackbar(data, 1, () {
-        Get.snackbar(
-          '',
-          'Төсөлд амжилттай хөрөнгө орууллаа. Таньд амжилт хүсье',
-          backgroundColor: Colors.white60,
-          colorText: Colors.black,
-        );
+        successSnack('Төсөлд амжилттай хөрөнгө орууллаа. Таньд амжилт хүсье');
       }, () {});
     });
   }

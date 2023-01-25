@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "gerege_app_v2" "\0"
+            VALUE "FileDescription", "CrowdFund" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "gerege_app_v2" "\0"
+            VALUE "InternalName", "CrowdFund" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "gerege_app_v2.exe" "\0"
-            VALUE "ProductName", "gerege_app_v2" "\0"
+            VALUE "OriginalFilename", "CrowdFund.exe" "\0"
+            VALUE "ProductName", "CrowdFund" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

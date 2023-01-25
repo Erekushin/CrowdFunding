@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/dialogs/snacks.dart';
+import 'package:CrowdFund/dialogs/snacks.dart';
 import '../global_players.dart';
 import '../helpers/gvariables.dart';
 import '../style/color.dart';

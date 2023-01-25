@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/helpers/gvariables.dart';
+import 'package:CrowdFund/helpers/gvariables.dart';
 import 'package:get/get_connect/connect.dart';
 import 'package:get/route_manager.dart';
 
+import '../dialogs/snacks.dart';
 import '../helpers/backHelper.dart';
 import '../screens/entrance/login.dart';
 
@@ -15,7 +16,7 @@ class Services extends GetConnect {
 
   Future<Response> postRequest(
       Object bodyData, String url, bool token, String msgcode) async {
-    var response;
+    Response response = const Response();
     try {
       response = await post(
         url,
@@ -45,10 +46,10 @@ class Services extends GetConnect {
   /// [bodyData] request body data
   /// [token] check for token usage
   Future<Response> getRequest(String url, bool token, String msgcode) async {
-    var response;
+    Response response = const Response();
     try {
       response = await get(url, headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        // 'Content-Type': 'application/json; charset=UTF-8',
         'authorization': token == true ? "Bearer ${GlobalVariables.token}" : "",
         'code': msgcode
       }, decoder: (data) {
@@ -60,12 +61,7 @@ class Services extends GetConnect {
           "getreq status: ${response.status}  statusText: ${response.statusText} ");
     } catch (e) {
       crowdlog.wtf(e);
-      Get.snackbar(
-        '',
-        e.toString(),
-        colorText: Colors.black,
-        backgroundColor: Colors.grey.withOpacity(0.2),
-      );
+      errorSnack('ямар нэгэн алдаа гарлаа $e');
       //garsan aldaag tsugluuldag base heregtei bna
 
     }
@@ -76,17 +72,24 @@ class Services extends GetConnect {
   /// [bodyData] request body data
   /// [token] check for token usage
   Future<Response> deleteRequest(String url, bool token, String msgcode) async {
-    final response = await delete(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': token == true ? "Bearer ${GlobalVariables.token}" : "",
-        'code': msgcode
-      },
-    );
-    if (response.statusCode == 401) {
-      // storage.erase();
-      Get.to(() => const LoginScreen());
+    Response response = const Response();
+    try {
+      response = await delete(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'authorization':
+              token == true ? "Bearer ${GlobalVariables.token}" : "",
+          'code': msgcode
+        },
+      );
+      if (response.statusCode == 401) {
+        // storage.erase();
+        Get.to(() => const LoginScreen());
+      }
+    } catch (e) {
+      crowdlog.wtf(e);
+      errorSnack('ямар нэгэн алдаа гарлаа $e');
     }
     return response;
   }
@@ -97,18 +100,25 @@ class Services extends GetConnect {
 
   Future<Response> putRequest(
       Object bodyData, String url, bool token, String msgcode) async {
-    final response = await put(
-      url,
-      bodyData,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        'authorization': token == true ? "Bearer ${GlobalVariables.token}" : "",
-        'code': msgcode
-      },
-    );
-    if (response.statusCode == 401) {
-      // storage.erase();
-      Get.to(() => const LoginScreen());
+    Response response = const Response();
+    try {
+      response = await put(
+        url,
+        bodyData,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'authorization':
+              token == true ? "Bearer ${GlobalVariables.token}" : "",
+          'code': msgcode
+        },
+      );
+      if (response.statusCode == 401) {
+        // storage.erase();
+        Get.to(() => const LoginScreen());
+      }
+    } catch (e) {
+      crowdlog.wtf(e);
+      errorSnack('ямар нэгэн алдаа гарлаа $e');
     }
     return response;
   }
@@ -128,8 +138,4 @@ class Services extends GetConnect {
       },
     );
   }
-
-  // GetSocket userMessages() {
-  //   return socket('https://yourapi/users/socket');
-  // }
 }

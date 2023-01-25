@@ -4,7 +4,7 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:get/get.dart';
 import 'package:sunmi_barcode_scanner/sunmi_barcode_scanner.dart';
 import 'package:flutter/services.dart';
-import 'package:gerege_app_v2/controller/sumni_scanner.dart';
+import 'package:CrowdFund/controller/sumni_scanner.dart';
 
 String time(date) {
   var dateValue = DateFormat("yyyy-MM-dd HH:mm:ss").parseUTC(date);

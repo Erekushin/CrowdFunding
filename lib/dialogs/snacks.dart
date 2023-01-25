@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gerege_app_v2/helpers/working_string.dart';
+import 'package:CrowdFund/helpers/working_string.dart';
 import 'package:get/get.dart';
 
 import '../global_players.dart';
@@ -40,8 +40,8 @@ Object somethingIsWrongSnack(String title, String text) {
       duration: Duration(seconds: Sizes.regularSnackDuration));
 }
 
-Object errorSnack(String title, String text) {
-  return Get.snackbar(title.translationWord(), '',
+Object errorSnack(String text) {
+  return Get.snackbar('error_tr'.translationWord(), '',
       messageText: Text(
         text.translationWord(),
         style:

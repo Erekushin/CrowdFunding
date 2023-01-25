@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gerege_app_v2/global_players.dart';
-import 'package:gerege_app_v2/helpers/gvariables.dart';
-import 'package:gerege_app_v2/style/color.dart';
+import 'package:CrowdFund/global_players.dart';
+import 'package:CrowdFund/helpers/gvariables.dart';
+import 'package:CrowdFund/style/color.dart';
 import 'package:get/get.dart';
 
 import '../../screens/entrance/login.dart';

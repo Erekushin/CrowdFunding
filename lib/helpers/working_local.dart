@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:local_auth/local_auth.dart';
+import '../dialogs/snacks.dart';
 import 'backHelper.dart';
 import 'gvariables.dart';
 
@@ -120,17 +121,12 @@ class WorkingBioMatrix {
               availableBiometrics!.contains(BiometricType.fingerprint))) {
         try {
           final bool didAuthenticate = await localauth.authenticate(
-              localizedReason: 'Please authenticate to show account balance');
+              localizedReason: 'Please authenticate');
           canCheckBiometrics = didAuthenticate;
         } on PlatformException catch (e) {
           canCheckBiometrics = false;
           crowdlog.e('${e.code} ${e.details} ${e.message}');
-          Get.snackbar(
-            'Энд алдаа заагаад байна',
-            e.toString(),
-            colorText: Colors.black,
-            backgroundColor: Colors.white,
-          );
+          errorSnack('Ямар нэгэн алдаа гарлаа алдаа гарлаа');
         }
       }
     }

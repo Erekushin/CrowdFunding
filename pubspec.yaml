@@ -1,4 +1,4 @@
-name: gerege_app_v2
+name: CrowdFund
 description: gerege app upgrade
 
 publish_to: "none"
@@ -37,6 +37,8 @@ dependencies:
   qr_flutter: ^4.0.0
   barcode_widget: ^2.0.0
   webview_flutter: ^3.0.4
+
+  google_sign_in: ^5.4.3
 
 dev_dependencies:
   flutter_test:
