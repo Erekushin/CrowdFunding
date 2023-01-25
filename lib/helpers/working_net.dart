@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:CrowdFund/helpers/gvariables.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get_connect/connect.dart';
 import 'package:get/route_manager.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import '../dialogs/snacks.dart';
 import '../helpers/backHelper.dart';
@@ -137,5 +139,30 @@ class Services extends GetConnect {
         'authorization': token == true ? "Bearer ${GlobalVariables.token}" : "",
       },
     );
+  }
+}
+
+class AuthByThird {
+  final googleSignIn = GoogleSignIn();
+
+  GoogleSignInAccount? _user;
+
+  GoogleSignInAccount get user => _user!;
+
+  Future signInWithGoogle() async {
+    try {
+      final googleUser = await googleSignIn.signIn();
+      if (googleUser == null) return;
+      _user = googleUser;
+
+      final GoogleSignInAuthentication gAuth = await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+          accessToken: gAuth.accessToken, idToken: gAuth.idToken);
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } catch (e) {
+      print('google auth dotor aldsan $e');
+    }
   }
 }

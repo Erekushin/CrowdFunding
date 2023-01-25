@@ -38,6 +38,7 @@ class _WalletMainState extends State<WalletMain> with TickerProviderStateMixin {
       NumberFormat.decimalPattern(_locale).format(double.parse(s));
 
 //#region...........FUNCTIONS..............
+  getTransactionList() async {}
 
   ///[getAccountBalance] wallet balance default account
   getAccountBalance() async {

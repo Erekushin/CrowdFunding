@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -15,6 +16,7 @@ import '../../controller/entrance.dart';
 import '../../dialogs/snacks.dart';
 import '../../helpers/backHelper.dart';
 import '../../helpers/frontHelper.dart';
+import '../../helpers/working_net.dart';
 import '../../widget/fundamental/btn.dart';
 import '../../widget/fundamental/txt_field.dart';
 import '../../dialogs/question_dialogs.dart';
@@ -211,8 +213,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   const Spacer(),
                   SizedBox(
                       width: GlobalVariables.gWidth * .5,
-                      child: iconedBtn(Colors.redAccent, Colors.white, 'Google',
-                          FontAwesomeIcons.google, () {})),
+                      child: iconedBtn(
+                          Colors.redAccent,
+                          Colors.white,
+                          'Google',
+                          FontAwesomeIcons.google,
+                          () => AuthByThird().signInWithGoogle())),
                   SizedBox(
                       width: GlobalVariables.gWidth * .5,
                       child: iconedBtn(Colors.blue, Colors.white, 'Facebook',

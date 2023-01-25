@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "845318562564",
+    "project_id": "crowdfund-fe7aa",
+    "storage_bucket": "crowdfund-fe7aa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:845318562564:android:57442739444f8daa8f2651",
+        "android_client_info": {
+          "package_name": "medtech.CrowdFund"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "845318562564-l0bsipteheig0ob10ats6tcr6t930c6q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsMo5L515tACVx-puVPxAYKS3yYpPvMDQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "845318562564-l0bsipteheig0ob10ats6tcr6t930c6q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

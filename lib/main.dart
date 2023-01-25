@@ -7,10 +7,12 @@ import 'package:get/get.dart';
 import 'package:flutter/services.dart';
 
 import 'controller/entrance.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
   //erek changes
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   // await GetStorage.init();
 
   /// false -> phone true-> tablet
