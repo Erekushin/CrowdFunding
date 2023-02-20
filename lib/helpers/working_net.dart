@@ -1,5 +1,4 @@
 import 'package:CrowdFund/helpers/gvariables.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get_connect/connect.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_sign_in/google_sign_in.dart';
