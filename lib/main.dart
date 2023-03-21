@@ -10,7 +10,7 @@ import 'controller/entrance.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
-  //git test
+  //git test gffg
   //erek changes
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
